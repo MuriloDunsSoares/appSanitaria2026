@@ -1,7 +1,6 @@
 /// ChatProvider migrado para Clean Architecture com Use Cases.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/di/injection_container.dart';
 import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 import 'package:app_sanitaria/domain/entities/message_entity.dart';
@@ -10,15 +9,10 @@ import 'package:app_sanitaria/domain/usecases/chat/get_user_conversations.dart';
 import 'package:app_sanitaria/domain/usecases/chat/mark_messages_as_read.dart';
 import 'package:app_sanitaria/domain/usecases/chat/send_message.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Estado do chat (Clean Architecture)
 class ChatState {
-  final List<ConversationEntity> conversations;
-  final Map<String, List<MessageEntity>> messages;
-  final bool isLoading;
-  final String? errorMessage;
-  final int totalUnreadCount;
-
   ChatState({
     this.conversations = const [],
     this.messages = const {},
@@ -26,6 +20,11 @@ class ChatState {
     this.errorMessage,
     this.totalUnreadCount = 0,
   });
+  final List<ConversationEntity> conversations;
+  final Map<String, List<MessageEntity>> messages;
+  final bool isLoading;
+  final String? errorMessage;
+  final int totalUnreadCount;
 
   ChatState copyWith({
     List<ConversationEntity>? conversations,
@@ -46,12 +45,6 @@ class ChatState {
 
 /// ChatNotifier V2 - Clean Architecture
 class ChatNotifierV2 extends StateNotifier<ChatState> {
-  final GetUserConversations _getUserConversations;
-  final GetMessages _getMessages;
-  final SendMessage _sendMessage;
-  final MarkMessagesAsRead _markMessagesAsRead;
-  final String? _currentUserId;
-
   ChatNotifierV2({
     required GetUserConversations getUserConversations,
     required GetMessages getMessages,
@@ -66,12 +59,17 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
         super(ChatState()) {
     if (_currentUserId != null) loadConversations();
   }
+  final GetUserConversations _getUserConversations;
+  final GetMessages _getMessages;
+  final SendMessage _sendMessage;
+  final MarkMessagesAsRead _markMessagesAsRead;
+  final String? _currentUserId;
 
   /// Carrega conversas do usuário
   Future<void> loadConversations() async {
     if (_currentUserId == null) return;
 
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _getUserConversations.call(_currentUserId!);
 
@@ -100,7 +98,7 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
     // Extrair userId1 e userId2 do conversationId (formato: userId1_userId2)
     final userIds = conversationId.split('_');
     if (userIds.length != 2) return;
-    
+
     final result = await _getMessages.call(
       GetMessagesParams(userId1: userIds[0], userId2: userIds[1]),
     );
@@ -108,7 +106,8 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
     result.fold(
       (failure) => null,
       (messages) {
-        final newMessages = Map<String, List<MessageEntity>>.from(state.messages);
+        final newMessages =
+            Map<String, List<MessageEntity>>.from(state.messages);
         newMessages[conversationId] = messages;
         state = state.copyWith(messages: newMessages);
       },
@@ -141,13 +140,14 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
       },
       (sentMessage) {
         // Atualizar localmente
-        final newMessages = Map<String, List<MessageEntity>>.from(state.messages);
+        final newMessages =
+            Map<String, List<MessageEntity>>.from(state.messages);
         final conversationMessages = List<MessageEntity>.from(
           newMessages[conversationId] ?? [],
         );
         conversationMessages.add(sentMessage);
         newMessages[conversationId] = conversationMessages;
-        
+
         state = state.copyWith(messages: newMessages);
         loadConversations(); // Atualizar lista de conversas
         return true;
@@ -188,10 +188,10 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
     // Gerar ID da conversa (ordenado para ser consistente)
     final ids = [userId, otherUserId]..sort();
     final conversationId = '${ids[0]}_${ids[1]}';
-    
+
     // Carregar mensagens (cria conversa se não existir)
     await loadMessages(conversationId);
-    
+
     return conversationId;
   }
 }
@@ -199,7 +199,7 @@ class ChatNotifierV2 extends StateNotifier<ChatState> {
 /// Provider para ChatNotifierV2
 final chatProviderV2 = StateNotifierProvider<ChatNotifierV2, ChatState>((ref) {
   final userId = ref.watch(authProviderV2).userId;
-  
+
   return ChatNotifierV2(
     getUserConversations: getIt<GetUserConversations>(),
     getMessages: getIt<GetMessages>(),
@@ -208,4 +208,3 @@ final chatProviderV2 = StateNotifierProvider<ChatNotifierV2, ChatState>((ref) {
     currentUserId: userId,
   );
 });
-

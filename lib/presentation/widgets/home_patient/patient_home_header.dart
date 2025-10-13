@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o header
 /// - Composição: Widget reutilizável e testável
 class PatientHomeHeader extends StatelessWidget {
-  final String userName;
-  final String selectedCity;
-  final VoidCallback onCityTap;
-
   const PatientHomeHeader({
     super.key,
     required this.userName,
     required this.selectedCity,
     required this.onCityTap,
   });
+  final String userName;
+  final String selectedCity;
+  final VoidCallback onCityTap;
 
   @override
   Widget build(BuildContext context) {
@@ -115,5 +114,3 @@ class PatientHomeHeader extends StatelessWidget {
     );
   }
 }
-
-

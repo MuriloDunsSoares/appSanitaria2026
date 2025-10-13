@@ -11,16 +11,11 @@ import '../../repositories/auth_repository.dart';
 ///
 /// **Responsabilidade única:** Retornar usuário autenticado.
 class GetCurrentUser extends UseCase<UserEntity, NoParams> {
-  final AuthRepository repository;
-
   GetCurrentUser(this.repository);
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, UserEntity>> call(NoParams params) async {
-    return await repository.getCurrentUser();
+    return repository.getCurrentUser();
   }
 }
-
-
-
-

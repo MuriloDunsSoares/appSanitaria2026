@@ -9,30 +9,23 @@ import '../../entities/contract_entity.dart';
 import '../../repositories/contracts_repository.dart';
 
 /// Use Case para obter contratos do profissional.
-class GetContractsByProfessional
-    extends UseCase<List<ContractEntity>, String> {
-  final ContractsRepository repository;
-
+class GetContractsByProfessional extends UseCase<List<ContractEntity>, String> {
   GetContractsByProfessional(this.repository);
+  final ContractsRepository repository;
 
   @override
   Future<Either<Failure, List<ContractEntity>>> call(
     String professionalId,
   ) async {
-    return await repository.getContractsByProfessional(professionalId);
+    return repository.getContractsByProfessional(professionalId);
   }
 }
 
 /// Parâmetros para buscar por profissional ID.
 class ProfessionalIdParams extends Equatable {
-  final String professionalId;
-
   const ProfessionalIdParams(this.professionalId);
+  final String professionalId;
 
   @override
   List<Object?> get props => [professionalId];
 }
-
-
-
-

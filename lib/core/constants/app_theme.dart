@@ -64,12 +64,12 @@ import 'package:flutter/material.dart';
 /// TextStyle myStyle = Theme.of(context).textTheme.headlineLarge;
 /// ```
 ///
-/// **PERFORMANCE:** 
+/// **PERFORMANCE:**
 /// - Constantes: O(1), zero overhead runtime (inlined)
 /// - lightTheme getter: Criado 1x, cached pelo MaterialApp
 /// - Theme.of(context): O(1), busca eficiente na árvore de widgets
 ///
-/// **MEMÓRIA:** 
+/// **MEMÓRIA:**
 /// - Constantes de cor: ~16 bytes cada
 /// - ThemeData completo: ~2-3 KB em memória
 /// - Total: <5 KB (insignificante)
@@ -95,7 +95,7 @@ class AppTheme {
   // ───────────────────────────────────────────────────────────────────────
   // CONSTRUTOR PRIVADO - Previne Instanciação
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Construtor privado que previne instanciação da classe.
   ///
   /// **Por que privado?**
@@ -111,7 +111,7 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════
   // CORES PRIMÁRIAS - Identidade Visual do Brand
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Cor primária da aplicação (roxo/lilás vibrante).
   ///
   /// **Hex:** #667EEA (RGB: 102, 126, 234)
@@ -147,7 +147,7 @@ class AppTheme {
   /// Theme.of(context).colorScheme.primary
   /// ```
   static const Color primaryColor = Color(0xFF667EEA);
-  
+
   /// Cor primária escura (roxo profundo).
   ///
   /// **Hex:** #764BA2 (RGB: 118, 75, 162)
@@ -174,7 +174,7 @@ class AppTheme {
   /// - Contraste com branco: 7.2:1 (passa WCAG AAA)
   /// - Mais escuro = melhor legibilidade
   static const Color primaryDark = Color(0xFF764BA2);
-  
+
   /// Cor secundária da aplicação (azul Material).
   ///
   /// **Hex:** #2196F3 (RGB: 33, 150, 243)
@@ -209,7 +209,7 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════
   // CORES DE FUNDO - Backgrounds e Surfaces
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Cor de fundo principal da aplicação (cinza muito claro).
   ///
   /// **Hex:** #F8F9FA (RGB: 248, 249, 250)
@@ -236,7 +236,7 @@ class AppTheme {
   /// - Cor sólida renderiza mais rápido que gradientes
   /// - GPU-friendly (sem blend complexo)
   static const Color backgroundColor = Color(0xFFF8F9FA);
-  
+
   /// Cor de superfícies elevadas (branco puro).
   ///
   /// **Valor:** Colors.white (#FFFFFFFF)
@@ -258,7 +258,7 @@ class AppTheme {
   ///
   /// **Nota:** Usar Colors.white (const) é mais eficiente que Color(0xFFFFFFFF)
   static const Color surfaceColor = Colors.white;
-  
+
   /// Cor de fundo de cards (branco puro).
   ///
   /// **Valor:** Colors.white (#FFFFFFFF)
@@ -286,7 +286,7 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════
   // CORES DE TEXTO - Hierarquia Tipográfica
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Cor de texto primário (cinza muito escuro).
   ///
   /// **Hex:** #333333 (RGB: 51, 51, 51)
@@ -314,7 +314,7 @@ class AppTheme {
   ///
   /// **Hierarquia:** Nível 1 (mais importante)
   static const Color textPrimary = Color(0xFF333333);
-  
+
   /// Cor de texto secundário (cinza médio).
   ///
   /// **Hex:** #666666 (RGB: 102, 102, 102)
@@ -341,7 +341,7 @@ class AppTheme {
   ///
   /// **Hierarquia:** Nível 2 (importância média)
   static const Color textSecondary = Color(0xFF666666);
-  
+
   /// Cor de texto hint/placeholder (cinza claro).
   ///
   /// **Hex:** #999999 (RGB: 153, 153, 153)
@@ -368,7 +368,7 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════
   // CORES DE ESTADO - Feedback Visual
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Cor de sucesso (verde Material).
   ///
   /// **Hex:** #4CAF50 (RGB: 76, 175, 80)
@@ -402,7 +402,7 @@ class AppTheme {
   /// );
   /// ```
   static const Color successColor = Color(0xFF4CAF50);
-  
+
   /// Cor de erro (vermelho suave).
   ///
   /// **Hex:** #E74C3C (RGB: 231, 76, 60)
@@ -441,7 +441,7 @@ class AppTheme {
   /// }
   /// ```
   static const Color errorColor = Color(0xFFE74C3C);
-  
+
   /// Cor de aviso (laranja).
   ///
   /// **Hex:** #FFA726 (RGB: 255, 167, 38)
@@ -475,7 +475,7 @@ class AppTheme {
   /// }
   /// ```
   static const Color warningColor = Color(0xFFFFA726);
-  
+
   /// Cor informativa (azul, mesmo que secondaryColor).
   ///
   /// **Hex:** #2196F3 (RGB: 33, 150, 243)
@@ -509,10 +509,10 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════
   // ESPECIALIDADES - Gradientes para Cards de Categorias
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Gradiente para cards de "Cuidadores" (roxo primário).
   ///
-  /// **Cores:** 
+  /// **Cores:**
   /// - Início (topLeft): #667EEA (primaryColor - roxo claro)
   /// - Fim (bottomRight): #764BA2 (primaryDark - roxo escuro)
   ///
@@ -744,16 +744,16 @@ class AppTheme {
   }
 
   // === SPACING ===
-  static const double spaceXs = 4.0;
-  static const double spaceSm = 8.0;
-  static const double spaceMd = 16.0;
-  static const double spaceLg = 24.0;
-  static const double spaceXl = 32.0;
+  static const double spaceXs = 4;
+  static const double spaceSm = 8;
+  static const double spaceMd = 16;
+  static const double spaceLg = 24;
+  static const double spaceXl = 32;
 
   // === BORDER RADIUS ===
-  static const double radiusSm = 8.0;
-  static const double radiusMd = 12.0;
-  static const double radiusLg = 16.0;
-  static const double radiusXl = 20.0;
-  static const double radiusFull = 999.0;
+  static const double radiusSm = 8;
+  static const double radiusMd = 12;
+  static const double radiusLg = 16;
+  static const double radiusXl = 20;
+  static const double radiusFull = 999;
 }

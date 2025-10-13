@@ -48,7 +48,7 @@ void main() {
     test('deve retornar 0.0 quando não houver avaliações', () async {
       // Arrange
       when(mockRepository.getAverageRating(tProfessionalId))
-          .thenAnswer((_) async => const Right(0.0));
+          .thenAnswer((_) async => const Right(0));
 
       // Act
       final result = await useCase(tProfessionalId);

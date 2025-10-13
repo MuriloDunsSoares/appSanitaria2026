@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:flutter/material.dart';
 
 /// Botões Flutuantes para PROFISSIONAIS
 ///

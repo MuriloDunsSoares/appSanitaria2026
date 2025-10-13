@@ -35,14 +35,14 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem - SENAC 2010',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
       biografia: 'Técnico especializado',
-      avaliacao: 0.0,
-      hourlyRate: 75.0,
+      avaliacao: 0,
+      hourlyRate: 75,
     );
 
     final tRegisteredProfessional = ProfessionalEntity(
@@ -90,8 +90,8 @@ void main() {
 
     test('deve retornar ValidationFailure quando email já existe', () async {
       // Arrange
-      when(mockRepository.registerProfessional(tProfessional))
-          .thenAnswer((_) async => const Left(ValidationFailure('Email já cadastrado')));
+      when(mockRepository.registerProfessional(tProfessional)).thenAnswer(
+          (_) async => const Left(ValidationFailure('Email já cadastrado')));
 
       // Act
       final result = await useCase(tProfessional);

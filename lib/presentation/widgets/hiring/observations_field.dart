@@ -8,12 +8,11 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o campo de observações
 /// - Opcional: Sem validador (campo opcional)
 class ObservationsField extends StatelessWidget {
-  final TextEditingController controller;
-
   const ObservationsField({
     super.key,
     required this.controller,
   });
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -48,5 +47,3 @@ class ObservationsField extends StatelessWidget {
     );
   }
 }
-
-

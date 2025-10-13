@@ -35,14 +35,14 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
       biografia: 'Técnico especializado',
       avaliacao: 4.8,
-      hourlyRate: 80.0,
+      hourlyRate: 80,
     );
 
     test('deve atualizar perfil do profissional com sucesso', () async {

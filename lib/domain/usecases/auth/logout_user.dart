@@ -10,16 +10,11 @@ import '../../repositories/auth_repository.dart';
 ///
 /// **Responsabilidade única:** Encerrar sessão.
 class LogoutUser extends UseCase<Unit, NoParams> {
-  final AuthRepository repository;
-
   LogoutUser(this.repository);
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, Unit>> call(NoParams params) async {
-    return await repository.logout();
+    return repository.logout();
   }
 }
-
-
-
-

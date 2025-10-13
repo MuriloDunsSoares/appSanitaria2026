@@ -5,19 +5,6 @@ import 'package:equatable/equatable.dart';
 /// Representa um usuário genérico que pode ser tanto um profissional
 /// quanto um paciente. Esta é a entidade do domínio (regras de negócio puras).
 abstract class UserEntity extends Equatable {
-  final String id;
-  final String nome;
-  final String email;
-  final String password;
-  final String telefone;
-  final DateTime dataNascimento;
-  final String endereco;
-  final String cidade;
-  final String estado;
-  final String sexo;
-  final UserType tipo;
-  final DateTime dataCadastro;
-
   const UserEntity({
     required this.id,
     required this.nome,
@@ -32,6 +19,18 @@ abstract class UserEntity extends Equatable {
     required this.tipo,
     required this.dataCadastro,
   });
+  final String id;
+  final String nome;
+  final String email;
+  final String password;
+  final String telefone;
+  final DateTime dataNascimento;
+  final String endereco;
+  final String cidade;
+  final String estado;
+  final String sexo;
+  final UserType tipo;
+  final DateTime dataCadastro;
 
   /// Calcula idade a partir da data de nascimento
   int get idade {

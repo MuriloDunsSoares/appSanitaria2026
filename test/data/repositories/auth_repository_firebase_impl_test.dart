@@ -1,8 +1,3 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_auth_datasource.dart';
@@ -10,6 +5,10 @@ import 'package:app_sanitaria/data/repositories/auth_repository_firebase_impl.da
 import 'package:app_sanitaria/domain/entities/patient_entity.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/domain/entities/speciality.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([FirebaseAuthDataSource])
 import 'auth_repository_firebase_impl_test.mocks.dart';
@@ -31,7 +30,7 @@ void main() {
     email: 'joao@teste.com',
     password: '123456',
     telefone: '11999999999',
-    dataNascimento: DateTime(1990, 1, 1),
+    dataNascimento: DateTime(1990),
     endereco: 'Rua Teste, 123',
     cidade: 'São Paulo',
     estado: 'SP',
@@ -46,7 +45,7 @@ void main() {
     email: 'doutor@teste.com',
     password: '123456',
     telefone: '11999999999',
-    dataNascimento: DateTime(1980, 1, 1),
+    dataNascimento: DateTime(1980),
     endereco: 'Rua Teste, 123',
     cidade: 'São Paulo',
     estado: 'SP',
@@ -83,7 +82,8 @@ void main() {
       verifyNoMoreInteractions(mockFirebaseAuthDataSource);
     });
 
-    test('deve retornar InvalidCredentialsFailure quando credenciais inválidas', () async {
+    test('deve retornar InvalidCredentialsFailure quando credenciais inválidas',
+        () async {
       // arrange
       when(mockFirebaseAuthDataSource.login(
         email: anyNamed('email'),
@@ -100,7 +100,8 @@ void main() {
       expect(result, const Left(InvalidCredentialsFailure()));
     });
 
-    test('deve retornar UserNotFoundFailure quando usuário não existe', () async {
+    test('deve retornar UserNotFoundFailure quando usuário não existe',
+        () async {
       // arrange
       when(mockFirebaseAuthDataSource.login(
         email: anyNamed('email'),
@@ -167,7 +168,8 @@ void main() {
       verifyNoMoreInteractions(mockFirebaseAuthDataSource);
     });
 
-    test('deve retornar EmailAlreadyExistsFailure quando email já cadastrado', () async {
+    test('deve retornar EmailAlreadyExistsFailure quando email já cadastrado',
+        () async {
       // arrange
       when(mockFirebaseAuthDataSource.registerPatient(any))
           .thenThrow(const EmailAlreadyExistsException('Email já existe'));
@@ -219,7 +221,8 @@ void main() {
       verifyNoMoreInteractions(mockFirebaseAuthDataSource);
     });
 
-    test('deve retornar EmailAlreadyExistsFailure quando email já cadastrado', () async {
+    test('deve retornar EmailAlreadyExistsFailure quando email já cadastrado',
+        () async {
       // arrange
       when(mockFirebaseAuthDataSource.registerProfessional(any))
           .thenThrow(const EmailAlreadyExistsException('Email já existe'));
@@ -235,8 +238,7 @@ void main() {
   group('AuthRepositoryFirebaseImpl - logout', () {
     test('deve fazer logout com sucesso', () async {
       // arrange
-      when(mockFirebaseAuthDataSource.logout())
-          .thenAnswer((_) async => {});
+      when(mockFirebaseAuthDataSource.logout()).thenAnswer((_) async => {});
 
       // act
       final result = await repository.logout();
@@ -324,4 +326,3 @@ void main() {
     });
   });
 }
-

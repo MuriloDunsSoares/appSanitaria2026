@@ -9,30 +9,23 @@ import '../../entities/conversation_entity.dart';
 import '../../repositories/chat_repository.dart';
 
 /// Use Case para obter conversas do usuário.
-class GetUserConversations
-    extends UseCase<List<ConversationEntity>, String> {
-  final ChatRepository repository;
-
+class GetUserConversations extends UseCase<List<ConversationEntity>, String> {
   GetUserConversations(this.repository);
+  final ChatRepository repository;
 
   @override
   Future<Either<Failure, List<ConversationEntity>>> call(
     String userId,
   ) async {
-    return await repository.getUserConversations(userId);
+    return repository.getUserConversations(userId);
   }
 }
 
 /// Parâmetros para buscar por user ID.
 class UserIdParams extends Equatable {
-  final String userId;
-
   const UserIdParams(this.userId);
+  final String userId;
 
   @override
   List<Object?> get props => [userId];
 }
-
-
-
-

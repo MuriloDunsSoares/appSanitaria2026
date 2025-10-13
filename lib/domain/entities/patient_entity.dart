@@ -5,8 +5,6 @@ import 'user_entity.dart';
 /// Estende UserEntity com campos específicos de pacientes
 /// como condições médicas, medicações, tipo sanguíneo e alergias.
 class PatientEntity extends UserEntity {
-  final String condicoesMedicas;
-
   const PatientEntity({
     required super.id,
     required super.nome,
@@ -21,6 +19,29 @@ class PatientEntity extends UserEntity {
     required super.dataCadastro,
     this.condicoesMedicas = '',
   }) : super(tipo: UserType.paciente);
+
+  /// Deserialização de JSON (Map)
+  factory PatientEntity.fromJson(Map<String, dynamic> json) {
+    return PatientEntity(
+      id: (json['id'] as String?) ?? '',
+      nome: (json['nome'] as String?) ?? '',
+      email: (json['email'] as String?) ?? '',
+      password: (json['password'] as String?) ?? '',
+      telefone: (json['telefone'] as String?) ?? '',
+      dataNascimento: json['dataNascimento'] != null
+          ? DateTime.parse(json['dataNascimento'] as String)
+          : DateTime.now(),
+      endereco: (json['endereco'] as String?) ?? '',
+      cidade: (json['cidade'] as String?) ?? '',
+      estado: (json['estado'] as String?) ?? '',
+      sexo: (json['sexo'] as String?) ?? '',
+      dataCadastro: json['dataCadastro'] != null
+          ? DateTime.parse(json['dataCadastro'] as String)
+          : DateTime.now(),
+      condicoesMedicas: (json['condicoesMedicas'] as String?) ?? '',
+    );
+  }
+  final String condicoesMedicas;
 
   @override
   List<Object?> get props => [
@@ -46,27 +67,5 @@ class PatientEntity extends UserEntity {
       'dataCadastro': dataCadastro.toIso8601String(),
       'condicoesMedicas': condicoesMedicas,
     };
-  }
-
-  /// Deserialização de JSON (Map)
-  factory PatientEntity.fromJson(Map<String, dynamic> json) {
-    return PatientEntity(
-      id: (json['id'] as String?) ?? '',
-      nome: (json['nome'] as String?) ?? '',
-      email: (json['email'] as String?) ?? '',
-      password: (json['password'] as String?) ?? '',
-      telefone: (json['telefone'] as String?) ?? '',
-      dataNascimento: json['dataNascimento'] != null 
-          ? DateTime.parse(json['dataNascimento'] as String)
-          : DateTime.now(),
-      endereco: (json['endereco'] as String?) ?? '',
-      cidade: (json['cidade'] as String?) ?? '',
-      estado: (json['estado'] as String?) ?? '',
-      sexo: (json['sexo'] as String?) ?? '',
-      dataCadastro: json['dataCadastro'] != null
-          ? DateTime.parse(json['dataCadastro'] as String)
-          : DateTime.now(),
-      condicoesMedicas: (json['condicoesMedicas'] as String?) ?? '',
-    );
   }
 }

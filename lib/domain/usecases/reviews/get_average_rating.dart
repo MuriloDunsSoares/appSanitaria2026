@@ -9,26 +9,20 @@ import '../../repositories/reviews_repository.dart';
 
 /// Use Case para obter rating médio.
 class GetAverageRating extends UseCase<double, String> {
-  final ReviewsRepository repository;
-
   GetAverageRating(this.repository);
+  final ReviewsRepository repository;
 
   @override
   Future<Either<Failure, double>> call(String professionalId) async {
-    return await repository.getAverageRating(professionalId);
+    return repository.getAverageRating(professionalId);
   }
 }
 
 /// Parâmetros para buscar rating.
 class ProfessionalIdParams extends Equatable {
-  final String professionalId;
-
   const ProfessionalIdParams(this.professionalId);
+  final String professionalId;
 
   @override
   List<Object?> get props => [professionalId];
 }
-
-
-
-

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
 
 /// Widget: Modal de Seleção de Cidade
 ///
@@ -9,12 +9,11 @@ import 'package:app_sanitaria/core/constants/app_constants.dart';
 /// - Single Responsibility: Apenas renderiza o modal de cidades
 /// - State Management: Usa StatefulBuilder para busca local
 class CitySelectorModal extends StatefulWidget {
-  final Function(String city) onCitySelected;
-
   const CitySelectorModal({
     super.key,
     required this.onCitySelected,
   });
+  final Function(String city) onCitySelected;
 
   @override
   State<CitySelectorModal> createState() => _CitySelectorModalState();
@@ -136,5 +135,3 @@ class _CitySelectorModalState extends State<CitySelectorModal> {
     );
   }
 }
-
-

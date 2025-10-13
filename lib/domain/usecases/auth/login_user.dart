@@ -13,14 +13,14 @@ import '../../repositories/auth_repository.dart';
 /// **Responsabilidade única:** Autenticar credenciais.
 /// **Validações:** Nenhuma (delegadas ao repository).
 class LoginUser extends UseCase<UserEntity, LoginParams> {
-  final AuthRepository repository;
-
   LoginUser(this.repository);
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, UserEntity>> call(LoginParams params) async {
-    print('[LoginUser] Iniciando login... keepLoggedIn = ${params.keepLoggedIn}');
-    
+    print(
+        '[LoginUser] Iniciando login... keepLoggedIn = ${params.keepLoggedIn}');
+
     final result = await repository.login(
       email: params.email,
       password: params.password,
@@ -33,7 +33,8 @@ class LoginUser extends UseCase<UserEntity, LoginParams> {
         print('[LoginUser] Login falhou: $failure');
       },
       (user) async {
-        print('[LoginUser] Login OK! Salvando keepLoggedIn = ${params.keepLoggedIn}');
+        print(
+            '[LoginUser] Login OK! Salvando keepLoggedIn = ${params.keepLoggedIn}');
         await repository.setKeepLoggedIn(params.keepLoggedIn);
         print('[LoginUser] keepLoggedIn salvo com sucesso!');
       },
@@ -45,20 +46,15 @@ class LoginUser extends UseCase<UserEntity, LoginParams> {
 
 /// Parâmetros do Use Case LoginUser.
 class LoginParams extends Equatable {
-  final String email;
-  final String password;
-  final bool keepLoggedIn;
-
   const LoginParams({
     required this.email,
     required this.password,
     this.keepLoggedIn = false,
   });
+  final String email;
+  final String password;
+  final bool keepLoggedIn;
 
   @override
   List<Object?> get props => [email, password, keepLoggedIn];
 }
-
-
-
-

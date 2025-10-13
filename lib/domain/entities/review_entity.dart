@@ -2,14 +2,6 @@
 ///
 /// Representa uma avaliação feita por um paciente sobre um profissional.
 class ReviewEntity {
-  final String id;
-  final String professionalId;
-  final String patientId;
-  final String patientName;
-  final int rating; // 1 a 5 estrelas
-  final String comment;
-  final DateTime createdAt;
-
   const ReviewEntity({
     required this.id,
     required this.professionalId,
@@ -31,6 +23,13 @@ class ReviewEntity {
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
+  final String id;
+  final String professionalId;
+  final String patientId;
+  final String patientName;
+  final int rating; // 1 a 5 estrelas
+  final String comment;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
     return {

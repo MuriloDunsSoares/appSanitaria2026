@@ -25,7 +25,7 @@ void main() {
     const tUserId = 'patient123';
     const tImagePath = '/storage/images/patient123.jpg';
 
-    final tParams = SaveProfileImageParams(
+    const tParams = SaveProfileImageParams(
       userId: tUserId,
       imagePath: tImagePath,
     );
@@ -45,7 +45,7 @@ void main() {
 
     test('deve retornar ValidationFailure quando caminho inválido', () async {
       // Arrange
-      final invalidParams = SaveProfileImageParams(
+      const invalidParams = SaveProfileImageParams(
         userId: tUserId,
         imagePath: '',
       );

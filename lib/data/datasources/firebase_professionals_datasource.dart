@@ -6,16 +6,15 @@ import '../../domain/entities/professional_entity.dart';
 import '../../domain/entities/user_type.dart';
 
 /// DataSource para profissionais usando Firestore
-/// 
+///
 /// Responsável por:
 /// - Buscar profissionais
 /// - Filtrar por especialidade/cidade
 /// - Atualizar dados de profissionais
 class FirebaseProfessionalsDataSource {
-  final FirebaseFirestore _firestore;
-
   FirebaseProfessionalsDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   /// Obtém todos os profissionais
   Future<List<ProfessionalEntity>> getAllProfessionals() async {
@@ -24,7 +23,8 @@ class FirebaseProfessionalsDataSource {
 
       final snapshot = await _firestore
           .collection(FirestoreCollections.users)
-          .where(FirestoreCollections.tipo, isEqualTo: UserType.professional.name)
+          .where(FirestoreCollections.tipo,
+              isEqualTo: UserType.professional.name)
           .get();
 
       final professionals = snapshot.docs.map((doc) {
@@ -35,7 +35,8 @@ class FirebaseProfessionalsDataSource {
 
       return professionals;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar profissionais', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar profissionais',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar profissionais: $e');
     }
   }
@@ -58,11 +59,13 @@ class FirebaseProfessionalsDataSource {
             especialidadeLower.contains(queryLower);
       }).toList();
 
-      AppLogger.info('✅ ${filtered.length} profissionais encontrados com "$query"');
+      AppLogger.info(
+          '✅ ${filtered.length} profissionais encontrados com "$query"');
 
       return filtered;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar profissionais', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar profissionais',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar profissionais: $e');
     }
   }
@@ -72,10 +75,8 @@ class FirebaseProfessionalsDataSource {
     try {
       AppLogger.info('Buscando profissional: $id');
 
-      final doc = await _firestore
-          .collection(FirestoreCollections.users)
-          .doc(id)
-          .get();
+      final doc =
+          await _firestore.collection(FirestoreCollections.users).doc(id).get();
 
       if (!doc.exists) {
         AppLogger.info('⚠️ Profissional não encontrado: $id');
@@ -92,14 +93,16 @@ class FirebaseProfessionalsDataSource {
 
       return ProfessionalEntity.fromJson(data);
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar profissional', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar profissional',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
 
   /// Obtém múltiplos profissionais por IDs
   /// Útil para buscar favoritos
-  Future<List<ProfessionalEntity>> getProfessionalsByIds(List<String> ids) async {
+  Future<List<ProfessionalEntity>> getProfessionalsByIds(
+      List<String> ids) async {
     try {
       if (ids.isEmpty) {
         return [];
@@ -109,7 +112,7 @@ class FirebaseProfessionalsDataSource {
 
       // Buscar profissionais em lotes (Firestore limita 'whereIn' a 10 itens)
       final List<ProfessionalEntity> professionals = [];
-      
+
       // Dividir em chunks de 10 IDs
       for (var i = 0; i < ids.length; i += 10) {
         final chunkEnd = (i + 10 < ids.length) ? i + 10 : ids.length;
@@ -118,7 +121,8 @@ class FirebaseProfessionalsDataSource {
         final snapshot = await _firestore
             .collection(FirestoreCollections.users)
             .where(FieldPath.documentId, whereIn: chunk)
-            .where(FirestoreCollections.tipo, isEqualTo: UserType.professional.name)
+            .where(FirestoreCollections.tipo,
+                isEqualTo: UserType.professional.name)
             .get();
 
         final chunkProfessionals = snapshot.docs.map((doc) {
@@ -128,11 +132,13 @@ class FirebaseProfessionalsDataSource {
         professionals.addAll(chunkProfessionals);
       }
 
-      AppLogger.info('✅ ${professionals.length} profissionais encontrados por IDs');
+      AppLogger.info(
+          '✅ ${professionals.length} profissionais encontrados por IDs');
 
       return professionals;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar profissionais por IDs', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar profissionais por IDs',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar profissionais por IDs: $e');
     }
   }
@@ -152,7 +158,8 @@ class FirebaseProfessionalsDataSource {
 
       AppLogger.info('✅ Profissional atualizado: ${professional.id}');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar profissional', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar profissional',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao atualizar profissional: $e');
     }
   }
@@ -175,7 +182,8 @@ class FirebaseProfessionalsDataSource {
 
       AppLogger.info('✅ Avaliação atualizada: $professionalId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar avaliação', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar avaliação',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao atualizar avaliação: $e');
     }
   }
@@ -198,9 +206,9 @@ class FirebaseProfessionalsDataSource {
 
       AppLogger.info('✅ Foto atualizada: $professionalId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar foto', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar foto',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao atualizar foto: $e');
     }
   }
 }
-

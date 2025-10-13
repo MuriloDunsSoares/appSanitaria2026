@@ -82,5 +82,3 @@ abstract class ChatRepository {
   /// - [Left(StorageFailure)]: erro ao contar
   Future<Either<Failure, int>> getUnreadCount(String userId);
 }
-
-

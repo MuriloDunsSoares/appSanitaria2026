@@ -37,8 +37,7 @@ void main() {
       time: '08:00',
       address: 'Rua das Flores, 123 - São Paulo/SP',
       observations: 'Paciente com mobilidade reduzida',
-      status: ContractStatus.pending,
-      totalValue: 3000.0,
+      totalValue: 3000,
       createdAt: DateTime(2025, 10, 9),
     );
 
@@ -63,7 +62,7 @@ void main() {
     test('deve criar contrato com sucesso', () async {
       // Arrange
       final params = CreateContractParams(tContract);
-      
+
       when(mockRepository.createContract(tContract))
           .thenAnswer((_) async => Right(tCreatedContract));
 
@@ -88,7 +87,7 @@ void main() {
     test('deve retornar StorageFailure quando falha ao criar', () async {
       // Arrange
       final params = CreateContractParams(tContract);
-      
+
       when(mockRepository.createContract(tContract))
           .thenAnswer((_) async => const Left(StorageFailure()));
 

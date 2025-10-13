@@ -5,31 +5,31 @@ import '../../core/utils/app_logger.dart';
 import '../../domain/entities/contract_entity.dart';
 
 /// DataSource para contratos usando Firestore
-/// 
+///
 /// Responsável por:
 /// - Criar contratos
 /// - Buscar contratos por usuário
 /// - Atualizar status de contratos
 class FirebaseContractsDataSource {
-  final FirebaseFirestore _firestore;
-
   FirebaseContractsDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   /// Cria um novo contrato
   Future<ContractEntity> createContract(ContractEntity contract) async {
     try {
-      AppLogger.info('Criando contrato: ${contract.patientId} -> ${contract.professionalId}');
+      AppLogger.info(
+          'Criando contrato: ${contract.patientId} -> ${contract.professionalId}');
 
-      final contractId = _firestore
-          .collection(FirestoreCollections.contracts)
-          .doc()
-          .id;
+      final contractId =
+          _firestore.collection(FirestoreCollections.contracts).doc().id;
 
       final contractData = contract.toJson();
       contractData[FirestoreCollections.id] = contractId;
-      contractData[FirestoreCollections.createdAt] = FieldValue.serverTimestamp();
-      contractData[FirestoreCollections.updatedAt] = FieldValue.serverTimestamp();
+      contractData[FirestoreCollections.createdAt] =
+          FieldValue.serverTimestamp();
+      contractData[FirestoreCollections.updatedAt] =
+          FieldValue.serverTimestamp();
 
       await _firestore
           .collection(FirestoreCollections.contracts)
@@ -41,7 +41,8 @@ class FirebaseContractsDataSource {
       // Retornar entidade com ID atualizado
       return ContractEntity.fromJson({...contract.toJson(), 'id': contractId});
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao criar contrato', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao criar contrato',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao criar contrato: $e');
     }
   }
@@ -81,7 +82,8 @@ class FirebaseContractsDataSource {
 
       return contracts;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar contratos', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar contratos',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar contratos: $e');
     }
   }
@@ -104,7 +106,8 @@ class FirebaseContractsDataSource {
 
       return contracts;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar todos os contratos', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar todos os contratos',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar todos os contratos: $e');
     }
   }
@@ -128,13 +131,15 @@ class FirebaseContractsDataSource {
 
       return contracts;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar contratos do paciente', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar contratos do paciente',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar contratos do paciente: $e');
     }
   }
 
   /// Obtém contratos por profissional
-  Future<List<ContractEntity>> getContractsByProfessional(String professionalId) async {
+  Future<List<ContractEntity>> getContractsByProfessional(
+      String professionalId) async {
     try {
       AppLogger.info('Buscando contratos do profissional: $professionalId');
 
@@ -148,11 +153,13 @@ class FirebaseContractsDataSource {
           .map((doc) => ContractEntity.fromJson(doc.data()))
           .toList();
 
-      AppLogger.info('✅ ${contracts.length} contratos do profissional encontrados');
+      AppLogger.info(
+          '✅ ${contracts.length} contratos do profissional encontrados');
 
       return contracts;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar contratos do profissional', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar contratos do profissional',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar contratos do profissional: $e');
     }
   }
@@ -174,7 +181,8 @@ class FirebaseContractsDataSource {
 
       return ContractEntity.fromJson(doc.data()!);
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar contrato', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar contrato',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -197,7 +205,8 @@ class FirebaseContractsDataSource {
 
       AppLogger.info('✅ Status atualizado: $contractId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar status', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar status',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao atualizar status: $e');
     }
   }
@@ -208,7 +217,8 @@ class FirebaseContractsDataSource {
       AppLogger.info('Atualizando contrato: ${contract.id}');
 
       final contractData = contract.toJson();
-      contractData[FirestoreCollections.updatedAt] = FieldValue.serverTimestamp();
+      contractData[FirestoreCollections.updatedAt] =
+          FieldValue.serverTimestamp();
 
       await _firestore
           .collection(FirestoreCollections.contracts)
@@ -217,7 +227,8 @@ class FirebaseContractsDataSource {
 
       AppLogger.info('✅ Contrato atualizado: ${contract.id}');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar contrato', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar contrato',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao atualizar contrato: $e');
     }
   }
@@ -234,9 +245,9 @@ class FirebaseContractsDataSource {
 
       AppLogger.info('✅ Contrato deletado: $contractId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao deletar contrato', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao deletar contrato',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao deletar contrato: $e');
     }
   }
 }
-

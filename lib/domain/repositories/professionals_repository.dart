@@ -88,4 +88,3 @@ abstract class ProfessionalsRepository {
   Future<Either<Failure, Unit>> updateProfessional(
       ProfessionalEntity professional);
 }
-

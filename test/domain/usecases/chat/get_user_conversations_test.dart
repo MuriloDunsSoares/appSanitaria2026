@@ -1,5 +1,5 @@
 /// Testes para GetUserConversations Use Case
-/// 
+///
 /// Objetivo: Validar busca de todas as conversas de um usuário
 /// Regras de negócio:
 /// - Deve retornar lista de conversas com última mensagem
@@ -33,7 +33,7 @@ void main() {
   group('GetUserConversations', () {
     // Dados REALISTAS para testes
     const tUserId = 'patient123';
-    
+
     final tLastMessage1 = MessageEntity(
       id: 'msg1',
       conversationId: 'conv1',
@@ -42,7 +42,6 @@ void main() {
       receiverId: tUserId,
       content: 'Posso começar na segunda-feira às 8h.',
       timestamp: DateTime(2025, 10, 9, 15, 30),
-      isRead: false,
     );
 
     final tLastMessage2 = MessageEntity(
@@ -75,12 +74,12 @@ void main() {
       otherUserSpecialty: 'Cuidadores',
       lastMessage: tLastMessage2,
       lastMessageTime: DateTime(2025, 10, 8, 10, 15),
-      unreadCount: 0,
     );
 
     final tConversations = [tConversation1, tConversation2];
 
-    test('deve retornar lista de conversas do usuário quando existem conversas', () async {
+    test('deve retornar lista de conversas do usuário quando existem conversas',
+        () async {
       // Arrange
       when(mockRepository.getUserConversations(tUserId))
           .thenAnswer((_) async => Right(tConversations));
@@ -94,13 +93,14 @@ void main() {
         (failure) => fail('Deveria retornar lista de conversas'),
         (conversations) {
           expect(conversations.length, 2);
-          
+
           // Verificar primeira conversa
           expect(conversations[0].id, 'conv1');
           expect(conversations[0].otherUserName, 'João Santos');
           expect(conversations[0].unreadCount, 2);
-          expect(conversations[0].lastMessage?.content, contains('segunda-feira'));
-          
+          expect(
+              conversations[0].lastMessage?.content, contains('segunda-feira'));
+
           // Verificar segunda conversa
           expect(conversations[1].id, 'conv2');
           expect(conversations[1].otherUserName, 'Ana Costa');
@@ -113,7 +113,8 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar lista vazia quando usuário não tem conversas', () async {
+    test('deve retornar lista vazia quando usuário não tem conversas',
+        () async {
       // Arrange
       when(mockRepository.getUserConversations(tUserId))
           .thenAnswer((_) async => const Right([]));
@@ -133,7 +134,8 @@ void main() {
       verify(mockRepository.getUserConversations(tUserId)).called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao buscar conversas', () async {
+    test('deve retornar StorageFailure quando ocorre erro ao buscar conversas',
+        () async {
       // Arrange
       when(mockRepository.getUserConversations(tUserId))
           .thenAnswer((_) async => const Left(StorageFailure()));

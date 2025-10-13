@@ -8,12 +8,11 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza a saudação
 /// - Reusabilidade: Simples e direto
 class ProfessionalHeader extends StatelessWidget {
-  final String firstName;
-
   const ProfessionalHeader({
     super.key,
     required this.firstName,
   });
+  final String firstName;
 
   @override
   Widget build(BuildContext context) {
@@ -39,5 +38,3 @@ class ProfessionalHeader extends StatelessWidget {
     );
   }
 }
-
-

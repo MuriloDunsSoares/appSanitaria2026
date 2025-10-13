@@ -8,12 +8,6 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Renderiza período e duração
 /// - Composição: Combina chips e slider
 class PeriodDurationSelector extends StatelessWidget {
-  final String selectedPeriod;
-  final int selectedDuration;
-  final List<String> periods;
-  final ValueChanged<String> onPeriodChanged;
-  final ValueChanged<int> onDurationChanged;
-
   const PeriodDurationSelector({
     super.key,
     required this.selectedPeriod,
@@ -22,6 +16,11 @@ class PeriodDurationSelector extends StatelessWidget {
     required this.onPeriodChanged,
     required this.onDurationChanged,
   });
+  final String selectedPeriod;
+  final int selectedDuration;
+  final List<String> periods;
+  final ValueChanged<String> onPeriodChanged;
+  final ValueChanged<int> onDurationChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -87,5 +86,3 @@ class PeriodDurationSelector extends StatelessWidget {
     );
   }
 }
-
-

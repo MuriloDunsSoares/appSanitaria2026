@@ -1,12 +1,12 @@
+import 'package:app_sanitaria/domain/entities/patient_entity.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/profile_provider.dart';
+import 'package:app_sanitaria/presentation/widgets/profile_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/profile_provider.dart';
-import 'package:app_sanitaria/domain/entities/user_entity.dart';
-import 'package:app_sanitaria/domain/entities/patient_entity.dart';
-import 'package:app_sanitaria/domain/entities/professional_entity.dart';
-import 'package:app_sanitaria/presentation/widgets/profile_image_picker.dart';
 
 /// Tela de Perfil (Minha Conta)
 ///
@@ -47,7 +47,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (userId != null) {
       await ref.read(profileProvider.notifier).loadProfileImage(userId);
       final profileState = ref.read(profileProvider);
-      
+
       if (profileState.profileImagePath != null && mounted) {
         setState(() => _profileImagePath = profileState.profileImagePath);
       }
@@ -60,7 +60,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userId = authState.user?.id;
 
     if (userId != null) {
-      await ref.read(profileProvider.notifier).saveProfileImage(userId, imagePath);
+      await ref
+          .read(profileProvider.notifier)
+          .saveProfileImage(userId, imagePath);
       setState(() => _profileImagePath = imagePath);
     }
   }
@@ -88,7 +90,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       ),
     );
 
-    if (shouldLogout == true) {
+    if (shouldLogout ?? false) {
       await ref.read(authProviderV2.notifier).logout();
       if (mounted) {
         context.go('/');
@@ -115,151 +117,149 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         }
       },
       child: Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Tela acessada via bottom nav
-        title: const Text('Minha Conta'),
-        elevation: 0,
-      ),
-      body: user == null
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Avatar com ProfileImagePicker
-                  ProfileImagePicker(
-                    initialImagePath: _profileImagePath,
-                    onImageSelected: _onImageSelected,
-                    size: 120,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Nome
-                  Text(
-                    user.nome,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          automaticallyImplyLeading: false, // Tela acessada via bottom nav
+          title: const Text('Minha Conta'),
+          elevation: 0,
+        ),
+        body: user == null
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    // Avatar com ProfileImagePicker
+                    ProfileImagePicker(
+                      initialImagePath: _profileImagePath,
+                      onImageSelected: _onImageSelected,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 24),
 
-                  // Tipo de usuário
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: userType == UserType.paciente
-                          ? Colors.green.shade100
-                          : Colors.blue.shade100,
-                      borderRadius: BorderRadius.circular(20),
+                    // Nome
+                    Text(
+                      user.nome,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    child: Text(
-                      userType == UserType.paciente
-                          ? 'Paciente'
-                          : 'Profissional',
-                      style: TextStyle(
+
+                    const SizedBox(height: 8),
+
+                    // Tipo de usuário
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
                         color: userType == UserType.paciente
-                            ? Colors.green.shade900
-                            : Colors.blue.shade900,
-                        fontWeight: FontWeight.w600,
+                            ? Colors.green.shade100
+                            : Colors.blue.shade100,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        userType == UserType.paciente
+                            ? 'Paciente'
+                            : 'Profissional',
+                        style: TextStyle(
+                          color: userType == UserType.paciente
+                              ? Colors.green.shade900
+                              : Colors.blue.shade900,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
-                  // Card de informações
-                  Card(
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          _buildInfoRow(
-                            icon: Icons.email,
-                            label: 'Email',
-                            value: user.email,
-                          ),
-                          const Divider(height: 24),
-                          _buildInfoRow(
-                            icon: Icons.phone,
-                            label: 'Telefone',
-                            value: user.telefone,
-                          ),
-                          const Divider(height: 24),
-                          _buildInfoRow(
-                            icon: Icons.location_city,
-                            label: 'Cidade',
-                            value: _getUserLocation(user),
-                          ),
-                          if (userType == UserType.profissional) ...[
+                    // Card de informações
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            _buildInfoRow(
+                              icon: Icons.email,
+                              label: 'Email',
+                              value: user.email,
+                            ),
                             const Divider(height: 24),
                             _buildInfoRow(
-                              icon: Icons.work,
-                              label: 'Especialidade',
-                              value: _getUserSpecialty(user),
+                              icon: Icons.phone,
+                              label: 'Telefone',
+                              value: user.telefone,
                             ),
+                            const Divider(height: 24),
+                            _buildInfoRow(
+                              icon: Icons.location_city,
+                              label: 'Cidade',
+                              value: _getUserLocation(user),
+                            ),
+                            if (userType == UserType.profissional) ...[
+                              const Divider(height: 24),
+                              _buildInfoRow(
+                                icon: Icons.work,
+                                label: 'Especialidade',
+                                value: _getUserSpecialty(user),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  // Botão Meus Contratos
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        context.go('/contracts');
-                      },
-                      icon: const Icon(Icons.description),
-                      label: const Text('Meus Contratos'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
-                        foregroundColor: Colors.white,
+                    // Botão Meus Contratos
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          context.go('/contracts');
+                        },
+                        icon: const Icon(Icons.description),
+                        label: const Text('Meus Contratos'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          foregroundColor: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  // Botão Editar Perfil
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        context.go('/edit-profile');
-                      },
-                      icon: const Icon(Icons.edit),
-                      label: const Text('Editar Perfil'),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Botão Logout
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _handleLogout,
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Sair'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                    // Botão Editar Perfil
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          context.go('/edit-profile');
+                        },
+                        icon: const Icon(Icons.edit),
+                        label: const Text('Editar Perfil'),
                       ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 16),
+
+                    // Botão Logout
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _handleLogout,
+                        icon: const Icon(Icons.logout),
+                        label: const Text('Sair'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
       ),
     );
   }

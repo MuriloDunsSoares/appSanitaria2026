@@ -39,8 +39,8 @@ void main() {
 
     test('deve retornar NotFoundFailure quando não houver imagem', () async {
       // Arrange
-      when(mockRepository.deleteProfileImage(tUserId))
-          .thenAnswer((_) async => const Left(NotFoundFailure('Imagem de perfil')));
+      when(mockRepository.deleteProfileImage(tUserId)).thenAnswer(
+          (_) async => const Left(NotFoundFailure('Imagem de perfil')));
 
       // Act
       final result = await useCase(tUserId);

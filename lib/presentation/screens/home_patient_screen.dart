@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:app_sanitaria/presentation/widgets/common/exit_confirmation_wrapper.dart';
+import 'package:app_sanitaria/presentation/widgets/home_patient/city_selector_modal.dart';
 import 'package:app_sanitaria/presentation/widgets/home_patient/patient_home_header.dart';
 import 'package:app_sanitaria/presentation/widgets/home_patient/patient_home_search_bar.dart';
 import 'package:app_sanitaria/presentation/widgets/home_patient/patient_services_grid.dart';
 import 'package:app_sanitaria/presentation/widgets/home_patient/publish_ad_button.dart';
-import 'package:app_sanitaria/presentation/widgets/home_patient/city_selector_modal.dart';
-import 'package:app_sanitaria/presentation/widgets/common/exit_confirmation_wrapper.dart';
 import 'package:app_sanitaria/presentation/widgets/patient_bottom_nav.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tela Home para Pacientes - REFATORADA
 ///
@@ -129,7 +129,7 @@ class _HomePatientScreenState extends ConsumerState<HomePatientScreen> {
         backgroundColor: const Color(0xFFF8F9FA),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -164,7 +164,7 @@ class _HomePatientScreenState extends ConsumerState<HomePatientScreen> {
             ),
           ),
         ),
-        
+
         // Bottom Navigation (índice 0 = Home)
         bottomNavigationBar: const PatientBottomNav(currentIndex: 0),
       ),

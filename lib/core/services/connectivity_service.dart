@@ -8,15 +8,16 @@ import 'package:flutter/foundation.dart';
 /// - Fornecer stream de mudanças de conectividade
 /// - Verificar se há conexão disponível
 class ConnectivityService {
-  static final ConnectivityService _instance = ConnectivityService._internal();
   factory ConnectivityService() => _instance;
   ConnectivityService._internal();
+  static final ConnectivityService _instance = ConnectivityService._internal();
 
   final Connectivity _connectivity = Connectivity();
   ConnectivityResult? _lastResult;
 
   /// Stream que emite mudanças no estado da conectividade
-  Stream<List<ConnectivityResult>> get onConnectivityChanged => _connectivity.onConnectivityChanged;
+  Stream<List<ConnectivityResult>> get onConnectivityChanged =>
+      _connectivity.onConnectivityChanged;
 
   /// Verifica se há conexão com a internet disponível
   Future<bool> isConnected() async {

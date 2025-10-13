@@ -1,10 +1,11 @@
 /// Script para popular Firestore com dados de usuários do Firebase Auth
-/// 
+///
 /// Uso: dart run scripts/populate_firestore_users.dart
+library;
 
+import 'package:app_sanitaria/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../lib/firebase_options.dart';
 
 void main() async {
   print('🔥 Iniciando script de população do Firestore...\n');
@@ -20,7 +21,7 @@ void main() async {
   // IMPORTANTE: Use os UIDs corretos do Firebase Authentication
   final users = [
     {
-      'uid': 'sLrYoCGio6arsQPNh4cYVCRE...',  // Marcio (já existe)
+      'uid': 'sLrYoCGio6arsQPNh4cYVCRE...', // Marcio (já existe)
       'email': 'marcio@gmail.com',
       'nome': 'Marcio',
       'tipo': 'profissional',
@@ -35,7 +36,7 @@ void main() async {
       'avaliacao': 0.0,
     },
     {
-      'uid': 'YAa8VJ2lkQfGkfl6hQtshyeW2...',  // Tiago
+      'uid': 'YAa8VJ2lkQfGkfl6hQtshyeW2...', // Tiago
       'email': 'tiago@gmail.com',
       'nome': 'Tiago',
       'tipo': 'paciente',
@@ -46,7 +47,7 @@ void main() async {
       'dataNascimento': '1990-03-20',
     },
     {
-      'uid': 'NUMVVu40f4MfkvKhhrd7cYA...',  // Eduarda
+      'uid': 'NUMVVu40f4MfkvKhhrd7cYA...', // Eduarda
       'email': 'eduarda@gmail.com',
       'nome': 'Eduarda',
       'tipo': 'profissional',
@@ -61,7 +62,7 @@ void main() async {
       'avaliacao': 0.0,
     },
     {
-      'uid': 'Om2OJvCeELcntuqJietW1x9v...',  // Maria
+      'uid': 'Om2OJvCeELcntuqJietW1x9v...', // Maria
       'email': 'maria@gmail.com',
       'nome': 'Maria',
       'tipo': 'paciente',
@@ -72,7 +73,7 @@ void main() async {
       'dataNascimento': '1975-11-25',
     },
     {
-      'uid': '7RMCuaRhBUfFuTnaQQPP7k2...',  // Ivan
+      'uid': '7RMCuaRhBUfFuTnaQQPP7k2...', // Ivan
       'email': 'ivan@gmail.com',
       'nome': 'Ivan',
       'tipo': 'profissional',
@@ -87,7 +88,7 @@ void main() async {
       'avaliacao': 0.0,
     },
     {
-      'uid': 'HWNpvCLgNieML28XnLTsHX...',  // Murilo
+      'uid': 'HWNpvCLgNieML28XnLTsHX...', // Murilo
       'email': 'murilo@gmail.com',
       'nome': 'Murilo',
       'tipo': 'paciente',
@@ -98,7 +99,7 @@ void main() async {
       'dataNascimento': '1980-09-30',
     },
     {
-      'uid': '2owgi92mSbS3q2lZk8cr05Wl...',  // GBTC
+      'uid': '2owgi92mSbS3q2lZk8cr05Wl...', // GBTC
       'email': 'gbtc@gmail.com',
       'nome': 'Gabriel',
       'tipo': 'profissional',
@@ -117,13 +118,13 @@ void main() async {
   print('📋 Criando ${users.length} usuários no Firestore...\n');
 
   for (final user in users) {
-    final uid = user['uid'] as String;
-    final email = user['email'] as String;
-    
+    final uid = user['uid']! as String;
+    final email = user['email']! as String;
+
     try {
       // Verificar se já existe
       final doc = await firestore.collection('users').doc(uid).get();
-      
+
       if (doc.exists) {
         print('⏭️  $email já existe no Firestore (pulando)');
         continue;
@@ -154,7 +155,7 @@ void main() async {
 
       // Criar documento
       await firestore.collection('users').doc(uid).set(userData);
-      
+
       print('✅ $email criado com sucesso no Firestore');
     } catch (e) {
       print('❌ Erro ao criar $email: $e');
@@ -164,4 +165,3 @@ void main() async {
   print('\n🎉 Script concluído!');
   print('Agora você pode fazer login com todas as contas.');
 }
-

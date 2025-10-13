@@ -5,23 +5,6 @@ import 'contract_status.dart';
 /// Representa um contrato de serviço entre paciente e profissional.
 /// Inclui todas as informações necessárias para gerenciar a contratação.
 class ContractEntity {
-  final String id;
-  final String patientId;
-  final String professionalId;
-  final String patientName;
-  final String professionalName;
-  final String serviceType;
-  final String period; // 'Diário', 'Semanal', 'Mensal'
-  final int duration; // em horas
-  final DateTime date;
-  final String time; // formato "HH:mm"
-  final String address;
-  final String? observations;
-  final ContractStatus status;
-  final double totalValue;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-
   const ContractEntity({
     required this.id,
     required this.patientId,
@@ -41,16 +24,10 @@ class ContractEntity {
     double? price,
     required this.createdAt,
     this.updatedAt,
-  }) : patientName = patientName ?? '',
-       professionalName = professionalName ?? '',
-       serviceType = serviceType ?? service ?? '',
-       totalValue = totalValue ?? price ?? 0.0;
-
-  /// Getter alias para service (compatibilidade)
-  String get service => serviceType;
-  
-  /// Getter alias para price (compatibilidade)
-  double get price => totalValue;
+  })  : patientName = patientName ?? '',
+        professionalName = professionalName ?? '',
+        serviceType = serviceType ?? service ?? '',
+        totalValue = totalValue ?? price ?? 0.0;
 
   factory ContractEntity.fromJson(Map<String, dynamic> json) {
     return ContractEntity(
@@ -74,6 +51,28 @@ class ContractEntity {
           : null,
     );
   }
+  final String id;
+  final String patientId;
+  final String professionalId;
+  final String patientName;
+  final String professionalName;
+  final String serviceType;
+  final String period; // 'Diário', 'Semanal', 'Mensal'
+  final int duration; // em horas
+  final DateTime date;
+  final String time; // formato "HH:mm"
+  final String address;
+  final String? observations;
+  final ContractStatus status;
+  final double totalValue;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+
+  /// Getter alias para service (compatibilidade)
+  String get service => serviceType;
+
+  /// Getter alias para price (compatibilidade)
+  double get price => totalValue;
 
   Map<String, dynamic> toJson() {
     return {

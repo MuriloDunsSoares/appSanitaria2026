@@ -16,16 +16,17 @@ import '../datasources/firebase_professionals_datasource.dart';
 /// - Dados sincronizam automaticamente
 /// - Busca e filtros executados no servidor (quando possível)
 class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
-  final FirebaseProfessionalsDataSource firebaseProfessionalsDataSource;
-
   ProfessionalsRepositoryImpl({
     required this.firebaseProfessionalsDataSource,
   });
+  final FirebaseProfessionalsDataSource firebaseProfessionalsDataSource;
 
   @override
-  Future<Either<Failure, List<ProfessionalEntity>>> getAllProfessionals() async {
+  Future<Either<Failure, List<ProfessionalEntity>>>
+      getAllProfessionals() async {
     try {
-      final professionals = await firebaseProfessionalsDataSource.getAllProfessionals();
+      final professionals =
+          await firebaseProfessionalsDataSource.getAllProfessionals();
       return Right(professionals);
     } on StorageException catch (_) {
       return const Left(StorageFailure());
@@ -47,7 +48,8 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
   }) async {
     try {
       // Buscar todos os profissionais do Firestore
-      var professionals = await firebaseProfessionalsDataSource.getAllProfessionals();
+      var professionals =
+          await firebaseProfessionalsDataSource.getAllProfessionals();
 
       // Filtrar por query de busca (nome ou especialidade)
       if (searchQuery != null && searchQuery.isNotEmpty) {
@@ -98,7 +100,8 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
       }
 
       // Ordenar por rating (maiores primeiro)
-      professionals.sort((a, b) => (b.averageRating ?? 0).compareTo(a.averageRating ?? 0));
+      professionals.sort(
+          (a, b) => (b.averageRating ?? 0).compareTo(a.averageRating ?? 0));
 
       return Right(professionals);
     } on StorageException catch (_) {
@@ -109,14 +112,16 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
   }
 
   @override
-  Future<Either<Failure, ProfessionalEntity>> getProfessionalById(String id) async {
+  Future<Either<Failure, ProfessionalEntity>> getProfessionalById(
+      String id) async {
     try {
-      final professional = await firebaseProfessionalsDataSource.getProfessionalById(id);
-      
+      final professional =
+          await firebaseProfessionalsDataSource.getProfessionalById(id);
+
       if (professional == null) {
         return const Left(NotFoundFailure('Profissional não encontrado'));
       }
-      
+
       return Right(professional);
     } on StorageException catch (_) {
       return const Left(StorageFailure());
@@ -126,14 +131,15 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
   }
 
   @override
-  Future<Either<Failure, List<ProfessionalEntity>>> getProfessionalsBySpeciality(
+  Future<Either<Failure, List<ProfessionalEntity>>>
+      getProfessionalsBySpeciality(
     Speciality speciality,
   ) async {
     try {
-      final professionals = await firebaseProfessionalsDataSource.getAllProfessionals();
-      final filtered = professionals
-          .where((prof) => prof.speciality == speciality)
-          .toList();
+      final professionals =
+          await firebaseProfessionalsDataSource.getAllProfessionals();
+      final filtered =
+          professionals.where((prof) => prof.speciality == speciality).toList();
       return Right(filtered);
     } on StorageException catch (_) {
       return const Left(StorageFailure());
@@ -147,8 +153,10 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
     String city,
   ) async {
     try {
-      final professionals = await firebaseProfessionalsDataSource.getAllProfessionals();
-      final filtered = professionals.where((prof) => prof.city == city).toList();
+      final professionals =
+          await firebaseProfessionalsDataSource.getAllProfessionals();
+      final filtered =
+          professionals.where((prof) => prof.city == city).toList();
       return Right(filtered);
     } on StorageException catch (_) {
       return const Left(StorageFailure());
@@ -162,7 +170,8 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
     List<String> ids,
   ) async {
     try {
-      final professionals = await firebaseProfessionalsDataSource.getProfessionalsByIds(ids);
+      final professionals =
+          await firebaseProfessionalsDataSource.getProfessionalsByIds(ids);
       return Right(professionals);
     } on StorageException catch (_) {
       return const Left(StorageFailure());
@@ -185,4 +194,3 @@ class ProfessionalsRepositoryImpl implements ProfessionalsRepository {
     }
   }
 }
-

@@ -1,8 +1,9 @@
-import 'package:app_sanitaria/core/utils/app_logger.dart';
 import 'dart:io';
+
+import 'package:app_sanitaria/core/utils/app_logger.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 /// Serviço para gerenciar seleção e upload de imagens
 ///

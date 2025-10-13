@@ -91,5 +91,3 @@ abstract class AuthRepository {
   /// - [Left(StorageFailure)]: erro ao acessar preferência
   Future<Either<Failure, bool>> getKeepLoggedIn();
 }
-
-

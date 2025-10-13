@@ -10,27 +10,24 @@ import '../../entities/speciality.dart';
 import '../../repositories/professionals_repository.dart';
 
 /// Use Case para obter profissionais por especialidade.
-class GetProfessionalsBySpeciality extends UseCase<List<ProfessionalEntity>,
-    Speciality> {
-  final ProfessionalsRepository repository;
-
+class GetProfessionalsBySpeciality
+    extends UseCase<List<ProfessionalEntity>, Speciality> {
   GetProfessionalsBySpeciality(this.repository);
+  final ProfessionalsRepository repository;
 
   @override
   Future<Either<Failure, List<ProfessionalEntity>>> call(
     Speciality speciality,
   ) async {
-    return await repository.getProfessionalsBySpeciality(speciality);
+    return repository.getProfessionalsBySpeciality(speciality);
   }
 }
 
 /// Parâmetros para buscar por especialidade.
 class ProfessionalsBySpecialityParams extends Equatable {
-  final Speciality speciality;
-
   const ProfessionalsBySpecialityParams(this.speciality);
+  final Speciality speciality;
 
   @override
   List<Object?> get props => [speciality];
 }
-

@@ -25,7 +25,7 @@ void main() {
 
   group('GetContractsByPatient', () {
     const tPatientId = 'patient123';
-    
+
     final tContract1 = ContractEntity(
       id: 'contract1',
       patientId: tPatientId,
@@ -39,8 +39,8 @@ void main() {
       time: '08:00',
       address: 'Rua das Flores, 123',
       status: ContractStatus.active,
-      totalValue: 3000.0,
-      createdAt: DateTime(2025, 10, 1),
+      totalValue: 3000,
+      createdAt: DateTime(2025, 10),
     );
 
     final tContract2 = ContractEntity(
@@ -52,11 +52,11 @@ void main() {
       serviceType: 'Acompanhamento hospitalar',
       period: 'Mensal',
       duration: 160,
-      date: DateTime(2025, 11, 1),
+      date: DateTime(2025, 11),
       time: '09:00',
       address: 'Hospital São Paulo',
       status: ContractStatus.confirmed,
-      totalValue: 9600.0,
+      totalValue: 9600,
       createdAt: DateTime(2025, 10, 5),
     );
 
@@ -84,7 +84,8 @@ void main() {
       verify(mockRepository.getContractsByPatient(tPatientId)).called(1);
     });
 
-    test('deve retornar lista vazia quando paciente não tem contratos', () async {
+    test('deve retornar lista vazia quando paciente não tem contratos',
+        () async {
       // Arrange
       when(mockRepository.getContractsByPatient(tPatientId))
           .thenAnswer((_) async => const Right([]));

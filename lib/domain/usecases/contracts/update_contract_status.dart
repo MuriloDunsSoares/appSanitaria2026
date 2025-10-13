@@ -12,15 +12,14 @@ import '../../repositories/contracts_repository.dart';
 /// Use Case para atualizar status do contrato.
 class UpdateContractStatus
     extends UseCase<ContractEntity, UpdateContractStatusParams> {
-  final ContractsRepository repository;
-
   UpdateContractStatus(this.repository);
+  final ContractsRepository repository;
 
   @override
   Future<Either<Failure, ContractEntity>> call(
     UpdateContractStatusParams params,
   ) async {
-    return await repository.updateContractStatus(
+    return repository.updateContractStatus(
       params.contractId,
       params.newStatus,
     );
@@ -29,18 +28,13 @@ class UpdateContractStatus
 
 /// Parâmetros para atualizar status.
 class UpdateContractStatusParams extends Equatable {
-  final String contractId;
-  final ContractStatus newStatus;
-
   const UpdateContractStatusParams({
     required this.contractId,
     required this.newStatus,
   });
+  final String contractId;
+  final ContractStatus newStatus;
 
   @override
   List<Object?> get props => [contractId, newStatus];
 }
-
-
-
-

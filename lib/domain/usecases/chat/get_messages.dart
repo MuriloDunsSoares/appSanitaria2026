@@ -10,13 +10,12 @@ import '../../repositories/chat_repository.dart';
 
 /// Parâmetros para buscar mensagens entre dois usuários
 class GetMessagesParams extends Equatable {
-  final String userId1;
-  final String userId2;
-
   const GetMessagesParams({
     required this.userId1,
     required this.userId2,
   });
+  final String userId1;
+  final String userId2;
 
   @override
   List<Object?> get props => [userId1, userId2];
@@ -24,15 +23,14 @@ class GetMessagesParams extends Equatable {
 
 /// Use Case para obter mensagens.
 class GetMessages extends UseCase<List<MessageEntity>, GetMessagesParams> {
-  final ChatRepository repository;
-
   GetMessages(this.repository);
+  final ChatRepository repository;
 
   @override
   Future<Either<Failure, List<MessageEntity>>> call(
     GetMessagesParams params,
   ) async {
-    return await repository.getMessages(
+    return repository.getMessages(
       userId1: params.userId1,
       userId2: params.userId2,
     );
@@ -41,14 +39,9 @@ class GetMessages extends UseCase<List<MessageEntity>, GetMessagesParams> {
 
 /// Parâmetros para buscar por conversation ID.
 class ConversationIdParams extends Equatable {
-  final String conversationId;
-
   const ConversationIdParams(this.conversationId);
+  final String conversationId;
 
   @override
   List<Object?> get props => [conversationId];
 }
-
-
-
-

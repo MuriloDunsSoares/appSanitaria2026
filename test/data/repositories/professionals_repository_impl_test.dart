@@ -1,14 +1,13 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_professionals_datasource.dart';
 import 'package:app_sanitaria/data/repositories/professionals_repository_impl.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/domain/entities/speciality.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([FirebaseProfessionalsDataSource])
 import 'professionals_repository_impl_test.mocks.dart';
@@ -30,7 +29,7 @@ void main() {
     email: 'joao@teste.com',
     password: '123456',
     telefone: '11999999999',
-    dataNascimento: DateTime(1980, 1, 1),
+    dataNascimento: DateTime(1980),
     endereco: 'Rua Teste, 123',
     cidade: 'São Paulo',
     estado: 'SP',
@@ -65,7 +64,9 @@ void main() {
   );
 
   group('ProfessionalsRepositoryImpl - getAllProfessionals', () {
-    test('deve retornar lista de profissionais quando há profissionais cadastrados', () async {
+    test(
+        'deve retornar lista de profissionais quando há profissionais cadastrados',
+        () async {
       // arrange
       when(mockDataSource.getAllProfessionals())
           .thenAnswer((_) async => [tProfessional1, tProfessional2]);
@@ -79,10 +80,10 @@ void main() {
       verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('deve retornar lista vazia quando não há profissionais cadastrados', () async {
+    test('deve retornar lista vazia quando não há profissionais cadastrados',
+        () async {
       // arrange
-      when(mockDataSource.getAllProfessionals())
-          .thenAnswer((_) async => []);
+      when(mockDataSource.getAllProfessionals()).thenAnswer((_) async => []);
 
       // act
       final result = await repository.getAllProfessionals();
@@ -92,10 +93,11 @@ void main() {
       verify(mockDataSource.getAllProfessionals());
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
-      when(mockDataSource.getAllProfessionals())
-          .thenThrow(const LocalStorageException('Erro ao buscar profissionais'));
+      when(mockDataSource.getAllProfessionals()).thenThrow(
+          const LocalStorageException('Erro ao buscar profissionais'));
 
       // act
       final result = await repository.getAllProfessionals();
@@ -105,7 +107,8 @@ void main() {
       verify(mockDataSource.getAllProfessionals());
     });
 
-    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada', () async {
+    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada',
+        () async {
       // arrange
       when(mockDataSource.getAllProfessionals())
           .thenThrow(Exception('Erro inesperado'));
@@ -138,7 +141,8 @@ void main() {
       verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('deve retornar NotFoundFailure quando profissional não existe', () async {
+    test('deve retornar NotFoundFailure quando profissional não existe',
+        () async {
       // arrange
       const professionalId = 'nao-existe';
       when(mockDataSource.getProfessionalById(professionalId))
@@ -152,7 +156,8 @@ void main() {
       verify(mockDataSource.getProfessionalById(professionalId));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       const professionalId = '1';
       when(mockDataSource.getProfessionalById(professionalId))
@@ -260,7 +265,9 @@ void main() {
       verify(mockDataSource.getAllProfessionals());
     });
 
-    test('deve retornar lista vazia quando não há profissionais da especialidade', () async {
+    test(
+        'deve retornar lista vazia quando não há profissionais da especialidade',
+        () async {
       // arrange
       when(mockDataSource.getAllProfessionals())
           .thenAnswer((_) async => [tProfessional1, tProfessional2]);
@@ -296,7 +303,8 @@ void main() {
       verify(mockDataSource.getAllProfessionals());
     });
 
-    test('deve retornar lista vazia quando não há profissionais na cidade', () async {
+    test('deve retornar lista vazia quando não há profissionais na cidade',
+        () async {
       // arrange
       when(mockDataSource.getAllProfessionals())
           .thenAnswer((_) async => [tProfessional1, tProfessional2]);

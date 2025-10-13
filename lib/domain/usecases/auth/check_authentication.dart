@@ -10,16 +10,11 @@ import '../../repositories/auth_repository.dart';
 ///
 /// **Responsabilidade única:** Validar se há sessão ativa.
 class CheckAuthentication extends UseCase<bool, NoParams> {
-  final AuthRepository repository;
-
   CheckAuthentication(this.repository);
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, bool>> call(NoParams params) async {
-    return await repository.isAuthenticated();
+    return repository.isAuthenticated();
   }
 }
-
-
-
-

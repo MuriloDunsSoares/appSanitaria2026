@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_sanitaria/core/routes/app_router.dart';
 import 'package:app_sanitaria/domain/entities/patient_entity.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tela de Cadastro de Paciente
 ///
@@ -146,7 +146,7 @@ class _PatientRegistrationScreenState
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -294,8 +294,10 @@ class _PatientRegistrationScreenState
                     if (value.length == 2 || value.length == 5) {
                       if (!value.endsWith('/')) {
                         _birthDateController.text = '$value/';
-                        _birthDateController.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _birthDateController.text.length),
+                        _birthDateController.selection =
+                            TextSelection.fromPosition(
+                          TextPosition(
+                              offset: _birthDateController.text.length),
                         );
                       }
                     }

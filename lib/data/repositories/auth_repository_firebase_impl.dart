@@ -19,11 +19,10 @@ import '../datasources/firebase_auth_datasource.dart';
 /// - Sessão mantida automaticamente pelo Firebase
 /// - Sincronização automática entre dispositivos
 class AuthRepositoryFirebaseImpl implements AuthRepository {
-  final FirebaseAuthDataSource firebaseAuthDataSource;
-
   AuthRepositoryFirebaseImpl({
     required this.firebaseAuthDataSource,
   });
+  final FirebaseAuthDataSource firebaseAuthDataSource;
 
   @override
   Future<Either<Failure, UserEntity>> login({
@@ -74,8 +73,8 @@ class AuthRepositoryFirebaseImpl implements AuthRepository {
     ProfessionalEntity professional,
   ) async {
     try {
-      final registeredProfessional = await firebaseAuthDataSource
-          .registerProfessional(professional);
+      final registeredProfessional =
+          await firebaseAuthDataSource.registerProfessional(professional);
       return Right(registeredProfessional);
     } on EmailAlreadyExistsException catch (_) {
       return const Left(EmailAlreadyExistsFailure());
@@ -140,4 +139,3 @@ class AuthRepositoryFirebaseImpl implements AuthRepository {
     }
   }
 }
-

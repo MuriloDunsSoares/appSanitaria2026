@@ -8,20 +8,14 @@ import '../../entities/professional_entity.dart';
 import '../../repositories/professionals_repository.dart';
 
 /// Use Case para buscar todos os profissionais.
-class GetAllProfessionals
-    extends UseCase<List<ProfessionalEntity>, NoParams> {
-  final ProfessionalsRepository repository;
-
+class GetAllProfessionals extends UseCase<List<ProfessionalEntity>, NoParams> {
   GetAllProfessionals(this.repository);
+  final ProfessionalsRepository repository;
 
   @override
   Future<Either<Failure, List<ProfessionalEntity>>> call(
     NoParams params,
   ) async {
-    return await repository.getAllProfessionals();
+    return repository.getAllProfessionals();
   }
 }
-
-
-
-

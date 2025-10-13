@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/favorites_provider_v2.dart';
 import 'package:app_sanitaria/presentation/providers/chat_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/favorites_provider_v2.dart';
 import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Card de Profissional na Lista
 ///
@@ -22,17 +22,16 @@ import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
 ///
 /// **Performance:** Usa RatingsCacheProvider para evitar I/O em cada card
 class ProfessionalCard extends ConsumerWidget {
-  final Map<String, dynamic> professional;
-
   const ProfessionalCard({
     super.key,
     required this.professional,
   });
+  final Map<String, dynamic> professional;
 
   /// Carrega a avaliação média do profissional (usando ReviewsProviderV2)
   double _getRating(WidgetRef ref, String professionalId) {
     if (professionalId.isEmpty) {
-      return 0.0;
+      return 0;
     }
 
     final reviewsState = ref.watch(reviewsProviderV2);
@@ -42,10 +41,11 @@ class ProfessionalCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final name = (professional['nome'] ?? 'Nome não disponível') as String;
-    final specialty = (professional['especialidade'] ?? 'Especialidade') as String;
+    final specialty =
+        (professional['especialidade'] ?? 'Especialidade') as String;
     final city = (professional['cidade'] ?? 'Cidade') as String;
     final state = (professional['estado'] ?? '') as String;
-    final professionalId = (professional['id']?.toString() ?? '') as String;
+    final professionalId = professional['id']?.toString() ?? '';
 
     // Observar estado de favoritos
     final favoritesState = ref.watch(favoritesProviderV2);
@@ -193,7 +193,7 @@ class ProfessionalCard extends ConsumerWidget {
                                 // Obter ID do usuário atual
                                 final authState = ref.read(authProviderV2);
                                 final currentUserId = authState.user?.id ?? '';
-                                
+
                                 // Iniciar conversa
                                 await ref
                                     .read(chatProviderV2.notifier)

@@ -20,12 +20,11 @@ import 'package:flutter/services.dart';
 /// )
 /// ```
 class ExitConfirmationWrapper extends StatelessWidget {
-  final Widget child;
-
   const ExitConfirmationWrapper({
     super.key,
     required this.child,
   });
+  final Widget child;
 
   Future<void> _handleBackButton(BuildContext context) async {
     // Mostra diálogo de confirmação
@@ -50,7 +49,7 @@ class ExitConfirmationWrapper extends StatelessWidget {
       ),
     );
 
-    if (shouldExit == true) {
+    if (shouldExit ?? false) {
       // Fecha o app
       SystemNavigator.pop();
     }
@@ -69,4 +68,3 @@ class ExitConfirmationWrapper extends StatelessWidget {
     );
   }
 }
-

@@ -1,16 +1,16 @@
 /// Provider para gerenciamento de perfil.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/di/injection_container.dart';
+import 'package:app_sanitaria/domain/entities/patient_entity.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/domain/entities/user_entity.dart';
 import 'package:app_sanitaria/domain/usecases/profile/delete_profile_image.dart';
 import 'package:app_sanitaria/domain/usecases/profile/get_profile_image.dart';
 import 'package:app_sanitaria/domain/usecases/profile/save_profile_image.dart';
 import 'package:app_sanitaria/domain/usecases/profile/update_patient_profile.dart';
 import 'package:app_sanitaria/domain/usecases/profile/update_professional_profile.dart';
-import 'package:app_sanitaria/domain/entities/patient_entity.dart';
-import 'package:app_sanitaria/domain/entities/professional_entity.dart';
-import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Estado do Perfil
 enum ProfileStatus {
@@ -22,10 +22,6 @@ enum ProfileStatus {
 
 /// State do Perfil
 class ProfileState {
-  final ProfileStatus status;
-  final String? profileImagePath;
-  final String? errorMessage;
-
   ProfileState({
     required this.status,
     this.profileImagePath,
@@ -43,6 +39,9 @@ class ProfileState {
   factory ProfileState.error(String message) {
     return ProfileState(status: ProfileStatus.error, errorMessage: message);
   }
+  final ProfileStatus status;
+  final String? profileImagePath;
+  final String? errorMessage;
 
   bool get isLoading => status == ProfileStatus.loading;
   bool get hasImage => profileImagePath != null && profileImagePath!.isNotEmpty;
@@ -62,10 +61,6 @@ class ProfileState {
 
 /// ProfileNotifier - Gerencia estado do perfil
 class ProfileNotifier extends StateNotifier<ProfileState> {
-  final GetProfileImage _getProfileImage;
-  final SaveProfileImage _saveProfileImage;
-  final DeleteProfileImage _deleteProfileImage;
-
   ProfileNotifier({
     required GetProfileImage getProfileImage,
     required SaveProfileImage saveProfileImage,
@@ -74,6 +69,9 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         _saveProfileImage = saveProfileImage,
         _deleteProfileImage = deleteProfileImage,
         super(ProfileState.initial());
+  final GetProfileImage _getProfileImage;
+  final SaveProfileImage _saveProfileImage;
+  final DeleteProfileImage _deleteProfileImage;
 
   /// Carrega foto de perfil de um usuário
   Future<void> loadProfileImage(String userId) async {
@@ -127,7 +125,8 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 }
 
 /// Provider para operações de atualização de perfil
-final profileUpdateProvider = FutureProvider.family<bool, UserEntity>((ref, user) async {
+final profileUpdateProvider =
+    FutureProvider.family<bool, UserEntity>((ref, user) async {
   final updatePatientProfile = getIt<UpdatePatientProfile>();
   final updateProfessionalProfile = getIt<UpdateProfessionalProfile>();
 
@@ -150,4 +149,3 @@ final profileProvider = StateNotifierProvider<ProfileNotifier, ProfileState>(
     deleteProfileImage: getIt<DeleteProfileImage>(),
   ),
 );
-

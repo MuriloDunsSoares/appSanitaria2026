@@ -18,10 +18,10 @@ import 'package:equatable/equatable.dart';
 /// - Facilita testes unitários (expect(failure, equals(expectedFailure)))
 /// - Performance otimizada para comparações
 abstract class Failure extends Equatable {
+  const Failure(this.message);
+
   /// Mensagem legível ao usuário (internacionalizada).
   final String message;
-
-  const Failure(this.message);
 
   @override
   List<Object?> get props => [message];
@@ -70,13 +70,14 @@ class ValidationFailure extends Failure {
 
 /// Erro ao acessar armazenamento de dados (Firebase Firestore).
 class StorageFailure extends Failure {
-  const StorageFailure([super.message = 'Erro ao conectar com o servidor. Verifique sua conexão.']);
+  const StorageFailure(
+      [super.message =
+          'Erro ao conectar com o servidor. Verifique sua conexão.']);
 }
 
 /// Recurso não encontrado no armazenamento.
 class NotFoundFailure extends Failure {
-  const NotFoundFailure(String resource)
-      : super('$resource não encontrado(a)');
+  const NotFoundFailure(String resource) : super('$resource não encontrado(a)');
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -85,7 +86,9 @@ class NotFoundFailure extends Failure {
 
 /// Erro de conexão com servidor (timeout, sem internet, etc).
 class NetworkFailure extends Failure {
-  const NetworkFailure([super.message = 'Erro de conexão. Verifique sua internet e tente novamente.']);
+  const NetworkFailure(
+      [super.message =
+          'Erro de conexão. Verifique sua internet e tente novamente.']);
 }
 
 /// Erro interno do servidor (5xx).
@@ -103,9 +106,6 @@ class ServerFailure extends Failure {
 /// **ATENÇÃO:** Use este failure apenas como fallback. Idealmente, todos os
 /// erros devem ter um failure específico para melhor tratamento na UI.
 class UnexpectedFailure extends Failure {
-  const UnexpectedFailure([super.message = 'Erro inesperado. Tente novamente.']);
+  const UnexpectedFailure(
+      [super.message = 'Erro inesperado. Tente novamente.']);
 }
-
-
-
-

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:app_sanitaria/core/routes/app_router.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/domain/entities/speciality.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/core/routes/app_router.dart';
-import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tela de Cadastro de Profissional
 ///
@@ -124,13 +124,14 @@ class _ProfessionalRegistrationScreenState
       sexo: _selectedGender!,
       dataCadastro: DateTime.now(),
       // idade é calculada automaticamente via getter
-      especialidade: Speciality.fromString(_selectedSpecialty ?? 'cuidadores') ?? Speciality.cuidadores,
+      especialidade:
+          Speciality.fromString(_selectedSpecialty ?? 'cuidadores') ??
+              Speciality.cuidadores,
       formacao: _formationController.text.trim(),
       certificados: _certificatesController.text.trim(),
       experiencia: int.tryParse(_experienceController.text.trim()) ?? 0,
-      biografia: '',
-      avaliacao: 0.0,
-      hourlyRate: 50.0,
+      avaliacao: 0,
+      hourlyRate: 50,
     );
 
     await ref.read(authProviderV2.notifier).registerProfessional(professional);
@@ -163,7 +164,7 @@ class _ProfessionalRegistrationScreenState
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -311,8 +312,10 @@ class _ProfessionalRegistrationScreenState
                     if (value.length == 2 || value.length == 5) {
                       if (!value.endsWith('/')) {
                         _birthDateController.text = '$value/';
-                        _birthDateController.selection = TextSelection.fromPosition(
-                          TextPosition(offset: _birthDateController.text.length),
+                        _birthDateController.selection =
+                            TextSelection.fromPosition(
+                          TextPosition(
+                              offset: _birthDateController.text.length),
                         );
                       }
                     }

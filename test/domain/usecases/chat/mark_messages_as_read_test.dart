@@ -1,5 +1,5 @@
 /// Testes para MarkMessagesAsRead Use Case
-/// 
+///
 /// Objetivo: Validar marcação de mensagens como lidas
 /// Regras de negócio:
 /// - Deve marcar todas as mensagens de uma conversa como lidas
@@ -33,7 +33,7 @@ void main() {
     const tConversationId = 'conv_patient123_prof456';
     const tUserId = 'patient123';
 
-    final tParams = MarkMessagesAsReadParams(
+    const tParams = MarkMessagesAsReadParams(
       conversationId: tConversationId,
       userId: tUserId,
     );
@@ -64,7 +64,8 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar StorageFailure quando falha ao marcar mensagens', () async {
+    test('deve retornar StorageFailure quando falha ao marcar mensagens',
+        () async {
       // Arrange
       when(mockRepository.markMessagesAsRead(
         conversationId: tConversationId,
@@ -91,7 +92,7 @@ void main() {
 
     test('deve funcionar corretamente com conversationId vazio', () async {
       // Arrange
-      final emptyParams = MarkMessagesAsReadParams(
+      const emptyParams = MarkMessagesAsReadParams(
         conversationId: '',
         userId: tUserId,
       );

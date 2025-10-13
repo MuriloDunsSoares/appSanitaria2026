@@ -25,15 +25,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Interação: Aplicado globalmente via MaterialApp.theme.
 import 'core/constants/app_theme.dart';
 
-/// [core/routes/app_router.dart]
-/// Configuração de rotas usando GoRouter para navegação declarativa.
-/// Interação: Define todas as telas e transições da aplicação.
-import 'core/routes/app_router.dart';
-
 /// [core/di/injection_container.dart]
 /// Service Locator para Dependency Injection usando GetIt.
 /// Responsabilidade: Registrar e fornecer instâncias de Use Cases e Repositories.
 import 'core/di/injection_container.dart';
+
+/// [core/routes/app_router.dart]
+/// Configuração de rotas usando GoRouter para navegação declarativa.
+/// Interação: Define todas as telas e transições da aplicação.
+import 'core/routes/app_router.dart';
 
 /// [core/services/firebase_service.dart]
 /// Serviço de inicialização e gerenciamento do Firebase.
@@ -69,7 +69,7 @@ void main() async {
   // ───────────────────────────────────────────────────────────────────────
   // INICIALIZAÇÃO DO FLUTTER BINDING
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Garante que o binding do Flutter esteja inicializado antes de operações async.
   ///
   /// **Por que é necessário?**
@@ -106,7 +106,7 @@ void main() async {
   // ───────────────────────────────────────────────────────────────────────
   // INICIALIZAÇÃO DO DEPENDENCY INJECTION (GetIt)
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Configura Dependency Injection usando GetIt.
   ///
   /// **O que faz:**
@@ -122,7 +122,7 @@ void main() async {
   // ───────────────────────────────────────────────────────────────────────
   // LINHAS 21-31: Inicialização da Árvore de Widgets
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Inicia a aplicação Flutter com ProviderScope como raiz.
   ///
   /// **runApp():**
@@ -136,7 +136,7 @@ void main() async {
     // ─────────────────────────────────────────────────────────────────────
     // LINHA 22: ProviderScope - Container de Injeção de Dependências
     // ─────────────────────────────────────────────────────────────────────
-    
+
     /// Container raiz do Riverpod que gerencia todos os providers da aplicação.
     ///
     /// **Responsabilidades:**
@@ -157,11 +157,11 @@ void main() async {
     /// **Performance:**
     /// - Overhead mínimo (~1-2ms)
     /// - Cache inteligente (providers só recalculam quando dependências mudam)
-    ProviderScope(
+    const ProviderScope(
       // ───────────────────────────────────────────────────────────────────
       // WIDGET RAIZ DA APLICAÇÃO
       // ───────────────────────────────────────────────────────────────────
-      
+
       /// Widget raiz que será renderizado dentro do ProviderScope.
       ///
       /// **const:**
@@ -177,7 +177,7 @@ void main() async {
       /// - Armazena estado de todos os providers
       /// - Gerencia lifecycle (criação, destruição, cache)
       /// - Propaga mudanças de estado para widgets dependentes
-      child: const AppSanitaria(),
+      child: AppSanitaria(),
     ),
   );
 }
@@ -223,7 +223,7 @@ class AppSanitaria extends ConsumerWidget {
   // ───────────────────────────────────────────────────────────────────────
   // MÉTODO BUILD - Construção da UI
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Constrói a árvore de widgets da aplicação.
   ///
   /// **Parâmetros:**
@@ -243,7 +243,7 @@ class AppSanitaria extends ConsumerWidget {
     // ─────────────────────────────────────────────────────────────────────
     // LINHA 40: Observação do GoRouter Provider
     // ─────────────────────────────────────────────────────────────────────
-    
+
     /// Observa o provider de configuração de rotas.
     ///
     /// **ref.watch():**
@@ -272,7 +272,7 @@ class AppSanitaria extends ConsumerWidget {
     // ─────────────────────────────────────────────────────────────────────
     // LINHAS 42-47: MaterialApp.router - Configuração da Aplicação
     // ─────────────────────────────────────────────────────────────────────
-    
+
     /// Widget raiz que configura a aplicação Material Design.
     ///
     /// **MaterialApp.router vs MaterialApp:**
@@ -300,7 +300,7 @@ class AppSanitaria extends ConsumerWidget {
       /// - AppBar title (título da tela atual)
       /// - Nome do app (definido em AndroidManifest.xml / Info.plist)
       title: 'App Sanitária',
-      
+
       /// Remove banner "DEBUG" do canto superior direito.
       ///
       /// **Valores:**
@@ -309,7 +309,7 @@ class AppSanitaria extends ConsumerWidget {
       ///
       /// **Nota:** Banner só aparece em debug mode, não em release builds.
       debugShowCheckedModeBanner: false,
-      
+
       /// Tema visual da aplicação (cores, tipografia, espaçamentos).
       ///
       /// **Origem:** AppTheme.lightTheme (definido em core/constants/app_theme.dart)
@@ -328,7 +328,7 @@ class AppSanitaria extends ConsumerWidget {
       /// - Todos os widgets Material (Button, Card, etc) usam este tema
       /// - Pode ser sobrescrito localmente com Theme(data: ...)
       theme: AppTheme.lightTheme,
-      
+
       /// Configuração de rotas usando GoRouter.
       ///
       /// **Tipo:** GoRouter (do package go_router)

@@ -8,11 +8,6 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Renderiza apenas um card
 /// - Reusabilidade: Configurável via parâmetros
 class ServiceCard extends StatelessWidget {
-  final String title;
-  final String emoji;
-  final Gradient gradient;
-  final VoidCallback onTap;
-
   const ServiceCard({
     super.key,
     required this.title,
@@ -20,6 +15,10 @@ class ServiceCard extends StatelessWidget {
     required this.gradient,
     required this.onTap,
   });
+  final String title;
+  final String emoji;
+  final Gradient gradient;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class ServiceCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: gradient,
             borderRadius: BorderRadius.circular(16),
@@ -65,5 +64,3 @@ class ServiceCard extends StatelessWidget {
     );
   }
 }
-
-

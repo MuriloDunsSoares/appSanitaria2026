@@ -23,6 +23,8 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Services
+import '../../core/services/connectivity_service.dart';
 // Data sources - Firebase
 import '../../data/datasources/firebase_auth_datasource.dart';
 import '../../data/datasources/firebase_chat_datasource.dart';
@@ -31,23 +33,21 @@ import '../../data/datasources/firebase_favorites_datasource.dart';
 import '../../data/datasources/firebase_professionals_datasource.dart';
 import '../../data/datasources/firebase_reviews_datasource.dart';
 import '../../data/datasources/profile_storage_datasource.dart';
-
 // Repositories
 import '../../data/repositories/auth_repository_firebase_impl.dart';
 import '../../data/repositories/chat_repository_firebase_impl.dart';
 import '../../data/repositories/contracts_repository_impl.dart';
 import '../../data/repositories/favorites_repository_impl.dart';
-import '../../data/repositories/profile_repository_impl.dart';
 import '../../data/repositories/professionals_repository_impl.dart';
+import '../../data/repositories/profile_repository_impl.dart';
 import '../../data/repositories/reviews_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/chat_repository.dart';
 import '../../domain/repositories/contracts_repository.dart';
 import '../../domain/repositories/favorites_repository.dart';
-import '../../domain/repositories/profile_repository.dart';
 import '../../domain/repositories/professionals_repository.dart';
+import '../../domain/repositories/profile_repository.dart';
 import '../../domain/repositories/reviews_repository.dart';
-
 // Use cases - Auth
 import '../../domain/usecases/auth/check_authentication.dart';
 import '../../domain/usecases/auth/get_current_user.dart';
@@ -55,44 +55,35 @@ import '../../domain/usecases/auth/login_user.dart';
 import '../../domain/usecases/auth/logout_user.dart';
 import '../../domain/usecases/auth/register_patient.dart';
 import '../../domain/usecases/auth/register_professional.dart';
-
+// Use cases - Chat
+import '../../domain/usecases/chat/get_messages.dart';
+import '../../domain/usecases/chat/get_user_conversations.dart';
+import '../../domain/usecases/chat/mark_messages_as_read.dart';
+import '../../domain/usecases/chat/send_message.dart';
+// Use cases - Contracts
+import '../../domain/usecases/contracts/create_contract.dart';
+import '../../domain/usecases/contracts/get_contracts_by_patient.dart';
+import '../../domain/usecases/contracts/get_contracts_by_professional.dart';
+import '../../domain/usecases/contracts/update_contract_status.dart';
+// Use cases - Favorites
+import '../../domain/usecases/favorites/get_favorites.dart';
+import '../../domain/usecases/favorites/toggle_favorite.dart';
 // Use cases - Professionals
 import '../../domain/usecases/professionals/get_all_professionals.dart';
 import '../../domain/usecases/professionals/get_professional_by_id.dart';
 import '../../domain/usecases/professionals/get_professionals_by_ids.dart';
 import '../../domain/usecases/professionals/get_professionals_by_speciality.dart';
 import '../../domain/usecases/professionals/search_professionals.dart';
-
-// Use cases - Contracts
-import '../../domain/usecases/contracts/create_contract.dart';
-import '../../domain/usecases/contracts/get_contracts_by_patient.dart';
-import '../../domain/usecases/contracts/get_contracts_by_professional.dart';
-import '../../domain/usecases/contracts/update_contract_status.dart';
-
-// Use cases - Chat
-import '../../domain/usecases/chat/get_messages.dart';
-import '../../domain/usecases/chat/get_user_conversations.dart';
-import '../../domain/usecases/chat/mark_messages_as_read.dart';
-import '../../domain/usecases/chat/send_message.dart';
-
-// Use cases - Favorites
-import '../../domain/usecases/favorites/get_favorites.dart';
-import '../../domain/usecases/favorites/toggle_favorite.dart';
-
-// Use cases - Reviews
-import '../../domain/usecases/reviews/add_review.dart';
-import '../../domain/usecases/reviews/get_average_rating.dart';
-import '../../domain/usecases/reviews/get_reviews_by_professional.dart';
-
 // Use cases - Profile
 import '../../domain/usecases/profile/delete_profile_image.dart';
 import '../../domain/usecases/profile/get_profile_image.dart';
 import '../../domain/usecases/profile/save_profile_image.dart';
 import '../../domain/usecases/profile/update_patient_profile.dart';
 import '../../domain/usecases/profile/update_professional_profile.dart';
-
-// Services
-import '../../core/services/connectivity_service.dart';
+// Use cases - Reviews
+import '../../domain/usecases/reviews/add_review.dart';
+import '../../domain/usecases/reviews/get_average_rating.dart';
+import '../../domain/usecases/reviews/get_reviews_by_professional.dart';
 
 // Service Locator global
 final getIt = GetIt.instance;
@@ -121,7 +112,7 @@ Future<void> setupDependencyInjection() async {
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
   // Connectivity Service (Singleton)
-  sl.registerLazySingleton<ConnectivityService>(() => ConnectivityService());
+  sl.registerLazySingleton<ConnectivityService>(ConnectivityService.new);
 
   // Logger (Singleton - uma instância global)
   sl.registerLazySingleton<Logger>(() => Logger(
@@ -129,8 +120,6 @@ Future<void> setupDependencyInjection() async {
           methodCount: 0, // Sem stack trace
           errorMethodCount: 5, // Stack trace apenas em erros
           lineLength: 80,
-          colors: true,
-          printEmojis: true,
           dateTimeFormat: DateTimeFormat.onlyTime,
         ),
       ));
@@ -140,27 +129,27 @@ Future<void> setupDependencyInjection() async {
   // ══════════════════════════════════════════════════════════════════════════
 
   sl.registerLazySingleton<FirebaseAuthDataSource>(
-    () => FirebaseAuthDataSource(),
+    FirebaseAuthDataSource.new,
   );
 
   sl.registerLazySingleton<FirebaseChatDataSource>(
-    () => FirebaseChatDataSource(),
+    FirebaseChatDataSource.new,
   );
 
   sl.registerLazySingleton<FirebaseProfessionalsDataSource>(
-    () => FirebaseProfessionalsDataSource(),
+    FirebaseProfessionalsDataSource.new,
   );
 
   sl.registerLazySingleton<FirebaseReviewsDataSource>(
-    () => FirebaseReviewsDataSource(),
+    FirebaseReviewsDataSource.new,
   );
 
   sl.registerLazySingleton<FirebaseContractsDataSource>(
-    () => FirebaseContractsDataSource(),
+    FirebaseContractsDataSource.new,
   );
 
   sl.registerLazySingleton<FirebaseFavoritesDataSource>(
-    () => FirebaseFavoritesDataSource(),
+    FirebaseFavoritesDataSource.new,
   );
 
   sl.registerLazySingleton<ProfileStorageDataSource>(
@@ -267,4 +256,3 @@ Future<void> setupDependencyInjection() async {
 Future<void> resetDependencyInjection() async {
   await sl.reset();
 }
-

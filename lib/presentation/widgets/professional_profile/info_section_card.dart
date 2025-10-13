@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 /// - Reusabilidade: Pode ser usado para qualquer seção de informação
 /// - Open/Closed: Extensível via child widget
 class InfoSectionCard extends StatelessWidget {
-  final String title;
-  final Widget child;
-
   const InfoSectionCard({
     super.key,
     required this.title,
     required this.child,
   });
+  final String title;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +53,8 @@ class InfoSectionCard extends StatelessWidget {
 
 /// Helper: Bullet point para listas
 class BulletPoint extends StatelessWidget {
-  final String text;
-
   const BulletPoint(this.text, {super.key});
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -80,5 +78,3 @@ class BulletPoint extends StatelessWidget {
     );
   }
 }
-
-

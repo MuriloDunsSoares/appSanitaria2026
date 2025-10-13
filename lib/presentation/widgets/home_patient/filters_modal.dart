@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
 
 /// Widget: Modal de Filtros
 ///
@@ -9,12 +9,11 @@ import 'package:app_sanitaria/core/constants/app_constants.dart';
 /// - Single Responsibility: Apenas renderiza o modal de filtros
 /// - State Management: Usa StatefulWidget para gerenciar seleções
 class FiltersModal extends StatefulWidget {
-  final Function({String? specialty, String? city}) onApplyFilters;
-
   const FiltersModal({
     super.key,
     required this.onApplyFilters,
   });
+  final Function({String? specialty, String? city}) onApplyFilters;
 
   @override
   State<FiltersModal> createState() => _FiltersModalState();
@@ -88,7 +87,6 @@ class _FiltersModalState extends State<FiltersModal> {
       ),
       items: [
         const DropdownMenuItem(
-          value: null,
           child: Text('Todas as cidades'),
         ),
         ...AppConstants.capitalsBrazil.keys.map((city) {
@@ -117,7 +115,6 @@ class _FiltersModalState extends State<FiltersModal> {
       ),
       items: [
         const DropdownMenuItem(
-          value: null,
           child: Text('Todas as especialidades'),
         ),
         ...AppConstants.professionalSpecialties.map((specialty) {
@@ -149,10 +146,12 @@ class _FiltersModalState extends State<FiltersModal> {
         const SizedBox(height: 8),
         Slider(
           value: _maxPrice ?? 200.0,
-          min: 50.0,
-          max: 500.0,
+          min: 50,
+          max: 500,
           divisions: 18,
-          label: _maxPrice != null ? 'R\$ ${_maxPrice!.toStringAsFixed(0)}' : 'R\$ 200',
+          label: _maxPrice != null
+              ? 'R\$ ${_maxPrice!.toStringAsFixed(0)}'
+              : r'R$ 200',
           onChanged: (value) {
             setState(() {
               _maxPrice = value;
@@ -160,7 +159,9 @@ class _FiltersModalState extends State<FiltersModal> {
           },
         ),
         Text(
-          _maxPrice != null ? 'Até R\$ ${_maxPrice!.toStringAsFixed(0)}/hora' : 'Qualquer preço',
+          _maxPrice != null
+              ? 'Até R\$ ${_maxPrice!.toStringAsFixed(0)}/hora'
+              : 'Qualquer preço',
           style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
       ],
@@ -177,7 +178,6 @@ class _FiltersModalState extends State<FiltersModal> {
       ),
       items: const [
         DropdownMenuItem(
-          value: null,
           child: Text('Qualquer experiência'),
         ),
         DropdownMenuItem(
@@ -219,7 +219,6 @@ class _FiltersModalState extends State<FiltersModal> {
       ),
       items: const [
         DropdownMenuItem(
-          value: null,
           child: Text('Qualquer disponibilidade'),
         ),
         DropdownMenuItem(
@@ -267,4 +266,3 @@ class _FiltersModalState extends State<FiltersModal> {
     );
   }
 }
-

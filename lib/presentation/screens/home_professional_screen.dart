@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_sanitaria/core/routes/app_router.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
 import 'package:app_sanitaria/presentation/providers/chat_provider_v2.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_floating_buttons.dart';
+import 'package:app_sanitaria/presentation/widgets/home_professional/conversations_feed.dart';
 import 'package:app_sanitaria/presentation/widgets/home_professional/professional_header.dart';
+import 'package:app_sanitaria/presentation/widgets/home_professional/quick_actions_section.dart';
 import 'package:app_sanitaria/presentation/widgets/home_professional/stats_cards_row.dart';
 import 'package:app_sanitaria/presentation/widgets/home_professional/view_profile_button.dart';
-import 'package:app_sanitaria/presentation/widgets/home_professional/conversations_feed.dart';
-import 'package:app_sanitaria/presentation/widgets/home_professional/quick_actions_section.dart';
-import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_floating_buttons.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tela Home para PROFISSIONAIS - REFATORADA
 ///
@@ -51,7 +51,7 @@ class _HomeProfessionalScreenState extends ConsumerState<HomeProfessionalScreen>
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
     _animationController.forward();
@@ -109,7 +109,7 @@ class _HomeProfessionalScreenState extends ConsumerState<HomeProfessionalScreen>
     final unreadMessages = chatState.totalUnreadCount;
     final rating =
         (user is ProfessionalEntity) ? user.avaliacao.toString() : '0.0';
-    final reviewCount = 0; // TODO: Adicionar contador de avaliações
+    const reviewCount = 0; // TODO: Adicionar contador de avaliações
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,

@@ -8,7 +8,7 @@ import '../../domain/entities/professional_entity.dart';
 import '../../domain/entities/user_entity.dart';
 
 /// DataSource para autenticação usando Firebase Auth
-/// 
+///
 /// Responsável por:
 /// - Login/Logout usando Firebase Auth (apenas modo online)
 /// - Registro de pacientes e profissionais
@@ -16,19 +16,18 @@ import '../../domain/entities/user_entity.dart';
 /// - Verificação de conectividade
 /// - Exibição de mensagens de erro quando offline
 class FirebaseAuthDataSource {
-  final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
-
   FirebaseAuthDataSource({
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
   })  : _auth = auth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
 
   // ==================== AUTENTICAÇÃO ====================
 
   /// Faz login com email e senha (apenas modo online)
-  /// 
+  ///
   /// Lança [InvalidCredentialsException] se credenciais inválidas
   /// Lança [NetworkException] se sem conexão
   /// Lança [OfflineModeException] se tentar usar offline
@@ -39,7 +38,7 @@ class FirebaseAuthDataSource {
     try {
       AppLogger.info('🔐 [FirebaseAuth] Iniciando login para: $email');
       AppLogger.info('📡 [FirebaseAuth] Verificando conexão com internet...');
-      
+
       // Verificar conexão com internet primeiro
       try {
         await _firestore.runTransaction((transaction) async {
@@ -48,7 +47,8 @@ class FirebaseAuthDataSource {
         });
         AppLogger.info('✅ [FirebaseAuth] Conexão verificada com sucesso');
       } catch (e) {
-        AppLogger.warning('❌ [FirebaseAuth] Sem conexão com internet detectada');
+        AppLogger.warning(
+            '❌ [FirebaseAuth] Sem conexão com internet detectada');
         throw const OfflineModeException(
           'Este aplicativo requer conexão com internet para funcionar.\n'
           'Por favor, verifique sua conexão e tente novamente.',
@@ -65,14 +65,15 @@ class FirebaseAuthDataSource {
 
       final uid = userCredential.user?.uid;
       AppLogger.info('👤 [FirebaseAuth] UID obtido: $uid');
-      
+
       if (uid == null) {
         AppLogger.error('❌ [FirebaseAuth] UID é null após autenticação');
         throw const InvalidCredentialsException('Usuário não encontrado');
       }
 
-      AppLogger.info('📄 [FirebaseAuth] Buscando dados do usuário no Firestore...');
-      
+      AppLogger.info(
+          '📄 [FirebaseAuth] Buscando dados do usuário no Firestore...');
+
       // Buscar dados do usuário no Firestore
       final userDoc = await _firestore
           .collection(FirestoreCollections.users)
@@ -80,23 +81,27 @@ class FirebaseAuthDataSource {
           .get();
 
       if (!userDoc.exists) {
-        AppLogger.warning('⚠️ [FirebaseAuth] Documento do usuário não encontrado no Firestore');
-        throw const StorageException('Dados do usuário não encontrados no Firestore');
+        AppLogger.warning(
+            '⚠️ [FirebaseAuth] Documento do usuário não encontrado no Firestore');
+        throw const StorageException(
+            'Dados do usuário não encontrados no Firestore');
       }
 
       final userData = userDoc.data()!;
-      
+
       // Verificar se campo 'tipo' existe e não é null
       final userType = userData[FirestoreCollections.tipo] as String?;
-      
+
       if (userType == null) {
-        AppLogger.error('❌ [FirebaseAuth] Campo "tipo" está null no Firestore para UID: $uid');
+        AppLogger.error(
+            '❌ [FirebaseAuth] Campo "tipo" está null no Firestore para UID: $uid');
         throw const StorageException(
           'Dados do usuário incompletos. Campo "tipo" não encontrado.',
         );
       }
-      
-      AppLogger.info('✅ [FirebaseAuth] Dados do usuário carregados. Tipo: $userType');
+
+      AppLogger.info(
+          '✅ [FirebaseAuth] Dados do usuário carregados. Tipo: $userType');
 
       // Retornar entidade apropriada (Patient ou Professional)
       if (userType == 'paciente') {
@@ -107,18 +112,22 @@ class FirebaseAuthDataSource {
         return ProfessionalEntity.fromJson(userData);
       }
     } on OfflineModeException {
-      AppLogger.warning('⚠️ [FirebaseAuth] OfflineModeException capturada - relançando');
+      AppLogger.warning(
+          '⚠️ [FirebaseAuth] OfflineModeException capturada - relançando');
       rethrow;
     } on StorageException {
-      AppLogger.warning('⚠️ [FirebaseAuth] StorageException capturada - relançando');
+      AppLogger.warning(
+          '⚠️ [FirebaseAuth] StorageException capturada - relançando');
       rethrow;
     } on FirebaseAuthException catch (e) {
-      AppLogger.error('❌ [FirebaseAuth] FirebaseAuthException: ${e.code}', error: e);
+      AppLogger.error('❌ [FirebaseAuth] FirebaseAuthException: ${e.code}',
+          error: e);
       AppLogger.error('Mensagem: ${e.message}');
-      
+
       switch (e.code) {
         case 'user-not-found':
-          AppLogger.info('👤 [FirebaseAuth] Usuário não encontrado no Firebase Auth');
+          AppLogger.info(
+              '👤 [FirebaseAuth] Usuário não encontrado no Firebase Auth');
           throw const InvalidCredentialsException(
             'Email ou senha incorretos. Verifique e tente novamente.',
           );
@@ -151,13 +160,14 @@ class FirebaseAuthDataSource {
           throw AuthenticationException('Erro ao fazer login: ${e.message}');
       }
     } catch (e, stackTrace) {
-      AppLogger.error('💥 [FirebaseAuth] Erro inesperado durante login', error: e, stackTrace: stackTrace);
+      AppLogger.error('💥 [FirebaseAuth] Erro inesperado durante login',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
   /// Registra um novo paciente
-  /// 
+  ///
   /// Lança [EmailAlreadyExistsException] se email já cadastrado
   /// Lança [ValidationException] se dados inválidos
   Future<PatientEntity> registerPatient(PatientEntity patient) async {
@@ -178,12 +188,16 @@ class FirebaseAuthDataSource {
       // Criar documento no Firestore
       final patientData = patient.toJson();
       patientData[FirestoreCollections.id] = uid;
-      patientData[FirestoreCollections.tipo] = 'paciente'; // IMPORTANTE: garantir que tipo seja salvo
-      patientData[FirestoreCollections.createdAt] = FieldValue.serverTimestamp();
-      patientData[FirestoreCollections.updatedAt] = FieldValue.serverTimestamp();
+      patientData[FirestoreCollections.tipo] =
+          'paciente'; // IMPORTANTE: garantir que tipo seja salvo
+      patientData[FirestoreCollections.createdAt] =
+          FieldValue.serverTimestamp();
+      patientData[FirestoreCollections.updatedAt] =
+          FieldValue.serverTimestamp();
 
-      AppLogger.info('📝 [FirebaseAuth] Salvando dados no Firestore: ${patientData.keys.toList()}');
-      
+      AppLogger.info(
+          '📝 [FirebaseAuth] Salvando dados no Firestore: ${patientData.keys.toList()}');
+
       await _firestore
           .collection(FirestoreCollections.users)
           .doc(uid)
@@ -215,13 +229,14 @@ class FirebaseAuthDataSource {
           throw AuthenticationException('Erro ao registrar: ${e.message}');
       }
     } catch (e, stackTrace) {
-      AppLogger.error('Erro inesperado ao registrar paciente', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro inesperado ao registrar paciente',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
   /// Registra um novo profissional
-  /// 
+  ///
   /// Lança [EmailAlreadyExistsException] se email já cadastrado
   /// Lança [ValidationException] se dados inválidos
   Future<ProfessionalEntity> registerProfessional(
@@ -244,13 +259,18 @@ class FirebaseAuthDataSource {
       // Criar documento no Firestore
       final professionalData = professional.toJson();
       professionalData[FirestoreCollections.id] = uid;
-      professionalData[FirestoreCollections.tipo] = 'profissional'; // IMPORTANTE: garantir que tipo seja salvo
-      professionalData[FirestoreCollections.createdAt] = FieldValue.serverTimestamp();
-      professionalData[FirestoreCollections.updatedAt] = FieldValue.serverTimestamp();
-      professionalData[FirestoreCollections.avaliacao] = 0.0; // Avaliação inicial
+      professionalData[FirestoreCollections.tipo] =
+          'profissional'; // IMPORTANTE: garantir que tipo seja salvo
+      professionalData[FirestoreCollections.createdAt] =
+          FieldValue.serverTimestamp();
+      professionalData[FirestoreCollections.updatedAt] =
+          FieldValue.serverTimestamp();
+      professionalData[FirestoreCollections.avaliacao] =
+          0.0; // Avaliação inicial
 
-      AppLogger.info('📝 [FirebaseAuth] Salvando dados no Firestore: ${professionalData.keys.toList()}');
-      
+      AppLogger.info(
+          '📝 [FirebaseAuth] Salvando dados no Firestore: ${professionalData.keys.toList()}');
+
       await _firestore
           .collection(FirestoreCollections.users)
           .doc(uid)
@@ -259,7 +279,8 @@ class FirebaseAuthDataSource {
       AppLogger.info('✅ Profissional registrado com sucesso: $uid');
 
       // Retornar entidade com ID atualizado
-      return ProfessionalEntity.fromJson({...professional.toJson(), 'id': uid, 'avaliacao': 0.0});
+      return ProfessionalEntity.fromJson(
+          {...professional.toJson(), 'id': uid, 'avaliacao': 0.0});
     } on FirebaseAuthException catch (e) {
       AppLogger.error('Erro ao registrar profissional', error: e);
 
@@ -282,7 +303,8 @@ class FirebaseAuthDataSource {
           throw AuthenticationException('Erro ao registrar: ${e.message}');
       }
     } catch (e, stackTrace) {
-      AppLogger.error('Erro inesperado ao registrar profissional', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro inesperado ao registrar profissional',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -318,12 +340,13 @@ class FirebaseAuthDataSource {
       }
 
       final userData = userDoc.data()!;
-      
+
       // Verificar se campo 'tipo' existe e não é null
       final userType = userData[FirestoreCollections.tipo] as String?;
-      
+
       if (userType == null) {
-        AppLogger.error('❌ [FirebaseAuth] Campo "tipo" está null no getCurrentUser()');
+        AppLogger.error(
+            '❌ [FirebaseAuth] Campo "tipo" está null no getCurrentUser()');
         return null;
       }
 
@@ -333,7 +356,8 @@ class FirebaseAuthDataSource {
         return ProfessionalEntity.fromJson(userData);
       }
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar usuário atual', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar usuário atual',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -343,4 +367,3 @@ class FirebaseAuthDataSource {
     return _auth.currentUser != null;
   }
 }
-

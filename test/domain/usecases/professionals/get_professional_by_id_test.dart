@@ -1,5 +1,5 @@
 /// Testes para GetProfessionalById Use Case
-/// 
+///
 /// Objetivo: Validar busca de profissional específico por ID
 /// Regras de negócio:
 /// - Deve retornar profissional quando ID existe
@@ -33,7 +33,7 @@ void main() {
   group('GetProfessionalById', () {
     // Dados REALISTAS para testes
     const tProfessionalId = 'prof123';
-    
+
     final tProfessional = ProfessionalEntity(
       id: tProfessionalId,
       nome: 'João Santos',
@@ -45,14 +45,15 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem - SENAC 2010',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
-      biografia: 'Técnico em enfermagem com 10 anos de experiência em cuidados domiciliares e hospitalares. Especializado em cuidados paliativos.',
+      biografia:
+          'Técnico em enfermagem com 10 anos de experiência em cuidados domiciliares e hospitalares. Especializado em cuidados paliativos.',
       avaliacao: 4.8,
-      hourlyRate: 75.0,
+      hourlyRate: 75,
       averageRating: 4.8,
     );
 
@@ -84,10 +85,11 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar NotFoundFailure quando profissional não existe', () async {
+    test('deve retornar NotFoundFailure quando profissional não existe',
+        () async {
       // Arrange
       const tInvalidId = 'prof_nao_existe';
-      
+
       when(mockRepository.getProfessionalById(tInvalidId))
           .thenAnswer((_) async => const Left(NotFoundFailure('Profissional')));
 
@@ -106,7 +108,9 @@ void main() {
       verify(mockRepository.getProfessionalById(tInvalidId)).called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao buscar profissional', () async {
+    test(
+        'deve retornar StorageFailure quando ocorre erro ao buscar profissional',
+        () async {
       // Arrange
       when(mockRepository.getProfessionalById(tProfessionalId))
           .thenAnswer((_) async => const Left(StorageFailure()));
@@ -129,7 +133,7 @@ void main() {
     test('deve buscar profissional com ID vazio sem erro', () async {
       // Arrange
       const tEmptyId = '';
-      
+
       when(mockRepository.getProfessionalById(tEmptyId))
           .thenAnswer((_) async => const Left(NotFoundFailure('Profissional')));
 

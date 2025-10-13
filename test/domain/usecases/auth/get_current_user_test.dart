@@ -36,7 +36,7 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Feminino',
-      dataCadastro: DateTime(2025, 1, 1),
+      dataCadastro: DateTime(2025),
       condicoesMedicas: 'Hipertensão',
     );
 
@@ -61,7 +61,8 @@ void main() {
       verify(mockRepository.getCurrentUser()).called(1);
     });
 
-    test('deve retornar AuthenticationFailure quando não está autenticado', () async {
+    test('deve retornar AuthenticationFailure quando não está autenticado',
+        () async {
       // Arrange
       when(mockRepository.getCurrentUser())
           .thenAnswer((_) async => const Left(SessionExpiredFailure()));

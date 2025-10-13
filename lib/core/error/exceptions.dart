@@ -16,8 +16,8 @@ library;
 
 /// Credenciais inválidas durante autenticação.
 class InvalidCredentialsException implements Exception {
-  final String message;
   const InvalidCredentialsException([this.message = 'Invalid credentials']);
+  final String message;
 
   @override
   String toString() => 'InvalidCredentialsException: $message';
@@ -25,17 +25,19 @@ class InvalidCredentialsException implements Exception {
 
 /// Usuário não encontrado no datasource.
 class UserNotFoundException implements Exception {
-  final String email;
   const UserNotFoundException(this.email);
+  final String email;
 
   @override
-  String toString() => 'UserNotFoundException: User with email $email not found';
+  String toString() =>
+      'UserNotFoundException: User with email $email not found';
 }
 
 /// Email já existe no sistema.
 class EmailAlreadyExistsException implements Exception {
+  const EmailAlreadyExistsException(
+      [this.message = 'Email already registered']);
   final String message;
-  const EmailAlreadyExistsException([this.message = 'Email already registered']);
 
   @override
   String toString() => 'EmailAlreadyExistsException: $message';
@@ -43,8 +45,8 @@ class EmailAlreadyExistsException implements Exception {
 
 /// Erro genérico de autenticação.
 class AuthenticationException implements Exception {
-  final String message;
   const AuthenticationException([this.message = 'Authentication error']);
+  final String message;
 
   @override
   String toString() => 'AuthenticationException: $message';
@@ -52,8 +54,8 @@ class AuthenticationException implements Exception {
 
 /// Erro de validação de dados.
 class ValidationException implements Exception {
-  final String message;
   const ValidationException([this.message = 'Validation error']);
+  final String message;
 
   @override
   String toString() => 'ValidationException: $message';
@@ -65,10 +67,9 @@ class ValidationException implements Exception {
 
 /// Erro genérico de armazenamento local.
 class LocalStorageException implements Exception {
+  const LocalStorageException(this.message, [this.originalError]);
   final String message;
   final dynamic originalError;
-
-  const LocalStorageException(this.message, [this.originalError]);
 
   @override
   String toString() => 'LocalStorageException: $message'
@@ -77,8 +78,8 @@ class LocalStorageException implements Exception {
 
 /// Erro genérico de armazenamento (local ou remoto - Firebase/Firestore).
 class StorageException implements Exception {
-  final String message;
   const StorageException([this.message = 'Storage error']);
+  final String message;
 
   @override
   String toString() => 'StorageException: $message';
@@ -86,10 +87,9 @@ class StorageException implements Exception {
 
 /// Recurso não encontrado no storage.
 class NotFoundException implements Exception {
+  const NotFoundException(this.resource, this.id);
   final String resource;
   final String id;
-
-  const NotFoundException(this.resource, this.id);
 
   @override
   String toString() => 'NotFoundException: $resource with id $id not found';
@@ -97,10 +97,9 @@ class NotFoundException implements Exception {
 
 /// Erro ao serializar/deserializar JSON.
 class SerializationException implements Exception {
+  const SerializationException(this.message, [this.originalError]);
   final String message;
   final dynamic originalError;
-
-  const SerializationException(this.message, [this.originalError]);
 
   @override
   String toString() => 'SerializationException: $message'
@@ -113,10 +112,9 @@ class SerializationException implements Exception {
 
 /// Erro de conexão com servidor.
 class NetworkException implements Exception {
+  const NetworkException(this.message, [this.statusCode]);
   final String message;
   final int? statusCode;
-
-  const NetworkException(this.message, [this.statusCode]);
 
   @override
   String toString() => 'NetworkException: $message'
@@ -125,9 +123,8 @@ class NetworkException implements Exception {
 
 /// Timeout de requisição.
 class TimeoutException implements Exception {
-  final String operation;
-
   const TimeoutException(this.operation);
+  final String operation;
 
   @override
   String toString() => 'TimeoutException: Operation "$operation" timed out';
@@ -135,10 +132,10 @@ class TimeoutException implements Exception {
 
 /// Exception lançada quando tenta usar o app offline
 class OfflineModeException implements Exception {
+  const OfflineModeException(
+      [this.message = 'App requer conexão com internet']);
   final String message;
-  const OfflineModeException([this.message = 'App requer conexão com internet']);
 
   @override
   String toString() => 'OfflineModeException: $message';
 }
-

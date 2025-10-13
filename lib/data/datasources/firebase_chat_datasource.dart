@@ -6,22 +6,21 @@ import '../../domain/entities/conversation_entity.dart';
 import '../../domain/entities/message_entity.dart';
 
 /// DataSource para chat usando Firestore (Real-time)
-/// 
+///
 /// Responsável por:
 /// - Enviar e receber mensagens em tempo real
 /// - Gerenciar conversas
 /// - Sincronizar mensagens entre dispositivos
 /// - Marcar mensagens como lidas
 class FirebaseChatDataSource {
-  final FirebaseFirestore _firestore;
-
   FirebaseChatDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   // ==================== CONVERSAS ====================
 
   /// Obtém todas as conversas de um usuário (Stream em tempo real)
-  /// 
+  ///
   /// Retorna um Stream que atualiza automaticamente quando
   /// novas mensagens chegam
   Stream<List<ConversationEntity>> getUserConversationsStream(
@@ -43,7 +42,8 @@ class FirebaseChatDataSource {
         }).toList();
       });
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar conversas', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar conversas',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -75,7 +75,8 @@ class FirebaseChatDataSource {
 
       return null;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar conversa', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar conversa',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -116,12 +117,11 @@ class FirebaseChatDataSource {
         otherUserId: userId2,
         otherUserName: user2Name,
         otherUserSpecialty: user2Specialty,
-        lastMessage: null,
-        unreadCount: 0,
         updatedAt: now,
       );
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao criar conversa', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao criar conversa',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao criar conversa: $e');
     }
   }
@@ -129,7 +129,7 @@ class FirebaseChatDataSource {
   // ==================== MENSAGENS ====================
 
   /// Obtém mensagens de uma conversa (Stream em tempo real)
-  /// 
+  ///
   /// Retorna um Stream que atualiza automaticamente quando
   /// novas mensagens são enviadas
   Stream<List<MessageEntity>> getMessagesStream(String conversationId) {
@@ -146,7 +146,8 @@ class FirebaseChatDataSource {
         }).toList();
       });
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar mensagens', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar mensagens',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -210,10 +211,10 @@ class FirebaseChatDataSource {
         receiverId: receiverId,
         text: text,
         timestamp: now.toDate(),
-        isRead: false,
       );
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao enviar mensagem', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao enviar mensagem',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao enviar mensagem: $e');
     }
   }
@@ -251,7 +252,8 @@ class FirebaseChatDataSource {
 
       AppLogger.info('Mensagens marcadas como lidas: $conversationId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao marcar mensagens como lidas', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao marcar mensagens como lidas',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -282,9 +284,9 @@ class FirebaseChatDataSource {
 
       AppLogger.info('✅ Conversa deletada: $conversationId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao deletar conversa', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao deletar conversa',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao deletar conversa: $e');
     }
   }
 }
-

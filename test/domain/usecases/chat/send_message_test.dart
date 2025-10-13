@@ -1,5 +1,5 @@
 /// Testes para SendMessage Use Case
-/// 
+///
 /// Objetivo: Validar envio de mensagens entre usuários
 /// Regras de negócio:
 /// - Conteúdo não pode ser vazio
@@ -34,8 +34,9 @@ void main() {
     // Dados REALISTAS para testes
     const tSenderId = 'patient123';
     const tReceiverId = 'prof456';
-    const tContent = 'Olá! Gostaria de contratar seus serviços para cuidar da minha mãe.';
-    
+    const tContent =
+        'Olá! Gostaria de contratar seus serviços para cuidar da minha mãe.';
+
     final tMessage = MessageEntity(
       id: 'msg789',
       conversationId: 'conv_patient123_prof456',
@@ -44,10 +45,9 @@ void main() {
       receiverId: tReceiverId,
       content: tContent,
       timestamp: DateTime(2025, 10, 9, 14, 30),
-      isRead: false,
     );
 
-    final tParams = SendMessageParams(
+    const tParams = SendMessageParams(
       senderId: tSenderId,
       receiverId: tReceiverId,
       content: tContent,
@@ -84,9 +84,10 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar ValidationFailure quando conteúdo está vazio', () async {
+    test('deve retornar ValidationFailure quando conteúdo está vazio',
+        () async {
       // Arrange
-      final emptyParams = SendMessageParams(
+      const emptyParams = SendMessageParams(
         senderId: tSenderId,
         receiverId: tReceiverId,
         content: '',
@@ -112,9 +113,11 @@ void main() {
       ));
     });
 
-    test('deve retornar ValidationFailure quando conteúdo contém apenas espaços', () async {
+    test(
+        'deve retornar ValidationFailure quando conteúdo contém apenas espaços',
+        () async {
       // Arrange
-      final whitespaceParams = SendMessageParams(
+      const whitespaceParams = SendMessageParams(
         senderId: tSenderId,
         receiverId: tReceiverId,
         content: '   ',
@@ -139,7 +142,8 @@ void main() {
       ));
     });
 
-    test('deve retornar StorageFailure quando falha ao enviar mensagem', () async {
+    test('deve retornar StorageFailure quando falha ao enviar mensagem',
+        () async {
       // Arrange
       when(mockRepository.sendMessage(
         senderId: tSenderId,

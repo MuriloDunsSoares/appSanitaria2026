@@ -9,13 +9,12 @@ import '../../repositories/chat_repository.dart';
 
 /// Use Case para marcar mensagens como lidas.
 class MarkMessagesAsRead extends UseCase<Unit, MarkAsReadParams> {
-  final ChatRepository repository;
-
   MarkMessagesAsRead(this.repository);
+  final ChatRepository repository;
 
   @override
   Future<Either<Failure, Unit>> call(MarkAsReadParams params) async {
-    return await repository.markMessagesAsRead(
+    return repository.markMessagesAsRead(
       conversationId: params.conversationId,
       userId: params.userId,
     );
@@ -24,13 +23,12 @@ class MarkMessagesAsRead extends UseCase<Unit, MarkAsReadParams> {
 
 /// Parâmetros para marcar como lido.
 class MarkAsReadParams extends Equatable {
-  final String conversationId;
-  final String userId;
-
   const MarkAsReadParams({
     required this.conversationId,
     required this.userId,
   });
+  final String conversationId;
+  final String userId;
 
   @override
   List<Object?> get props => [conversationId, userId];
@@ -38,7 +36,3 @@ class MarkAsReadParams extends Equatable {
 
 /// Alias para MarkAsReadParams (compatibilidade com testes)
 typedef MarkMessagesAsReadParams = MarkAsReadParams;
-
-
-
-

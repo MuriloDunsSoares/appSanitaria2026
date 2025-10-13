@@ -1,5 +1,5 @@
 /// Testes para SearchProfessionals Use Case
-/// 
+///
 /// Objetivo: Validar busca de profissionais por query (nome, cidade, especialidade)
 /// Regras de negócio:
 /// - Deve retornar profissionais que correspondem à query
@@ -44,21 +44,21 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem - SENAC 2010',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
       biografia: 'Técnico especializado em cuidados domiciliares.',
       avaliacao: 4.8,
-      hourlyRate: 75.0,
+      hourlyRate: 75,
       averageRating: 4.8,
     );
 
     test('deve retornar profissionais quando busca por nome', () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: 'João');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: 'João');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -98,8 +98,8 @@ void main() {
 
     test('deve retornar profissionais quando busca por cidade', () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: 'São Paulo');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: 'São Paulo');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -109,8 +109,7 @@ void main() {
         minPrice: anyNamed('minPrice'),
         minExperience: anyNamed('minExperience'),
         availableNow: anyNamed('availableNow'),
-      ))
-          .thenAnswer((_) async => Right([tProfessional]));
+      )).thenAnswer((_) async => Right([tProfessional]));
 
       // Act
       final result = await useCase(tParams);
@@ -137,10 +136,11 @@ void main() {
       )).called(1);
     });
 
-    test('deve retornar profissionais quando busca por especialidade', () async {
+    test('deve retornar profissionais quando busca por especialidade',
+        () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: 'enfermagem');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: 'enfermagem');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -150,8 +150,7 @@ void main() {
         minPrice: anyNamed('minPrice'),
         minExperience: anyNamed('minExperience'),
         availableNow: anyNamed('availableNow'),
-      ))
-          .thenAnswer((_) async => Right([tProfessional]));
+      )).thenAnswer((_) async => Right([tProfessional]));
 
       // Act
       final result = await useCase(tParams);
@@ -162,7 +161,8 @@ void main() {
         (failure) => fail('Deveria retornar profissionais'),
         (professionals) {
           expect(professionals.length, 1);
-          expect(professionals[0].especialidade.displayName, contains('enfermagem'));
+          expect(professionals[0].especialidade.displayName,
+              contains('enfermagem'));
         },
       );
 
@@ -178,10 +178,12 @@ void main() {
       )).called(1);
     });
 
-    test('deve retornar lista vazia quando nenhum profissional corresponde à busca', () async {
+    test(
+        'deve retornar lista vazia quando nenhum profissional corresponde à busca',
+        () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: 'XYZ Inexistente');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: 'XYZ Inexistente');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -191,8 +193,7 @@ void main() {
         minPrice: anyNamed('minPrice'),
         minExperience: anyNamed('minExperience'),
         availableNow: anyNamed('availableNow'),
-      ))
-          .thenAnswer((_) async => const Right([]));
+      )).thenAnswer((_) async => const Right([]));
 
       // Act
       final result = await useCase(tParams);
@@ -220,8 +221,8 @@ void main() {
 
     test('deve retornar lista vazia quando query está vazia', () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: '');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: '');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -231,8 +232,7 @@ void main() {
         minPrice: anyNamed('minPrice'),
         minExperience: anyNamed('minExperience'),
         availableNow: anyNamed('availableNow'),
-      ))
-          .thenAnswer((_) async => const Right([]));
+      )).thenAnswer((_) async => const Right([]));
 
       // Act
       final result = await useCase(tParams);
@@ -260,8 +260,8 @@ void main() {
 
     test('deve retornar StorageFailure quando ocorre erro na busca', () async {
       // Arrange
-      final tParams = SearchProfessionalsParams(searchQuery: 'João');
-      
+      const tParams = SearchProfessionalsParams(searchQuery: 'João');
+
       when(mockRepository.searchProfessionals(
         searchQuery: anyNamed('searchQuery'),
         speciality: anyNamed('speciality'),
@@ -271,8 +271,7 @@ void main() {
         minPrice: anyNamed('minPrice'),
         minExperience: anyNamed('minExperience'),
         availableNow: anyNamed('availableNow'),
-      ))
-          .thenAnswer((_) async => const Left(StorageFailure()));
+      )).thenAnswer((_) async => const Left(StorageFailure()));
 
       // Act
       final result = await useCase(tParams);

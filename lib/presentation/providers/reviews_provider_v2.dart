@@ -1,26 +1,25 @@
 /// ReviewsProvider migrado para Clean Architecture com Use Cases.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/di/injection_container.dart';
 import 'package:app_sanitaria/domain/entities/review_entity.dart';
 import 'package:app_sanitaria/domain/usecases/reviews/add_review.dart';
 import 'package:app_sanitaria/domain/usecases/reviews/get_average_rating.dart';
 import 'package:app_sanitaria/domain/usecases/reviews/get_reviews_by_professional.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Estado das avaliações (Clean Architecture)
 class ReviewsState {
-  final Map<String, List<ReviewEntity>> reviewsByProfessional;
-  final Map<String, double> averageRatings;
-  final bool isLoading;
-  final String? errorMessage;
-
   ReviewsState({
     this.reviewsByProfessional = const {},
     this.averageRatings = const {},
     this.isLoading = false,
     this.errorMessage,
   });
+  final Map<String, List<ReviewEntity>> reviewsByProfessional;
+  final Map<String, double> averageRatings;
+  final bool isLoading;
+  final String? errorMessage;
 
   ReviewsState copyWith({
     Map<String, List<ReviewEntity>>? reviewsByProfessional,
@@ -46,10 +45,6 @@ class ReviewsState {
 
 /// ReviewsNotifier V2 - Clean Architecture
 class ReviewsNotifierV2 extends StateNotifier<ReviewsState> {
-  final GetReviewsByProfessional _getReviewsByProfessional;
-  final AddReview _addReview;
-  final GetAverageRating _getAverageRating;
-
   ReviewsNotifierV2({
     required GetReviewsByProfessional getReviewsByProfessional,
     required AddReview addReview,
@@ -58,6 +53,9 @@ class ReviewsNotifierV2 extends StateNotifier<ReviewsState> {
         _addReview = addReview,
         _getAverageRating = getAverageRating,
         super(ReviewsState());
+  final GetReviewsByProfessional _getReviewsByProfessional;
+  final AddReview _addReview;
+  final GetAverageRating _getAverageRating;
 
   /// Carrega avaliações de um profissional
   Future<void> loadReviews(String professionalId) async {
@@ -74,7 +72,8 @@ class ReviewsNotifierV2 extends StateNotifier<ReviewsState> {
         final newReviews =
             Map<String, List<ReviewEntity>>.from(state.reviewsByProfessional);
         newReviews[professionalId] = reviews;
-        state = state.copyWith(reviewsByProfessional: newReviews, isLoading: false);
+        state =
+            state.copyWith(reviewsByProfessional: newReviews, isLoading: false);
       },
     );
   }
@@ -134,4 +133,3 @@ final reviewsProviderV2 =
     getAverageRating: getIt<GetAverageRating>(),
   );
 });
-

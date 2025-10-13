@@ -4,16 +4,15 @@ import '../../core/error/exceptions.dart';
 import '../../core/utils/app_logger.dart';
 
 /// DataSource para favoritos usando Firestore
-/// 
+///
 /// Responsável por:
 /// - Adicionar/remover favoritos
 /// - Buscar favoritos de um usuário
 /// - Verificar se profissional está favoritado
 class FirebaseFavoritesDataSource {
-  final FirebaseFirestore _firestore;
-
   FirebaseFavoritesDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   /// Obtém os IDs dos profissionais favoritos de um usuário
   Future<List<String>> getFavorites(String userId) async {
@@ -38,7 +37,8 @@ class FirebaseFavoritesDataSource {
 
       return favorites;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar favoritos', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar favoritos',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar favoritos: $e');
     }
   }
@@ -53,13 +53,15 @@ class FirebaseFavoritesDataSource {
           .doc(userId)
           .set({
         FirestoreCollections.userId: userId,
-        FirestoreCollections.professionalIds: FieldValue.arrayUnion([professionalId]),
+        FirestoreCollections.professionalIds:
+            FieldValue.arrayUnion([professionalId]),
         FirestoreCollections.updatedAt: FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
       AppLogger.info('✅ Favorito adicionado');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao adicionar favorito', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao adicionar favorito',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao adicionar favorito: $e');
     }
   }
@@ -73,13 +75,15 @@ class FirebaseFavoritesDataSource {
           .collection(FirestoreCollections.favorites)
           .doc(userId)
           .update({
-        FirestoreCollections.professionalIds: FieldValue.arrayRemove([professionalId]),
+        FirestoreCollections.professionalIds:
+            FieldValue.arrayRemove([professionalId]),
         FirestoreCollections.updatedAt: FieldValue.serverTimestamp(),
       });
 
       AppLogger.info('✅ Favorito removido');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao remover favorito', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao remover favorito',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao remover favorito: $e');
     }
   }
@@ -90,7 +94,8 @@ class FirebaseFavoritesDataSource {
       final favorites = await getFavorites(userId);
       return favorites.contains(professionalId);
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao verificar favorito', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao verificar favorito',
+          error: e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -107,9 +112,9 @@ class FirebaseFavoritesDataSource {
 
       AppLogger.info('✅ Favoritos limpos');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao limpar favoritos', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao limpar favoritos',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao limpar favoritos: $e');
     }
   }
 }
-

@@ -26,4 +26,3 @@ enum Speciality {
     return null;
   }
 }
-

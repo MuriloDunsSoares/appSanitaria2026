@@ -86,5 +86,3 @@ abstract class ContractsRepository {
   /// - [Left(StorageFailure)]: erro ao deletar
   Future<Either<Failure, Unit>> deleteContract(String contractId);
 }
-
-

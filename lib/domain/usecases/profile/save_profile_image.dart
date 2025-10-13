@@ -11,9 +11,8 @@ import '../../repositories/profile_repository.dart';
 ///
 /// **Responsabilidade única:** Persistir caminho da imagem de perfil.
 class SaveProfileImage extends UseCase<Unit, SaveProfileImageParams> {
-  final ProfileRepository repository;
-
   SaveProfileImage(this.repository);
+  final ProfileRepository repository;
 
   @override
   Future<Either<Failure, Unit>> call(SaveProfileImageParams params) async {
@@ -22,19 +21,18 @@ class SaveProfileImage extends UseCase<Unit, SaveProfileImageParams> {
       return const Left(ValidationFailure('Caminho da imagem inválido'));
     }
 
-    return await repository.saveProfileImage(params.userId, params.imagePath);
+    return repository.saveProfileImage(params.userId, params.imagePath);
   }
 }
 
 /// Parâmetros do Use Case SaveProfileImage.
 class SaveProfileImageParams extends Equatable {
-  final String userId;
-  final String imagePath;
-
   const SaveProfileImageParams({
     required this.userId,
     required this.imagePath,
   });
+  final String userId;
+  final String imagePath;
 
   @override
   List<Object?> get props => [userId, imagePath];

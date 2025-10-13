@@ -10,12 +10,6 @@ import '../../repositories/reviews_repository.dart';
 
 /// Parâmetros para adicionar avaliação
 class AddReviewParams extends Equatable {
-  final String professionalId;
-  final String patientId;
-  final String patientName;
-  final int rating;
-  final String comment;
-
   const AddReviewParams({
     required this.professionalId,
     required this.patientId,
@@ -23,16 +17,21 @@ class AddReviewParams extends Equatable {
     required this.rating,
     required this.comment,
   });
+  final String professionalId;
+  final String patientId;
+  final String patientName;
+  final int rating;
+  final String comment;
 
   @override
-  List<Object?> get props => [professionalId, patientId, patientName, rating, comment];
+  List<Object?> get props =>
+      [professionalId, patientId, patientName, rating, comment];
 }
 
 /// Use Case para adicionar avaliação.
 class AddReview extends UseCase<ReviewEntity, AddReviewParams> {
-  final ReviewsRepository repository;
-
   AddReview(this.repository);
+  final ReviewsRepository repository;
 
   @override
   Future<Either<Failure, ReviewEntity>> call(AddReviewParams params) async {
@@ -52,10 +51,6 @@ class AddReview extends UseCase<ReviewEntity, AddReviewParams> {
       createdAt: DateTime.now(),
     );
 
-    return await repository.addReview(review);
+    return repository.addReview(review);
   }
 }
-
-
-
-

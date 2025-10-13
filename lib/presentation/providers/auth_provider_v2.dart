@@ -1,7 +1,6 @@
 /// AuthProvider migrado para Clean Architecture com Use Cases.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/di/injection_container.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/core/usecases/usecase.dart';
@@ -14,6 +13,7 @@ import 'package:app_sanitaria/domain/usecases/auth/login_user.dart';
 import 'package:app_sanitaria/domain/usecases/auth/logout_user.dart';
 import 'package:app_sanitaria/domain/usecases/auth/register_patient.dart';
 import 'package:app_sanitaria/domain/usecases/auth/register_professional.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Estado de Autenticação (Clean Architecture)
 enum AuthStatus {
@@ -26,10 +26,6 @@ enum AuthStatus {
 
 /// State da Autenticação (Clean Architecture)
 class AuthState {
-  final AuthStatus status;
-  final UserEntity? user;
-  final String? errorMessage;
-
   AuthState({
     required this.status,
     this.user,
@@ -47,6 +43,9 @@ class AuthState {
   factory AuthState.error(String message) {
     return AuthState(status: AuthStatus.error, errorMessage: message);
   }
+  final AuthStatus status;
+  final UserEntity? user;
+  final String? errorMessage;
 
   bool get isAuthenticated => status == AuthStatus.authenticated;
   bool get isLoading => status == AuthStatus.loading;
@@ -69,13 +68,6 @@ class AuthState {
 
 /// AuthNotifier V2 - Clean Architecture com Use Cases
 class AuthNotifierV2 extends StateNotifier<AuthState> {
-  final CheckAuthentication _checkAuthentication;
-  final GetCurrentUser _getCurrentUser;
-  final LoginUser _loginUser;
-  final LogoutUser _logoutUser;
-  final RegisterPatient _registerPatient;
-  final RegisterProfessional _registerProfessional;
-
   AuthNotifierV2({
     required CheckAuthentication checkAuthentication,
     required GetCurrentUser getCurrentUser,
@@ -92,11 +84,17 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
         super(AuthState.initial()) {
     _checkSession();
   }
+  final CheckAuthentication _checkAuthentication;
+  final GetCurrentUser _getCurrentUser;
+  final LoginUser _loginUser;
+  final LogoutUser _logoutUser;
+  final RegisterPatient _registerPatient;
+  final RegisterProfessional _registerProfessional;
 
   /// Verifica sessão existente
   Future<void> _checkSession() async {
     print('[AuthProvider] _checkSession() iniciado...');
-    
+
     final result = await _checkAuthentication.call(NoParams());
 
     result.fold(
@@ -106,7 +104,7 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
       },
       (isAuthenticated) async {
         print('[AuthProvider] isAuthenticated = $isAuthenticated');
-        
+
         if (isAuthenticated) {
           print('[AuthProvider] Carregando usuário...');
           final userResult = await _getCurrentUser.call(NoParams());
@@ -126,7 +124,7 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
         }
       },
     );
-    
+
     print('[AuthProvider] _checkSession() finalizado. Estado: ${state.status}');
   }
 
@@ -213,13 +211,19 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
     return switch (failure) {
       ValidationFailure() => 'Dados inválidos. Verifique as informações.',
       NotFoundFailure() => 'Usuário não encontrado. Verifique o email.',
-      InvalidCredentialsFailure() => 'Email ou senha incorretos. Tente novamente.',
-      UserNotFoundFailure() => 'Conta não encontrada. Você precisa se cadastrar primeiro.',
-      EmailAlreadyExistsFailure() => 'Este email já está cadastrado. Faça login.',
+      InvalidCredentialsFailure() =>
+        'Email ou senha incorretos. Tente novamente.',
+      UserNotFoundFailure() =>
+        'Conta não encontrada. Você precisa se cadastrar primeiro.',
+      EmailAlreadyExistsFailure() =>
+        'Este email já está cadastrado. Faça login.',
       SessionExpiredFailure() => 'Sua sessão expirou. Faça login novamente.',
-      StorageFailure() => 'Erro ao conectar com o servidor. Verifique sua internet e tente novamente.',
-      NetworkFailure(:final message) => message ?? 'Sem conexão com a internet. Conecte-se e tente novamente.',
-      _ => 'Erro inesperado. Tente novamente ou entre em contato com o suporte.',
+      StorageFailure() =>
+        'Erro ao conectar com o servidor. Verifique sua internet e tente novamente.',
+      NetworkFailure(:final message) =>
+        message ?? 'Sem conexão com a internet. Conecte-se e tente novamente.',
+      _ =>
+        'Erro inesperado. Tente novamente ou entre em contato com o suporte.',
     };
   }
 }
@@ -252,4 +256,3 @@ final userIdProviderV2 = Provider<String?>((ref) {
 final userNameProviderV2 = Provider<String?>((ref) {
   return ref.watch(authProviderV2).userName;
 });
-

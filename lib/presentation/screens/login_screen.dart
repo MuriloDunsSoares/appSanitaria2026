@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
 import 'package:app_sanitaria/core/services/connectivity_service.dart';
 import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Tela de Login
 ///
@@ -71,7 +71,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _listenToConnectivityChanges() {
     final connectivityService = ConnectivityService();
     connectivityService.onConnectivityChanged.listen((results) {
-      final isConnected = results.isNotEmpty && results.first != ConnectivityResult.none;
+      final isConnected =
+          results.isNotEmpty && results.first != ConnectivityResult.none;
       setState(() {
         _isOnline = isConnected;
       });
@@ -89,7 +90,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!_isOnline) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Você está offline. Este aplicativo requer conexão com internet.'),
+          content: Text(
+              'Você está offline. Este aplicativo requer conexão com internet.'),
           backgroundColor: Colors.orange,
           duration: Duration(seconds: 5),
         ),
@@ -145,7 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -298,13 +300,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 // Indicador de conectividade
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: _isOnline ? Colors.green.withOpacity(0.1) : Colors.orange.withOpacity(0.1),
+                    color: _isOnline
+                        ? Colors.green.withOpacity(0.1)
+                        : Colors.orange.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: _isOnline ? Colors.green : Colors.orange,
-                      width: 1,
                     ),
                   ),
                   child: Row(

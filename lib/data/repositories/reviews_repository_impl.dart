@@ -9,9 +9,8 @@ import '../../domain/repositories/reviews_repository.dart';
 import '../datasources/firebase_reviews_datasource.dart';
 
 class ReviewsRepositoryImpl implements ReviewsRepository {
-  final FirebaseReviewsDataSource dataSource;
-
   ReviewsRepositoryImpl({required this.dataSource});
+  final FirebaseReviewsDataSource dataSource;
 
   @override
   Future<Either<Failure, List<ReviewEntity>>> getReviewsByProfessional(
@@ -60,10 +59,10 @@ class ReviewsRepositoryImpl implements ReviewsRepository {
     try {
       final reviews = await dataSource.getReviewsByProfessional(professionalId);
       if (reviews.isEmpty) {
-        return const Right(0.0);
+        return const Right(0);
       }
       final sum = reviews.fold<double>(
-        0.0,
+        0,
         (prev, review) => prev + review.rating,
       );
       final average = sum / reviews.length;
@@ -87,4 +86,3 @@ class ReviewsRepositoryImpl implements ReviewsRepository {
     }
   }
 }
-

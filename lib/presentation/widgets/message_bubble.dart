@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/domain/entities/message_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Bolha de Mensagem no Chat
@@ -10,14 +10,13 @@ import 'package:intl/intl.dart';
 /// - Horário
 /// - Status de leitura (para mensagens enviadas)
 class MessageBubble extends StatelessWidget {
-  final MessageEntity message;
-  final bool isMe;
-
   const MessageBubble({
     super.key,
     required this.message,
     required this.isMe,
   });
+  final MessageEntity message;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {

@@ -8,9 +8,8 @@ import '../../domain/repositories/favorites_repository.dart';
 import '../datasources/firebase_favorites_datasource.dart';
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
-  final FirebaseFavoritesDataSource dataSource;
-
   FavoritesRepositoryImpl({required this.dataSource});
+  final FirebaseFavoritesDataSource dataSource;
 
   @override
   Future<Either<Failure, List<String>>> getFavorites(String patientId) async {
@@ -90,7 +89,3 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
     }
   }
 }
-
-
-
-

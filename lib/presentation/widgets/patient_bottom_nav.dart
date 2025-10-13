@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app_sanitaria/core/routes/app_router.dart';
 
 /// Bottom Navigation Bar para PACIENTES
 ///
@@ -25,14 +24,14 @@ import 'package:app_sanitaria/core/routes/app_router.dart';
 /// - Individual Chat
 /// - Professional Profile Detail
 class PatientBottomNav extends StatelessWidget {
-  /// Índice do botão atualmente ativo (0-3)
-  /// 0 = Buscar, 1 = Conversas, 2 = Favoritos, 3 = Perfil
-  final int currentIndex;
-
   const PatientBottomNav({
     super.key,
     required this.currentIndex,
   });
+
+  /// Índice do botão atualmente ativo (0-3)
+  /// 0 = Buscar, 1 = Conversas, 2 = Favoritos, 3 = Perfil
+  final int currentIndex;
 
   /// Navega para a tela correspondente ao índice
   void _onTap(BuildContext context, int index) {
@@ -61,7 +60,7 @@ class PatientBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [

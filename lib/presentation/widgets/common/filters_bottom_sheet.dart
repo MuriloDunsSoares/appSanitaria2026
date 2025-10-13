@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
 
 /// Widget: Modal de Filtros Reutilizável
 ///
@@ -17,6 +17,16 @@ import 'package:app_sanitaria/core/constants/app_constants.dart';
 /// - DRY: Reutilizável em múltiplas telas
 /// - State Management: Usa StatefulWidget para gerenciar seleções
 class FiltersBottomSheet extends StatefulWidget {
+  const FiltersBottomSheet({
+    super.key,
+    this.initialCity,
+    this.initialSpecialty,
+    this.initialMinPrice,
+    this.initialMaxPrice,
+    this.initialMinExperience,
+    this.initialAvailableNow,
+    required this.onApplyFilters,
+  });
   final String? initialCity;
   final String? initialSpecialty;
   final double? initialMinPrice;
@@ -31,17 +41,6 @@ class FiltersBottomSheet extends StatefulWidget {
     int? minExperience,
     bool? availableNow,
   }) onApplyFilters;
-
-  const FiltersBottomSheet({
-    super.key,
-    this.initialCity,
-    this.initialSpecialty,
-    this.initialMinPrice,
-    this.initialMaxPrice,
-    this.initialMinExperience,
-    this.initialAvailableNow,
-    required this.onApplyFilters,
-  });
 
   @override
   State<FiltersBottomSheet> createState() => _FiltersBottomSheetState();
@@ -132,7 +131,6 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       ),
       items: [
         const DropdownMenuItem(
-          value: null,
           child: Text('Todas as especialidades'),
         ),
         ...AppConstants.professionalSpecialties.map((specialty) {
@@ -169,7 +167,6 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
         ),
         RangeSlider(
           values: RangeValues(_minPrice, _maxPrice),
-          min: 0,
           max: 500,
           divisions: 50,
           labels: RangeLabels(
@@ -206,7 +203,6 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
         ),
         Slider(
           value: _minExperience.toDouble(),
-          min: 0,
           max: 20,
           divisions: 20,
           label: '$_minExperience ${_minExperience == 1 ? 'ano' : 'anos'}',
@@ -230,7 +226,6 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       ),
       items: [
         const DropdownMenuItem(
-          value: null,
           child: Text('Todas as cidades'),
         ),
         ...AppConstants.capitalsBrazil.keys.map((city) {
@@ -331,4 +326,3 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
     );
   }
 }
-

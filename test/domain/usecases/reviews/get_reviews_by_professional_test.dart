@@ -24,7 +24,7 @@ void main() {
 
   group('GetReviewsByProfessional', () {
     const tProfessionalId = 'prof456';
-    
+
     final tReview1 = ReviewEntity(
       id: 'review1',
       professionalId: tProfessionalId,
@@ -32,7 +32,7 @@ void main() {
       patientName: 'Maria Silva',
       rating: 5,
       comment: 'Excelente profissional!',
-      createdAt: DateTime(2025, 10, 1),
+      createdAt: DateTime(2025, 10),
     );
 
     final tReview2 = ReviewEntity(
@@ -65,7 +65,8 @@ void main() {
         },
       );
 
-      verify(mockRepository.getReviewsByProfessional(tProfessionalId)).called(1);
+      verify(mockRepository.getReviewsByProfessional(tProfessionalId))
+          .called(1);
     });
 
     test('deve retornar lista vazia quando não houver avaliações', () async {
@@ -78,7 +79,8 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, List<ReviewEntity>>>());
-      verify(mockRepository.getReviewsByProfessional(tProfessionalId)).called(1);
+      verify(mockRepository.getReviewsByProfessional(tProfessionalId))
+          .called(1);
     });
 
     test('deve retornar StorageFailure quando ocorre erro', () async {

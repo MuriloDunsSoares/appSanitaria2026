@@ -9,12 +9,11 @@ import 'service_card.dart';
 /// - Single Responsibility: Organiza os cards em grid
 /// - Composição: Usa ServiceCard para cada item
 class PatientServicesGrid extends StatelessWidget {
-  final Function(String specialty) onServiceTap;
-
   const PatientServicesGrid({
     super.key,
     required this.onServiceTap,
   });
+  final Function(String specialty) onServiceTap;
 
   @override
   Widget build(BuildContext context) {
@@ -80,5 +79,3 @@ class PatientServicesGrid extends StatelessWidget {
     );
   }
 }
-
-

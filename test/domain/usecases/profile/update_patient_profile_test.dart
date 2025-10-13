@@ -34,7 +34,7 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Feminino',
-      dataCadastro: DateTime(2025, 1, 1),
+      dataCadastro: DateTime(2025),
       condicoesMedicas: 'Diabetes tipo 2',
     );
 

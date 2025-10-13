@@ -9,13 +9,6 @@ import 'package:intl/intl.dart';
 /// - Single Responsibility: Apenas renderiza o resumo
 /// - Composição: Usa _buildSummaryRow para cada linha
 class OrderSummaryCard extends StatelessWidget {
-  final String service;
-  final String period;
-  final int duration;
-  final DateTime date;
-  final String time;
-  final String? address;
-
   const OrderSummaryCard({
     super.key,
     required this.service,
@@ -25,6 +18,12 @@ class OrderSummaryCard extends StatelessWidget {
     required this.time,
     this.address,
   });
+  final String service;
+  final String period;
+  final int duration;
+  final DateTime date;
+  final String time;
+  final String? address;
 
   @override
   Widget build(BuildContext context) {
@@ -98,5 +97,3 @@ class OrderSummaryCard extends StatelessWidget {
     );
   }
 }
-
-

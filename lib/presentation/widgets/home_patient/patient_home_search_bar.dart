@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza a barra de busca
 /// - Delegação: Callbacks para ações externas
 class PatientHomeSearchBar extends StatelessWidget {
-  final TextEditingController searchController;
-  final ValueChanged<String>? onSearchChanged;
-  final ValueChanged<String>? onSearchSubmitted;
-
   const PatientHomeSearchBar({
     super.key,
     required this.searchController,
     this.onSearchChanged,
     this.onSearchSubmitted,
   });
+  final TextEditingController searchController;
+  final ValueChanged<String>? onSearchChanged;
+  final ValueChanged<String>? onSearchSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class PatientHomeSearchBar extends StatelessWidget {
 
   /// Campo de busca
   Widget _buildSearchField() {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -60,5 +59,3 @@ class PatientHomeSearchBar extends StatelessWidget {
     );
   }
 }
-
-

@@ -9,9 +9,8 @@ import '../../repositories/profile_repository.dart';
 
 /// Use Case para atualizar perfil de paciente.
 class UpdatePatientProfile extends UseCase<PatientEntity, PatientEntity> {
-  final ProfileRepository repository;
-
   UpdatePatientProfile(this.repository);
+  final ProfileRepository repository;
 
   @override
   Future<Either<Failure, PatientEntity>> call(PatientEntity patient) async {
@@ -20,7 +19,7 @@ class UpdatePatientProfile extends UseCase<PatientEntity, PatientEntity> {
       return const Left(ValidationFailure('Email inválido'));
     }
 
-    return await repository.updatePatientProfile(patient);
+    return repository.updatePatientProfile(patient);
   }
 
   /// Valida formato de email
@@ -31,7 +30,3 @@ class UpdatePatientProfile extends UseCase<PatientEntity, PatientEntity> {
     return emailRegex.hasMatch(email);
   }
 }
-
-
-
-

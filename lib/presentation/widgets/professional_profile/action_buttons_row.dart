@@ -8,14 +8,13 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza os botões de ação
 /// - Delegação: Callbacks para as ações
 class ActionButtonsRow extends StatelessWidget {
-  final VoidCallback onHireTap;
-  final VoidCallback onChatTap;
-
   const ActionButtonsRow({
     super.key,
     required this.onHireTap,
     required this.onChatTap,
   });
+  final VoidCallback onHireTap;
+  final VoidCallback onChatTap;
 
   @override
   Widget build(BuildContext context) {
@@ -51,5 +50,3 @@ class ActionButtonsRow extends StatelessWidget {
     );
   }
 }
-
-

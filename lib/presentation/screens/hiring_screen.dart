@@ -1,19 +1,18 @@
+import 'package:app_sanitaria/domain/entities/contract_entity.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/contracts_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/professionals_provider_v2.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/address_field.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/date_time_selector.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/observations_field.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/order_summary_card.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/period_duration_selector.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/professional_summary_card.dart';
+import 'package:app_sanitaria/presentation/widgets/hiring/service_type_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app_sanitaria/presentation/providers/professionals_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/contracts_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/domain/entities/contract_entity.dart';
-import 'package:app_sanitaria/domain/entities/contract_status.dart';
-import 'package:app_sanitaria/domain/entities/professional_entity.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/professional_summary_card.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/service_type_selector.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/period_duration_selector.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/date_time_selector.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/address_field.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/observations_field.dart';
-import 'package:app_sanitaria/presentation/widgets/hiring/order_summary_card.dart';
 import 'package:intl/intl.dart';
 
 /// Tela de Contratação Completa - REFATORADA
@@ -34,12 +33,11 @@ import 'package:intl/intl.dart';
 /// - ✅ Manutenibilidade: Mudanças localizadas
 /// - ✅ Reusabilidade: Widgets podem ser usados em outros contextos
 class HiringScreen extends ConsumerStatefulWidget {
-  final String professionalId;
-
   const HiringScreen({
     super.key,
     required this.professionalId,
   });
+  final String professionalId;
 
   @override
   ConsumerState<HiringScreen> createState() => _HiringScreenState();
@@ -191,7 +189,7 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
 
     if (currentUser == null) return;
 
-    final double valorHora = 50.0;
+    const double valorHora = 50;
     final int multiplicador = _selectedPeriod == 'Diário'
         ? 1
         : _selectedPeriod == 'Semanal'
@@ -205,7 +203,7 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
       professionalId: widget.professionalId,
       patientName: currentUser.nome,
       professionalName: _professional?.nome ?? '',
-      serviceType: _selectedService!,
+      serviceType: _selectedService,
       period: _selectedPeriod,
       duration: _selectedDuration,
       date: _selectedDate!,
@@ -214,7 +212,6 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
       observations: _observationsController.text.isEmpty
           ? null
           : _observationsController.text,
-      status: ContractStatus.pending,
       totalValue: totalValue,
       createdAt: DateTime.now(),
     );
@@ -236,8 +233,7 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
     }
   }
 
-  void _showSnackBar(String message, Color backgroundColor,
-      {IconData? icon}) {
+  void _showSnackBar(String message, Color backgroundColor, {IconData? icon}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: icon != null
@@ -283,116 +279,116 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
           elevation: 0,
         ),
         body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Card do Profissional
-            ProfessionalSummaryCard(professional: _professional!),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Card do Profissional
+              ProfessionalSummaryCard(professional: _professional!),
 
-            // Formulário
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Tipo de Serviço
-                    ServiceTypeSelector(
-                      selectedService: _selectedService,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedService = value;
-                        });
-                      },
-                      services: _services,
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Período e Duração
-                    PeriodDurationSelector(
-                      selectedPeriod: _selectedPeriod,
-                      selectedDuration: _selectedDuration,
-                      periods: _periods,
-                      onPeriodChanged: (period) {
-                        setState(() {
-                          _selectedPeriod = period;
-                        });
-                      },
-                      onDurationChanged: (duration) {
-                        setState(() {
-                          _selectedDuration = duration;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Data e Horário
-                    DateTimeSelector(
-                      selectedDate: _selectedDate,
-                      selectedTime: _selectedTime,
-                      onDateTap: _selectDate,
-                      onTimeTap: _selectTime,
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Endereço
-                    AddressField(controller: _addressController),
-                    const SizedBox(height: 24),
-
-                    // Observações
-                    ObservationsField(controller: _observationsController),
-                    const SizedBox(height: 32),
-
-                    // Resumo do Pedido
-                    if (_selectedService != null &&
-                        _selectedDate != null &&
-                        _selectedTime != null)
-                      OrderSummaryCard(
-                        service: _selectedService!,
-                        period: _selectedPeriod,
-                        duration: _selectedDuration,
-                        date: _selectedDate!,
-                        time: _selectedTime!.format(context),
-                        address: _addressController.text,
+              // Formulário
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Tipo de Serviço
+                      ServiceTypeSelector(
+                        selectedService: _selectedService,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedService = value;
+                          });
+                        },
+                        services: _services,
                       ),
-                    const SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
-                    // Botão Confirmar
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: _confirmHiring,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                      // Período e Duração
+                      PeriodDurationSelector(
+                        selectedPeriod: _selectedPeriod,
+                        selectedDuration: _selectedDuration,
+                        periods: _periods,
+                        onPeriodChanged: (period) {
+                          setState(() {
+                            _selectedPeriod = period;
+                          });
+                        },
+                        onDurationChanged: (duration) {
+                          setState(() {
+                            _selectedDuration = duration;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Data e Horário
+                      DateTimeSelector(
+                        selectedDate: _selectedDate,
+                        selectedTime: _selectedTime,
+                        onDateTap: _selectDate,
+                        onTimeTap: _selectTime,
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Endereço
+                      AddressField(controller: _addressController),
+                      const SizedBox(height: 24),
+
+                      // Observações
+                      ObservationsField(controller: _observationsController),
+                      const SizedBox(height: 32),
+
+                      // Resumo do Pedido
+                      if (_selectedService != null &&
+                          _selectedDate != null &&
+                          _selectedTime != null)
+                        OrderSummaryCard(
+                          service: _selectedService!,
+                          period: _selectedPeriod,
+                          duration: _selectedDuration,
+                          date: _selectedDate!,
+                          time: _selectedTime!.format(context),
+                          address: _addressController.text,
+                        ),
+                      const SizedBox(height: 24),
+
+                      // Botão Confirmar
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: _confirmHiring,
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.check_circle_outline),
+                              SizedBox(width: 8),
+                              Text(
+                                'Confirmar Contratação',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.check_circle_outline),
-                            SizedBox(width: 8),
-                            Text(
-                              'Confirmar Contratação',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                  ],
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

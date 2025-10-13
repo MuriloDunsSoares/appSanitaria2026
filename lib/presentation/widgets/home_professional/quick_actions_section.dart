@@ -9,14 +9,13 @@ import 'action_card.dart';
 /// - Single Responsibility: Apenas renderiza a seção de ações
 /// - Composição: Usa ActionCard
 class QuickActionsSection extends StatelessWidget {
-  final VoidCallback onEditProfileTap;
-  final VoidCallback onHelpTap;
-
   const QuickActionsSection({
     super.key,
     required this.onEditProfileTap,
     required this.onHelpTap,
   });
+  final VoidCallback onEditProfileTap;
+  final VoidCallback onHelpTap;
 
   @override
   Widget build(BuildContext context) {
@@ -48,5 +47,3 @@ class QuickActionsSection extends StatelessWidget {
     );
   }
 }
-
-

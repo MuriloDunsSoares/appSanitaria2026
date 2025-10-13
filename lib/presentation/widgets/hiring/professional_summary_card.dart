@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:flutter/material.dart';
 
 /// Widget: Card de Resumo do Profissional
 ///
@@ -9,12 +9,11 @@ import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 /// - Single Responsibility: Apenas renderiza o card do profissional
 /// - Reusabilidade: Pode ser usado em outras telas
 class ProfessionalSummaryCard extends StatelessWidget {
-  final ProfessionalEntity professional;
-
   const ProfessionalSummaryCard({
     super.key,
     required this.professional,
   });
+  final ProfessionalEntity professional;
 
   @override
   Widget build(BuildContext context) {
@@ -72,5 +71,3 @@ class ProfessionalSummaryCard extends StatelessWidget {
     );
   }
 }
-
-

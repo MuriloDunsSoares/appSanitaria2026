@@ -1,14 +1,13 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_contracts_datasource.dart';
 import 'package:app_sanitaria/data/repositories/contracts_repository_impl.dart';
 import 'package:app_sanitaria/domain/entities/contract_entity.dart';
 import 'package:app_sanitaria/domain/entities/contract_status.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([FirebaseContractsDataSource])
 import 'contracts_repository_impl_test.mocks.dart';
@@ -32,8 +31,7 @@ void main() {
     address: 'Rua Teste, 123',
     date: DateTime(2025, 10, 15),
     duration: 60,
-    price: 150.0,
-    status: ContractStatus.pending,
+    price: 150,
     createdAt: DateTime(2025, 10, 7),
   );
 
@@ -47,7 +45,7 @@ void main() {
     address: 'Av. Principal, 456',
     date: DateTime(2025, 10, 20),
     duration: 90,
-    price: 200.0,
+    price: 200,
     status: ContractStatus.confirmed,
     createdAt: DateTime(2025, 10, 8),
   );
@@ -67,7 +65,8 @@ void main() {
         verify(mockDataSource.createContract(tContract1));
       });
 
-      test('deve retornar StorageFailure quando ocorre erro ao criar', () async {
+      test('deve retornar StorageFailure quando ocorre erro ao criar',
+          () async {
         // arrange
         when(mockDataSource.createContract(any))
             .thenThrow(const LocalStorageException('Erro ao criar contrato'));
@@ -130,7 +129,8 @@ void main() {
             .thenAnswer((_) async => [tContract1]);
 
         // act
-        final result = await repository.getContractsByProfessional(professionalId);
+        final result =
+            await repository.getContractsByProfessional(professionalId);
 
         // assert
         expect(result, Right([tContract1]));
@@ -144,7 +144,8 @@ void main() {
             .thenAnswer((_) async => []);
 
         // act
-        final result = await repository.getContractsByProfessional(professionalId);
+        final result =
+            await repository.getContractsByProfessional(professionalId);
 
         // assert
         expect(result, const Right([]));
@@ -157,7 +158,8 @@ void main() {
             .thenThrow(const LocalStorageException('Erro'));
 
         // act
-        final result = await repository.getContractsByProfessional(professionalId);
+        final result =
+            await repository.getContractsByProfessional(professionalId);
 
         // assert
         expect(result, const Left(StorageFailure('Erro')));
@@ -171,11 +173,11 @@ void main() {
         const newStatus = ContractStatus.confirmed;
         when(mockDataSource.getContractById(contractId))
             .thenAnswer((_) async => tContract1);
-        when(mockDataSource.updateContract(any))
-            .thenAnswer((_) async => {});
+        when(mockDataSource.updateContract(any)).thenAnswer((_) async => {});
 
         // act
-        final result = await repository.updateContractStatus(contractId, newStatus);
+        final result =
+            await repository.updateContractStatus(contractId, newStatus);
 
         // assert
         result.fold(
@@ -189,7 +191,8 @@ void main() {
         verify(mockDataSource.updateContract(any));
       });
 
-      test('deve retornar NotFoundFailure quando contrato não existe', () async {
+      test('deve retornar NotFoundFailure quando contrato não existe',
+          () async {
         // arrange
         const contractId = 'nao-existe';
         const newStatus = ContractStatus.confirmed;
@@ -197,10 +200,12 @@ void main() {
             .thenAnswer((_) async => null);
 
         // act
-        final result = await repository.updateContractStatus(contractId, newStatus);
+        final result =
+            await repository.updateContractStatus(contractId, newStatus);
 
         // assert
-        expect(result, const Left<Failure, ContractEntity>(NotFoundFailure('Contrato')));
+        expect(result,
+            const Left<Failure, ContractEntity>(NotFoundFailure('Contrato')));
       });
 
       test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -211,7 +216,8 @@ void main() {
             .thenThrow(const LocalStorageException('Erro'));
 
         // act
-        final result = await repository.updateContractStatus(contractId, newStatus);
+        final result =
+            await repository.updateContractStatus(contractId, newStatus);
 
         // assert
         expect(result, const Left<Failure, ContractEntity>(StorageFailure()));

@@ -25,7 +25,7 @@ void main() {
     const tPatientId = 'patient123';
     const tProfessionalId = 'prof456';
 
-    final tParams = ToggleFavoriteParams(
+    const tParams = ToggleFavoriteParams(
       patientId: tPatientId,
       professionalId: tProfessionalId,
     );
@@ -40,7 +40,8 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, bool>>());
-      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId)).called(1);
+      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId))
+          .called(1);
     });
 
     test('deve remover favorito com sucesso', () async {
@@ -53,7 +54,8 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, bool>>());
-      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId)).called(1);
+      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId))
+          .called(1);
     });
 
     test('deve retornar StorageFailure quando falha', () async {
@@ -66,7 +68,8 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, bool>>());
-      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId)).called(1);
+      verify(mockRepository.toggleFavorite(tPatientId, tProfessionalId))
+          .called(1);
     });
   });
 }

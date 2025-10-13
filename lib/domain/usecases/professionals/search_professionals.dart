@@ -12,15 +12,14 @@ import '../../repositories/professionals_repository.dart';
 /// Use Case para buscar profissionais com filtros.
 class SearchProfessionals
     extends UseCase<List<ProfessionalEntity>, SearchProfessionalsParams> {
-  final ProfessionalsRepository repository;
-
   SearchProfessionals(this.repository);
+  final ProfessionalsRepository repository;
 
   @override
   Future<Either<Failure, List<ProfessionalEntity>>> call(
     SearchProfessionalsParams params,
   ) async {
-    return await repository.searchProfessionals(
+    return repository.searchProfessionals(
       searchQuery: params.searchQuery,
       speciality: params.speciality,
       city: params.city,
@@ -35,14 +34,7 @@ class SearchProfessionals
 
 /// Parâmetros para busca de profissionais.
 class SearchProfessionalsParams extends Equatable {
-  final String? searchQuery;
-  final Speciality? speciality;
-  final String? city;
-  final double? minRating;
-  final double? maxPrice;
-  final double? minPrice;
-  final int? minExperience; // Anos mínimos de experiência
-  final bool? availableNow; // Disponível agora
+  // Disponível agora
 
   const SearchProfessionalsParams({
     this.searchQuery,
@@ -54,6 +46,14 @@ class SearchProfessionalsParams extends Equatable {
     this.minExperience,
     this.availableNow,
   });
+  final String? searchQuery;
+  final Speciality? speciality;
+  final String? city;
+  final double? minRating;
+  final double? maxPrice;
+  final double? minPrice;
+  final int? minExperience; // Anos mínimos de experiência
+  final bool? availableNow;
 
   @override
   List<Object?> get props => [
@@ -67,4 +67,3 @@ class SearchProfessionalsParams extends Equatable {
         availableNow,
       ];
 }
-

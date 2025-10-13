@@ -13,9 +13,8 @@ import '../datasources/profile_storage_datasource.dart';
 ///
 /// **Responsabilidade:** Conectar Use Cases ao ProfileStorageDataSource.
 class ProfileRepositoryImpl implements ProfileRepository {
-  final ProfileStorageDataSource dataSource;
-
   ProfileRepositoryImpl({required this.dataSource});
+  final ProfileStorageDataSource dataSource;
 
   @override
   Future<Either<Failure, String?>> getProfileImage(String userId) async {

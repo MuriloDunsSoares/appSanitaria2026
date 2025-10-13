@@ -9,26 +9,20 @@ import '../../repositories/favorites_repository.dart';
 
 /// Use Case para obter favoritos.
 class GetFavorites extends UseCase<List<String>, String> {
-  final FavoritesRepository repository;
-
   GetFavorites(this.repository);
+  final FavoritesRepository repository;
 
   @override
   Future<Either<Failure, List<String>>> call(String patientId) async {
-    return await repository.getFavorites(patientId);
+    return repository.getFavorites(patientId);
   }
 }
 
 /// Parâmetros para buscar favoritos.
 class PatientIdParams extends Equatable {
-  final String patientId;
-
   const PatientIdParams(this.patientId);
+  final String patientId;
 
   @override
   List<Object?> get props => [patientId];
 }
-
-
-
-

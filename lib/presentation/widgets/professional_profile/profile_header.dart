@@ -9,12 +9,6 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o header
 /// - Composição: Auto-contido e reutilizável
 class ProfileHeader extends StatelessWidget {
-  final String? profileImagePath;
-  final String name;
-  final String specialty;
-  final String coren;
-  final bool isVerified;
-
   const ProfileHeader({
     super.key,
     this.profileImagePath,
@@ -23,6 +17,11 @@ class ProfileHeader extends StatelessWidget {
     required this.coren,
     required this.isVerified,
   });
+  final String? profileImagePath;
+  final String name;
+  final String specialty;
+  final String coren;
+  final bool isVerified;
 
   @override
   Widget build(BuildContext context) {
@@ -114,5 +113,3 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 }
-
-

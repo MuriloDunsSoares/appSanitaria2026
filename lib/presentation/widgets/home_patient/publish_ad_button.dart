@@ -8,12 +8,11 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o botão
 /// - Open/Closed: Fácil de estender quando a funcionalidade for implementada
 class PublishAdButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
   const PublishAdButton({
     super.key,
     required this.onPressed,
   });
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -46,5 +45,3 @@ class PublishAdButton extends StatelessWidget {
     );
   }
 }
-
-

@@ -25,7 +25,7 @@ void main() {
 
   group('GetContractsByProfessional', () {
     const tProfessionalId = 'prof456';
-    
+
     final tContract = ContractEntity(
       id: 'contract1',
       patientId: 'patient123',
@@ -39,8 +39,8 @@ void main() {
       time: '08:00',
       address: 'Rua das Flores, 123',
       status: ContractStatus.active,
-      totalValue: 3000.0,
-      createdAt: DateTime(2025, 10, 1),
+      totalValue: 3000,
+      createdAt: DateTime(2025, 10),
     );
 
     test('deve retornar lista de contratos do profissional', () async {
@@ -61,7 +61,8 @@ void main() {
         },
       );
 
-      verify(mockRepository.getContractsByProfessional(tProfessionalId)).called(1);
+      verify(mockRepository.getContractsByProfessional(tProfessionalId))
+          .called(1);
     });
 
     test('deve retornar lista vazia', () async {
@@ -74,7 +75,8 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, List<ContractEntity>>>());
-      verify(mockRepository.getContractsByProfessional(tProfessionalId)).called(1);
+      verify(mockRepository.getContractsByProfessional(tProfessionalId))
+          .called(1);
     });
   });
 }

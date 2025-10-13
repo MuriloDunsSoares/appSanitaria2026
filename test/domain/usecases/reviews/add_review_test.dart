@@ -39,7 +39,7 @@ void main() {
       createdAt: DateTime(2025, 10, 9),
     );
 
-    final tParams = AddReviewParams(
+    const tParams = AddReviewParams(
       professionalId: tProfessionalId,
       patientId: tPatientId,
       patientName: tPatientName,
@@ -70,7 +70,7 @@ void main() {
 
     test('deve retornar ValidationFailure para rating inválido', () async {
       // Arrange
-      final invalidParams = AddReviewParams(
+      const invalidParams = AddReviewParams(
         professionalId: tProfessionalId,
         patientId: tPatientId,
         patientName: tPatientName,

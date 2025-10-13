@@ -8,12 +8,11 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o campo de endereço
 /// - Validação: Inclui validador
 class AddressField extends StatelessWidget {
-  final TextEditingController controller;
-
   const AddressField({
     super.key,
     required this.controller,
   });
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -54,5 +53,3 @@ class AddressField extends StatelessWidget {
     );
   }
 }
-
-

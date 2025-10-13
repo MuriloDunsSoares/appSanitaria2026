@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/domain/entities/review_entity.dart';
 import 'package:app_sanitaria/presentation/widgets/rating_stars.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Card para exibir uma avaliação
 class ReviewCard extends StatelessWidget {
-  final ReviewEntity review;
-  final bool canDelete;
-  final VoidCallback? onDelete;
-
   const ReviewCard({
     super.key,
     required this.review,
     this.canDelete = false,
     this.onDelete,
   });
+  final ReviewEntity review;
+  final bool canDelete;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +112,6 @@ class ReviewCard extends StatelessWidget {
             // Rating (estrelas)
             RatingStars(
               rating: review.rating,
-              isInteractive: false,
               size: 20,
             ),
 
@@ -137,14 +135,13 @@ class ReviewCard extends StatelessWidget {
 
 /// Widget para exibir resumo de avaliações (média + total)
 class ReviewsSummary extends StatelessWidget {
-  final double averageRating;
-  final int totalReviews;
-
   const ReviewsSummary({
     super.key,
     required this.averageRating,
     required this.totalReviews,
   });
+  final double averageRating;
+  final int totalReviews;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +168,6 @@ class ReviewsSummary extends StatelessWidget {
               ),
               RatingStars(
                 rating: averageRating.round(),
-                isInteractive: false,
                 size: 20,
               ),
             ],

@@ -1,21 +1,21 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
 import 'package:app_sanitaria/data/services/image_picker_service.dart';
+import 'package:flutter/material.dart';
 
 /// Widget para seleção de foto de perfil
 ///
 /// Permite escolher entre câmera ou galeria
 class ProfileImagePicker extends StatefulWidget {
-  final String? initialImagePath;
-  final Function(String imagePath) onImageSelected;
-  final double size;
-
   const ProfileImagePicker({
     super.key,
     this.initialImagePath,
     required this.onImageSelected,
     this.size = 120,
   });
+  final String? initialImagePath;
+  final Function(String imagePath) onImageSelected;
+  final double size;
 
   @override
   State<ProfileImagePicker> createState() => _ProfileImagePickerState();

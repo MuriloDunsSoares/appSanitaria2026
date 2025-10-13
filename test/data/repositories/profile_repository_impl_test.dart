@@ -1,12 +1,11 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/profile_storage_datasource.dart';
 import 'package:app_sanitaria/data/repositories/profile_repository_impl.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([ProfileStorageDataSource])
 import 'profile_repository_impl_test.mocks.dart';
@@ -22,10 +21,12 @@ void main() {
 
   const tUserId = 'user-123';
   const tImagePath = '/storage/emulated/0/Pictures/profile_user-123.jpg';
-  const tNewImagePath = '/storage/emulated/0/Pictures/profile_user-123_updated.jpg';
+  const tNewImagePath =
+      '/storage/emulated/0/Pictures/profile_user-123_updated.jpg';
 
   group('ProfileRepositoryImpl - getProfileImage', () {
-    test('deve retornar caminho da imagem quando usuário tem foto de perfil', () async {
+    test('deve retornar caminho da imagem quando usuário tem foto de perfil',
+        () async {
       // arrange
       when(mockDataSource.getProfileImage(tUserId))
           .thenAnswer((_) async => tImagePath);
@@ -52,7 +53,8 @@ void main() {
       verify(mockDataSource.getProfileImage(tUserId));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       when(mockDataSource.getProfileImage(tUserId))
           .thenThrow(const LocalStorageException('Erro ao buscar imagem'));
@@ -65,7 +67,8 @@ void main() {
       verify(mockDataSource.getProfileImage(tUserId));
     });
 
-    test('deve retornar StorageFailure quando ocorre exceção genérica', () async {
+    test('deve retornar StorageFailure quando ocorre exceção genérica',
+        () async {
       // arrange
       when(mockDataSource.getProfileImage(tUserId))
           .thenThrow(Exception('Erro inesperado'));
@@ -106,7 +109,8 @@ void main() {
       verify(mockDataSource.saveProfileImage(tUserId, tNewImagePath));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       when(mockDataSource.saveProfileImage(tUserId, tImagePath))
           .thenThrow(const LocalStorageException('Erro ao salvar imagem'));
@@ -118,7 +122,8 @@ void main() {
       expect(result, const Left(StorageFailure()));
     });
 
-    test('deve retornar StorageFailure quando ocorre exceção genérica', () async {
+    test('deve retornar StorageFailure quando ocorre exceção genérica',
+        () async {
       // arrange
       when(mockDataSource.saveProfileImage(tUserId, tImagePath))
           .thenThrow(Exception('Erro inesperado'));
@@ -160,7 +165,8 @@ void main() {
       verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('deve retornar sucesso mesmo quando não há imagem para deletar', () async {
+    test('deve retornar sucesso mesmo quando não há imagem para deletar',
+        () async {
       // arrange
       when(mockDataSource.deleteProfileImage(tUserId))
           .thenAnswer((_) async => false);
@@ -172,7 +178,8 @@ void main() {
       expect(result, const Right(unit));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       when(mockDataSource.deleteProfileImage(tUserId))
           .thenThrow(const LocalStorageException('Erro ao deletar imagem'));
@@ -184,7 +191,8 @@ void main() {
       expect(result, const Left(StorageFailure()));
     });
 
-    test('deve retornar StorageFailure quando ocorre exceção genérica', () async {
+    test('deve retornar StorageFailure quando ocorre exceção genérica',
+        () async {
       // arrange
       when(mockDataSource.deleteProfileImage(tUserId))
           .thenThrow(Exception('Erro inesperado'));

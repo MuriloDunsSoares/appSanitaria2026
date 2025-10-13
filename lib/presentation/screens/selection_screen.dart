@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:flutter/material.dart';
 
 /// Tela de Seleção de Tipo de Usuário
 ///
@@ -32,7 +32,7 @@ class SelectionScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -101,12 +101,6 @@ class SelectionScreen extends StatelessWidget {
 ///
 /// Princípio DRY: Evita duplicação de código
 class _SelectionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Gradient gradient;
-  final VoidCallback onTap;
-
   const _SelectionCard({
     required this.icon,
     required this.title,
@@ -114,6 +108,11 @@ class _SelectionCard extends StatelessWidget {
     required this.gradient,
     required this.onTap,
   });
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Gradient gradient;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

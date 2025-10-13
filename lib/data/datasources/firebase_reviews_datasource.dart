@@ -5,26 +5,23 @@ import '../../core/utils/app_logger.dart';
 import '../../domain/entities/review_entity.dart';
 
 /// DataSource para avaliações usando Firestore
-/// 
+///
 /// Responsável por:
 /// - Adicionar avaliações de profissionais
 /// - Buscar avaliações por profissional
 /// - Calcular avaliação média
 class FirebaseReviewsDataSource {
-  final FirebaseFirestore _firestore;
-
   FirebaseReviewsDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   /// Adiciona uma nova avaliação
   Future<ReviewEntity> addReview(ReviewEntity review) async {
     try {
       AppLogger.info('Adicionando avaliação: ${review.professionalId}');
 
-      final reviewId = _firestore
-          .collection(FirestoreCollections.reviews)
-          .doc()
-          .id;
+      final reviewId =
+          _firestore.collection(FirestoreCollections.reviews).doc().id;
 
       final reviewData = review.toJson();
       reviewData[FirestoreCollections.id] = reviewId;
@@ -43,7 +40,8 @@ class FirebaseReviewsDataSource {
       // Retornar entidade com ID atualizado
       return ReviewEntity.fromJson({...review.toJson(), 'id': reviewId});
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao adicionar avaliação', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao adicionar avaliação',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao adicionar avaliação: $e');
     }
   }
@@ -69,7 +67,8 @@ class FirebaseReviewsDataSource {
 
       return reviews;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao buscar avaliações', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao buscar avaliações',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao buscar avaliações: $e');
     }
   }
@@ -84,13 +83,14 @@ class FirebaseReviewsDataSource {
       }
 
       final sum = reviews.fold<double>(
-        0.0,
+        0,
         (sum, review) => sum + review.rating,
       );
 
       return sum / reviews.length;
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao calcular avaliação média', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao calcular avaliação média',
+          error: e, stackTrace: stackTrace);
       return 0.0;
     }
   }
@@ -108,9 +108,11 @@ class FirebaseReviewsDataSource {
         FirestoreCollections.updatedAt: FieldValue.serverTimestamp(),
       });
 
-      AppLogger.info('✅ Avaliação média atualizada: $professionalId -> $averageRating');
+      AppLogger.info(
+          '✅ Avaliação média atualizada: $professionalId -> $averageRating');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar avaliação média', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar avaliação média',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -129,7 +131,8 @@ class FirebaseReviewsDataSource {
         throw const StorageException('Avaliação não encontrada');
       }
 
-      final professionalId = doc.data()![FirestoreCollections.professionalId] as String;
+      final professionalId =
+          doc.data()![FirestoreCollections.professionalId] as String;
 
       // Deletar avaliação
       await _firestore
@@ -142,9 +145,9 @@ class FirebaseReviewsDataSource {
 
       AppLogger.info('✅ Avaliação deletada: $reviewId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao deletar avaliação', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao deletar avaliação',
+          error: e, stackTrace: stackTrace);
       throw StorageException('Erro ao deletar avaliação: $e');
     }
   }
 }
-

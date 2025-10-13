@@ -8,11 +8,6 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza as estatísticas
 /// - Composição: Usa _buildStatCard internamente
 class StatsCardsRow extends StatelessWidget {
-  final int activeConversations;
-  final int unreadMessages;
-  final String rating;
-  final int reviewCount;
-
   const StatsCardsRow({
     super.key,
     required this.activeConversations,
@@ -20,6 +15,10 @@ class StatsCardsRow extends StatelessWidget {
     required this.rating,
     required this.reviewCount,
   });
+  final int activeConversations;
+  final int unreadMessages;
+  final String rating;
+  final int reviewCount;
 
   @override
   Widget build(BuildContext context) {
@@ -133,5 +132,3 @@ class StatsCardsRow extends StatelessWidget {
     );
   }
 }
-
-

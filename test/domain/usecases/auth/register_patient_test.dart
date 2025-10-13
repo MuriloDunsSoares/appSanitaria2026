@@ -34,7 +34,7 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Feminino',
-      dataCadastro: DateTime(2025, 1, 1),
+      dataCadastro: DateTime(2025),
       condicoesMedicas: 'Hipertensão controlada',
     );
 
@@ -53,7 +53,8 @@ void main() {
       condicoesMedicas: tPatient.condicoesMedicas,
     );
 
-    test('deve registrar paciente com sucesso quando dados são válidos', () async {
+    test('deve registrar paciente com sucesso quando dados são válidos',
+        () async {
       // Arrange
       when(mockRepository.registerPatient(tPatient))
           .thenAnswer((_) async => Right(tRegisteredPatient));
@@ -78,8 +79,8 @@ void main() {
 
     test('deve retornar ValidationFailure quando email já existe', () async {
       // Arrange
-      when(mockRepository.registerPatient(tPatient))
-          .thenAnswer((_) async => const Left(ValidationFailure('Email já cadastrado')));
+      when(mockRepository.registerPatient(tPatient)).thenAnswer(
+          (_) async => const Left(ValidationFailure('Email já cadastrado')));
 
       // Act
       final result = await useCase(tPatient);
@@ -97,7 +98,8 @@ void main() {
       verify(mockRepository.registerPatient(tPatient)).called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao registrar', () async {
+    test('deve retornar StorageFailure quando ocorre erro ao registrar',
+        () async {
       // Arrange
       when(mockRepository.registerPatient(tPatient))
           .thenAnswer((_) async => const Left(StorageFailure()));

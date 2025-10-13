@@ -9,23 +9,18 @@ import '../../repositories/contracts_repository.dart';
 
 /// Use Case para criar contrato.
 class CreateContract extends UseCase<ContractEntity, CreateContractParams> {
+  CreateContract(this.repository);
   final ContractsRepository repository;
 
-  CreateContract(this.repository);
-
   @override
-  Future<Either<Failure, ContractEntity>> call(CreateContractParams params) async {
-    return await repository.createContract(params.contract);
+  Future<Either<Failure, ContractEntity>> call(
+      CreateContractParams params) async {
+    return repository.createContract(params.contract);
   }
 }
 
 /// Parâmetros para criar contrato
 class CreateContractParams {
-  final ContractEntity contract;
-
   const CreateContractParams(this.contract);
+  final ContractEntity contract;
 }
-
-
-
-

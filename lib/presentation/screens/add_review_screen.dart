@@ -1,20 +1,19 @@
+import 'package:app_sanitaria/domain/entities/review_entity.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
+import 'package:app_sanitaria/presentation/widgets/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/presentation/widgets/rating_stars.dart';
-import 'package:app_sanitaria/domain/entities/review_entity.dart';
 
 /// Tela para adicionar avaliação de um profissional
 class AddReviewScreen extends ConsumerStatefulWidget {
-  final String professionalId;
-  final String professionalName;
-
   const AddReviewScreen({
     super.key,
     required this.professionalId,
     required this.professionalName,
   });
+  final String professionalId;
+  final String professionalName;
 
   @override
   ConsumerState<AddReviewScreen> createState() => _AddReviewScreenState();
@@ -63,7 +62,8 @@ class _AddReviewScreenState extends ConsumerState<AddReviewScreen> {
       createdAt: DateTime.now(),
     );
 
-    final success = await ref.read(reviewsProviderV2.notifier).addReview(review);
+    final success =
+        await ref.read(reviewsProviderV2.notifier).addReview(review);
 
     if (!mounted) return;
 

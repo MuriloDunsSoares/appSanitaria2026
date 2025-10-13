@@ -18,17 +18,19 @@
 /// - Problemas de serialização/desserialização
 /// - Falhas no fluxo de dados entre camadas
 /// - Problemas de persistência
+library;
+
 import 'package:app_sanitaria/core/di/injection_container.dart';
 import 'package:app_sanitaria/core/usecases/usecase.dart';
 import 'package:app_sanitaria/domain/entities/patient_entity.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/domain/entities/speciality.dart';
 import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:app_sanitaria/domain/usecases/auth/get_current_user.dart';
 import 'package:app_sanitaria/domain/usecases/auth/login_user.dart';
+import 'package:app_sanitaria/domain/usecases/auth/logout_user.dart';
 import 'package:app_sanitaria/domain/usecases/auth/register_patient.dart';
 import 'package:app_sanitaria/domain/usecases/auth/register_professional.dart';
-import 'package:app_sanitaria/domain/usecases/auth/get_current_user.dart';
-import 'package:app_sanitaria/domain/usecases/auth/logout_user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,10 +44,10 @@ void main() {
   setUp(() async {
     // Limpar SharedPreferences antes de cada teste
     SharedPreferences.setMockInitialValues({});
-    
+
     // Inicializar DI com dependências REAIS (não mocks!)
     await setupDependencyInjection();
-    
+
     // Obter Use Cases do DI
     loginUseCase = sl<LoginUser>();
     registerPatientUseCase = sl<RegisterPatient>();
@@ -60,7 +62,8 @@ void main() {
   });
 
   group('Integration Test: Fluxo Completo de Autenticação de Paciente', () {
-    test('deve registrar paciente, fazer login, verificar sessão e logout', () async {
+    test('deve registrar paciente, fazer login, verificar sessão e logout',
+        () async {
       // ════════════════════════════════════════════════════════════
       // FASE 1: REGISTRO DE PACIENTE
       // ════════════════════════════════════════════════════════════
@@ -131,7 +134,7 @@ void main() {
       // ════════════════════════════════════════════════════════════
       // FASE 5: LOGIN COM CREDENCIAIS
       // ════════════════════════════════════════════════════════════
-      final loginParams = LoginParams(
+      const loginParams = LoginParams(
         email: 'joao.integration@test.com',
         password: 'senha123',
       );
@@ -183,7 +186,7 @@ void main() {
       await logoutUseCase(NoParams()); // Fazer logout
 
       // ACT: Tentar login com senha ERRADA
-      final loginParams = LoginParams(
+      const loginParams = LoginParams(
         email: 'maria@test.com',
         password: 'senha_errada',
       );
@@ -194,7 +197,11 @@ void main() {
         (failure) {
           // Esperado: InvalidCredentialsFailure
           final msg = failure.message.toLowerCase();
-          expect(msg.contains('senha') || msg.contains('incorreto') || msg.contains('credenciais'), isTrue);
+          expect(
+              msg.contains('senha') ||
+                  msg.contains('incorreto') ||
+                  msg.contains('credenciais'),
+              isTrue);
         },
         (user) => fail('Login deveria ter falhado com senha incorreta'),
       );
@@ -234,7 +241,7 @@ void main() {
         telefone: '11966666666',
         cidade: 'São Paulo',
         estado: 'SP',
-        dataNascimento: DateTime(2000, 1, 1),
+        dataNascimento: DateTime(2000),
         endereco: 'Rua XYZ',
         sexo: 'M',
         dataCadastro: DateTime.now(),
@@ -274,7 +281,7 @@ void main() {
         certificados: 'COREN-SP-123456',
         experiencia: 15,
         avaliacao: 4.9,
-        hourlyRate: 80.0,
+        hourlyRate: 80,
       );
 
       // ACT: Registrar profissional
@@ -294,7 +301,7 @@ void main() {
       await logoutUseCase(NoParams());
 
       // ACT: Login como profissional
-      final loginParams = LoginParams(
+      const loginParams = LoginParams(
         email: 'ana.prof@test.com',
         password: 'senha123',
       );
@@ -360,4 +367,3 @@ void main() {
     });
   });
 }
-

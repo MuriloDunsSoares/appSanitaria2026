@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:app_sanitaria/domain/entities/contract_entity.dart';
 import 'package:app_sanitaria/domain/entities/contract_status.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Card para exibir resumo de um contrato
 class ContractCard extends StatelessWidget {
-  final ContractEntity contract;
-  final VoidCallback? onTap;
-  final bool
-      isPatient; // true = paciente vê nome do profissional, false = profissional vê nome do paciente
+  // true = paciente vê nome do profissional, false = profissional vê nome do paciente
 
   const ContractCard({
     super.key,
@@ -16,6 +13,9 @@ class ContractCard extends StatelessWidget {
     this.onTap,
     this.isPatient = true,
   });
+  final ContractEntity contract;
+  final VoidCallback? onTap;
+  final bool isPatient;
 
   Color _getStatusColor() {
     switch (contract.status) {
@@ -63,7 +63,7 @@ class ContractCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -12,25 +12,22 @@ import '../../repositories/professionals_repository.dart';
 /// Útil para carregar profissionais favoritos.
 class GetProfessionalsByIds
     extends UseCase<List<ProfessionalEntity>, GetProfessionalsByIdsParams> {
-  final ProfessionalsRepository repository;
-
   GetProfessionalsByIds(this.repository);
+  final ProfessionalsRepository repository;
 
   @override
   Future<Either<Failure, List<ProfessionalEntity>>> call(
     GetProfessionalsByIdsParams params,
   ) async {
-    return await repository.getProfessionalsByIds(params.ids);
+    return repository.getProfessionalsByIds(params.ids);
   }
 }
 
 /// Parâmetros para buscar múltiplos profissionais por IDs.
 class GetProfessionalsByIdsParams extends Equatable {
-  final List<String> ids;
-
   const GetProfessionalsByIdsParams(this.ids);
+  final List<String> ids;
 
   @override
   List<Object?> get props => [ids];
 }
-

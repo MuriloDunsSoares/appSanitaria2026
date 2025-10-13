@@ -1,6 +1,6 @@
+import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 
 /// Widget: Feed de Últimas Conversas
 ///
@@ -10,16 +10,15 @@ import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 /// - Single Responsibility: Apenas renderiza a lista de conversas
 /// - Composição: Usa _buildConversationItem para cada conversa
 class ConversationsFeed extends StatelessWidget {
-  final List<dynamic> conversations;
-  final Function(String userId, String userName) onConversationTap;
-  final VoidCallback onSeeAllTap;
-
   const ConversationsFeed({
     super.key,
     required this.conversations,
     required this.onConversationTap,
     required this.onSeeAllTap,
   });
+  final List<dynamic> conversations;
+  final Function(String userId, String userName) onConversationTap;
+  final VoidCallback onSeeAllTap;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +47,15 @@ class ConversationsFeed extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ...conversations.take(3).map((conversation) {
-          return _buildConversationItem(context, conversation as ConversationEntity);
+          return _buildConversationItem(
+              context, conversation as ConversationEntity);
         }),
       ],
     );
   }
 
-  Widget _buildConversationItem(BuildContext context, ConversationEntity conversation) {
+  Widget _buildConversationItem(
+      BuildContext context, ConversationEntity conversation) {
     final lastMessage = conversation.lastMessage;
     final hasUnread = conversation.unreadCount > 0;
 
@@ -163,5 +164,3 @@ class ConversationsFeed extends StatelessWidget {
     }
   }
 }
-
-

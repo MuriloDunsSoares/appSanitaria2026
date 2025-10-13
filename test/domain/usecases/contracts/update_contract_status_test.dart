@@ -26,7 +26,7 @@ void main() {
   group('UpdateContractStatus', () {
     const tContractId = 'contract123';
     const tNewStatus = ContractStatus.confirmed;
-    
+
     final tUpdatedContract = ContractEntity(
       id: tContractId,
       patientId: 'patient123',
@@ -40,18 +40,18 @@ void main() {
       time: '08:00',
       address: 'Rua das Flores, 123',
       status: tNewStatus,
-      totalValue: 3000.0,
-      createdAt: DateTime(2025, 10, 1),
+      totalValue: 3000,
+      createdAt: DateTime(2025, 10),
       updatedAt: DateTime(2025, 10, 9),
     );
 
     test('deve atualizar status do contrato com sucesso', () async {
       // Arrange
-      final params = UpdateContractStatusParams(
+      const params = UpdateContractStatusParams(
         contractId: tContractId,
         newStatus: tNewStatus,
       );
-      
+
       when(mockRepository.updateContractStatus(tContractId, tNewStatus))
           .thenAnswer((_) async => Right(tUpdatedContract));
 
@@ -68,16 +68,17 @@ void main() {
         },
       );
 
-      verify(mockRepository.updateContractStatus(tContractId, tNewStatus)).called(1);
+      verify(mockRepository.updateContractStatus(tContractId, tNewStatus))
+          .called(1);
     });
 
     test('deve retornar NotFoundFailure quando contrato não existe', () async {
       // Arrange
-      final params = UpdateContractStatusParams(
+      const params = UpdateContractStatusParams(
         contractId: 'invalid_id',
         newStatus: tNewStatus,
       );
-      
+
       when(mockRepository.updateContractStatus('invalid_id', tNewStatus))
           .thenAnswer((_) async => const Left(NotFoundFailure('Contrato')));
 
@@ -86,7 +87,8 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, ContractEntity>>());
-      verify(mockRepository.updateContractStatus('invalid_id', tNewStatus)).called(1);
+      verify(mockRepository.updateContractStatus('invalid_id', tNewStatus))
+          .called(1);
     });
   });
 }

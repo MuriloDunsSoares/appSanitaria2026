@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// Card de Conversa na Lista
@@ -12,14 +12,13 @@ import 'package:intl/intl.dart';
 /// - Horário da última mensagem
 /// - Badge de mensagens não lidas
 class ConversationCard extends StatelessWidget {
-  final ConversationEntity conversation;
-  final VoidCallback? onTap;
-
   const ConversationCard({
     super.key,
     required this.conversation,
     this.onTap,
   });
+  final ConversationEntity conversation;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

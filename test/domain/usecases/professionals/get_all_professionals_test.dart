@@ -1,5 +1,5 @@
 /// Testes para GetAllProfessionals Use Case
-/// 
+///
 /// Objetivo: Validar busca de todos os profissionais cadastrados
 /// Regras de negócio:
 /// - Deve retornar lista de profissionais ordenada
@@ -44,14 +44,15 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem - SENAC 2010',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
-      biografia: 'Técnico em enfermagem com 10 anos de experiência em cuidados domiciliares.',
+      biografia:
+          'Técnico em enfermagem com 10 anos de experiência em cuidados domiciliares.',
       avaliacao: 4.8,
-      hourlyRate: 75.0,
+      hourlyRate: 75,
       averageRating: 4.8,
     );
 
@@ -72,9 +73,9 @@ void main() {
       certificados: 'Certificado Nacional de Cuidador',
       experiencia: 8,
       biografia: 'Cuidadora especializada em idosos com Alzheimer.',
-      avaliacao: 5.0,
-      hourlyRate: 60.0,
-      averageRating: 5.0,
+      avaliacao: 5,
+      hourlyRate: 60,
+      averageRating: 5,
     );
 
     final tProfessional3 = ProfessionalEntity(
@@ -93,15 +94,18 @@ void main() {
       formacao: 'Formação em Acompanhamento Hospitalar',
       certificados: 'Certificado de Acompanhante - 2018',
       experiencia: 6,
-      biografia: 'Acompanhante hospitalar com experiência em UTI e pós-operatório.',
+      biografia:
+          'Acompanhante hospitalar com experiência em UTI e pós-operatório.',
       avaliacao: 4.5,
-      hourlyRate: 55.0,
+      hourlyRate: 55,
       averageRating: 4.5,
     );
 
     final tProfessionals = [tProfessional1, tProfessional2, tProfessional3];
 
-    test('deve retornar lista de todos os profissionais quando existem profissionais cadastrados', () async {
+    test(
+        'deve retornar lista de todos os profissionais quando existem profissionais cadastrados',
+        () async {
       // Arrange
       when(mockRepository.getAllProfessionals())
           .thenAnswer((_) async => Right(tProfessionals));
@@ -115,22 +119,23 @@ void main() {
         (failure) => fail('Deveria retornar lista de profissionais'),
         (professionals) {
           expect(professionals.length, 3);
-          
+
           // Verificar primeiro profissional
           expect(professionals[0].nome, 'João Santos');
           expect(professionals[0].especialidade, Speciality.tecnicosEnfermagem);
           expect(professionals[0].experiencia, 10);
           expect(professionals[0].hourlyRate, 75.0);
           expect(professionals[0].cidade, 'São Paulo');
-          
+
           // Verificar segundo profissional
           expect(professionals[1].nome, 'Ana Costa');
           expect(professionals[1].especialidade, Speciality.cuidadores);
           expect(professionals[1].avaliacao, 5.0);
-          
+
           // Verificar terceiro profissional
           expect(professionals[2].nome, 'Carlos Oliveira');
-          expect(professionals[2].especialidade, Speciality.acompanhantesHospital);
+          expect(
+              professionals[2].especialidade, Speciality.acompanhantesHospital);
         },
       );
 
@@ -138,7 +143,9 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar lista vazia quando não existem profissionais cadastrados', () async {
+    test(
+        'deve retornar lista vazia quando não existem profissionais cadastrados',
+        () async {
       // Arrange
       when(mockRepository.getAllProfessionals())
           .thenAnswer((_) async => const Right([]));
@@ -158,7 +165,9 @@ void main() {
       verify(mockRepository.getAllProfessionals()).called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao buscar profissionais', () async {
+    test(
+        'deve retornar StorageFailure quando ocorre erro ao buscar profissionais',
+        () async {
       // Arrange
       when(mockRepository.getAllProfessionals())
           .thenAnswer((_) async => const Left(StorageFailure()));

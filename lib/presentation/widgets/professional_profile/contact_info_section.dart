@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza informações de contato
 /// - Composição: Usa _buildInfoRow internamente
 class ContactInfoSection extends StatelessWidget {
-  final String city;
-  final String phone;
-  final String email;
-
   const ContactInfoSection({
     super.key,
     required this.city,
     required this.phone,
     required this.email,
   });
+  final String city;
+  final String phone;
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -51,5 +50,3 @@ class ContactInfoSection extends StatelessWidget {
     );
   }
 }
-
-

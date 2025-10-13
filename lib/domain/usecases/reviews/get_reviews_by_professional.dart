@@ -9,30 +9,23 @@ import '../../entities/review_entity.dart';
 import '../../repositories/reviews_repository.dart';
 
 /// Use Case para obter avaliações.
-class GetReviewsByProfessional
-    extends UseCase<List<ReviewEntity>, String> {
-  final ReviewsRepository repository;
-
+class GetReviewsByProfessional extends UseCase<List<ReviewEntity>, String> {
   GetReviewsByProfessional(this.repository);
+  final ReviewsRepository repository;
 
   @override
   Future<Either<Failure, List<ReviewEntity>>> call(
     String professionalId,
   ) async {
-    return await repository.getReviewsByProfessional(professionalId);
+    return repository.getReviewsByProfessional(professionalId);
   }
 }
 
 /// Parâmetros para buscar reviews.
 class ProfessionalIdParams extends Equatable {
-  final String professionalId;
-
   const ProfessionalIdParams(this.professionalId);
+  final String professionalId;
 
   @override
   List<Object?> get props => [professionalId];
 }
-
-
-
-

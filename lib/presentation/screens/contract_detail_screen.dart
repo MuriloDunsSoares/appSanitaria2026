@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:app_sanitaria/domain/entities/contract_entity.dart';
 import 'package:app_sanitaria/domain/entities/contract_status.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 // LocalStorageDataSource removido - usando providers V2
 import 'package:intl/intl.dart';
 
@@ -11,14 +11,13 @@ import 'package:intl/intl.dart';
 ///
 /// Exibe todas as informações detalhadas de um contrato específico
 class ContractDetailScreen extends ConsumerWidget {
-  final ContractEntity contract;
-  final bool isPatient;
-
   const ContractDetailScreen({
     super.key,
     required this.contract,
     this.isPatient = true,
   });
+  final ContractEntity contract;
+  final bool isPatient;
 
   Color _getStatusColor() {
     switch (contract.status) {

@@ -1,19 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import '../../firebase_options.dart';
 import '../utils/app_logger.dart';
 
 /// Serviço para inicialização e gerenciamento do Firebase
-/// 
+///
 /// Responsável por:
 /// - Inicializar Firebase Core
 /// - Configurar Firebase Cloud Messaging (FCM)
 /// - Gerenciar tokens de notificação push
 class FirebaseService {
-  static final FirebaseService _instance = FirebaseService._internal();
   factory FirebaseService() => _instance;
   FirebaseService._internal();
+  static final FirebaseService _instance = FirebaseService._internal();
 
   bool _initialized = false;
   String? _fcmToken;
@@ -22,7 +21,7 @@ class FirebaseService {
   String? get fcmToken => _fcmToken;
 
   /// Inicializa o Firebase
-  /// 
+  ///
   /// Deve ser chamado no início do app, antes de qualquer
   /// operação com Firebase.
   Future<void> initialize() async {
@@ -33,7 +32,7 @@ class FirebaseService {
 
     try {
       AppLogger.info('Inicializando Firebase...');
-      
+
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
@@ -44,13 +43,14 @@ class FirebaseService {
       // Configurar FCM
       await _setupFCM();
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao inicializar Firebase', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao inicializar Firebase',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
   /// Configura o Firebase Cloud Messaging (FCM)
-  /// 
+  ///
   /// Solicita permissões e obtém o token FCM do dispositivo
   Future<void> _setupFCM() async {
     try {
@@ -59,19 +59,12 @@ class FirebaseService {
       final messaging = FirebaseMessaging.instance;
 
       // Solicitar permissões (iOS)
-      final settings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
+      final settings = await messaging.requestPermission();
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         AppLogger.info('✅ Permissões de notificação concedidas');
-      } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      } else if (settings.authorizationStatus ==
+          AuthorizationStatus.provisional) {
         AppLogger.info('⚠️ Permissões de notificação provisórias concedidas');
       } else {
         AppLogger.info('❌ Permissões de notificação negadas');
@@ -96,7 +89,8 @@ class FirebaseService {
       // Configurar handlers de mensagens
       _setupMessageHandlers();
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao configurar FCM', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao configurar FCM',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -104,13 +98,15 @@ class FirebaseService {
   void _setupMessageHandlers() {
     // Mensagem recebida quando app está em foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      AppLogger.info('Mensagem recebida (foreground): ${message.notification?.title}');
+      AppLogger.info(
+          'Mensagem recebida (foreground): ${message.notification?.title}');
       // TODO: Mostrar notificação local ou atualizar UI
     });
 
     // Mensagem clicada quando app estava em background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      AppLogger.info('Mensagem clicada (background): ${message.notification?.title}');
+      AppLogger.info(
+          'Mensagem clicada (background): ${message.notification?.title}');
       // TODO: Navegar para tela específica
     });
 
@@ -119,7 +115,7 @@ class FirebaseService {
   }
 
   /// Atualiza o token FCM do usuário no Firestore
-  /// 
+  ///
   /// [userId] ID do usuário logado
   Future<void> updateUserFCMToken(String userId) async {
     if (_fcmToken == null) {
@@ -131,18 +127,19 @@ class FirebaseService {
       // TODO: Implementar atualização no Firestore
       AppLogger.info('Token FCM atualizado para usuário $userId');
     } catch (e, stackTrace) {
-      AppLogger.error('Erro ao atualizar token FCM', error: e, stackTrace: stackTrace);
+      AppLogger.error('Erro ao atualizar token FCM',
+          error: e, stackTrace: stackTrace);
     }
   }
 }
 
 /// Handler para mensagens recebidas em background
-/// 
+///
 /// IMPORTANTE: Esta função DEVE ser top-level (fora de classes)
 /// para funcionar corretamente com FCM.
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  AppLogger.info('Mensagem recebida (background): ${message.notification?.title}');
+  AppLogger.info(
+      'Mensagem recebida (background): ${message.notification?.title}');
 }
-

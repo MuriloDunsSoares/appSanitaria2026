@@ -42,7 +42,7 @@ class AppConstants {
   // ───────────────────────────────────────────────────────────────────────
   // CONSTRUTOR PRIVADO - Previne Instanciação
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Construtor privado que previne instanciação da classe.
   ///
   /// **Por que privado?**
@@ -50,7 +50,7 @@ class AppConstants {
   /// - Não faz sentido criar instâncias: `final x = AppConstants()` ❌
   /// - Força uso correto: `AppConstants.minAge` ✅
   ///
-  /// **Sintaxe:** 
+  /// **Sintaxe:**
   /// - `AppConstants._()` → construtor nomeado privado (underscore)
   /// - Dart não permite chamar construtores privados de fora da classe
   ///
@@ -64,7 +64,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // STORAGE KEYS - Chaves para SharedPreferences
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Chave para armazenar a lista completa de usuários cadastrados.
   ///
   /// **Tipo de dado armazenado:** JSON String
@@ -97,7 +97,7 @@ class AppConstants {
   /// - Previne colisões com outros apps/plugins que usam SharedPreferences
   /// - Facilita debug (grep 'appSanitaria_' mostra todas as keys da app)
   static const String storageKeyHostList = 'appSanitaria_hostList';
-  
+
   /// Alias para storageKeyHostList (compatibilidade com código antigo).
   ///
   /// **Por que existe?**
@@ -109,7 +109,7 @@ class AppConstants {
   ///
   /// **Removível após:** Todos os datasources migrarem para storageKeyHostList
   static const String storageKeyUsersHost = 'appSanitaria_usersHost';
-  
+
   /// Chave para armazenar dados do usuário atualmente logado.
   ///
   /// **Tipo de dado:** JSON String
@@ -143,7 +143,7 @@ class AppConstants {
   ///
   /// **Performance:** ~200 bytes, leitura ~1ms
   static const String storageKeyUserData = 'appSanitaria_userData';
-  
+
   /// Chave para armazenar apenas o ID do usuário logado (otimização).
   ///
   /// **Tipo de dado:** String simples
@@ -169,7 +169,7 @@ class AppConstants {
   ///
   /// **Performance:** ~10 bytes, leitura ~0.5ms
   static const String storageKeyCurrentUserId = 'appSanitaria_currentUserId';
-  
+
   /// Chave base para armazenar favoritos de um usuário.
   ///
   /// **IMPORTANTE:** Esta é uma chave BASE, não a chave final!
@@ -203,12 +203,13 @@ class AppConstants {
   static const String storageKeyFavorites = 'appSanitaria_favorites';
   static const String storageKeyProfileImages = 'appSanitaria_profile_images';
   static const String storageKeyPatientProfile = 'appSanitaria_patient_profile';
-  static const String storageKeyProfessionalProfile = 'appSanitaria_professional_profile';
+  static const String storageKeyProfessionalProfile =
+      'appSanitaria_professional_profile';
 
   // ═══════════════════════════════════════════════════════════════════════
   // VALIDATION - Regras de Validação de Formulários
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Comprimento mínimo de senha para registro.
   ///
   /// **Valor:** 6 caracteres
@@ -239,7 +240,7 @@ class AppConstants {
   /// **Segurança atual:** BAIXA (sem hash, armazenamento plain text)
   /// **TODO:** Implementar bcrypt/argon2 antes de produção
   static const int minPasswordLength = 6;
-  
+
   /// Idade mínima para registro (maioridade legal no Brasil).
   ///
   /// **Valor:** 18 anos
@@ -266,7 +267,7 @@ class AppConstants {
   /// - LGPD Art. 14: Tratamento de dados de menores
   /// - Termo de uso deve mencionar esta restrição
   static const int minAge = 18;
-  
+
   /// Idade máxima para registro (validação de sanidade de dados).
   ///
   /// **Valor:** 120 anos
@@ -297,7 +298,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // PAGINATION - Limites de Itens por Página
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Número de profissionais carregados por página na lista.
   ///
   /// **Valor:** 20 profissionais
@@ -330,7 +331,7 @@ class AppConstants {
   /// - Load inicial: 20 cards × 50ms = ~1s
   /// - Load incremental: imperceptível (background)
   static const int professionalsPerPage = 20;
-  
+
   /// Número de mensagens carregadas por página no chat.
   ///
   /// **Valor:** 50 mensagens
@@ -366,7 +367,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // RATING - Configuração do Sistema de Avaliações
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Rating mínimo permitido (estrelas vazias).
   ///
   /// **Valor:** 0.0 (zero estrelas)
@@ -386,8 +387,8 @@ class AppConstants {
   ///   return Text('Sem avaliações');
   /// }
   /// ```
-  static const double minRating = 0.0;
-  
+  static const double minRating = 0;
+
   /// Rating máximo permitido (5 estrelas cheias).
   ///
   /// **Valor:** 5.0 (cinco estrelas)
@@ -413,8 +414,8 @@ class AppConstants {
   /// **Precisão:**
   /// - Aceita decimais: 4.5, 4.7, etc
   /// - UI pode arredondar para meio (4.3 → 4.5)
-  static const double maxRating = 5.0;
-  
+  static const double maxRating = 5;
+
   /// Rating padrão quando profissional não tem avaliações.
   ///
   /// **Valor:** 4.5 (quatro estrelas e meia)
@@ -433,12 +434,12 @@ class AppConstants {
   /// - Mostra 0.0 se sem avaliações (bug de UX)
   /// - TODO: Implementar lógica:
   /// ```dart
-  /// final displayRating = (totalReviews == 0) 
-  ///   ? AppConstants.defaultRating 
+  /// final displayRating = (totalReviews == 0)
+  ///   ? AppConstants.defaultRating
   ///   : averageRating;
   /// ```
   ///
-  /// **Debate:** 
+  /// **Debate:**
   /// - Alguns argumentam que deve ser 0.0 (mais honesto)
   /// - Outros argumentam 4.5 (mais justo para novos)
   /// - Solução: Badge "Novo profissional" + 4.5 temporário
@@ -447,7 +448,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // ESPECIALIDADES - Lista de Categorias de Profissionais
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Lista de especialidades/categorias de profissionais de saúde.
   ///
   /// **Tipo:** List<String> (imutável via const)
@@ -504,7 +505,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // CIDADES - Capitais Brasileiras com Estados
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Mapa de todas as 27 capitais brasileiras com suas siglas de estado.
   ///
   /// **Tipo:** Map<String, String>
@@ -561,47 +562,47 @@ class AppConstants {
   /// **Regiões (organizadas geograficamente):**
   static const Map<String, String> capitalsBrazil = {
     // REGIÃO NORTE (7 capitais)
-    'Rio Branco': 'AC',      // Acre
-    'Macapá': 'AP',          // Amapá
-    'Manaus': 'AM',          // Amazonas
-    'Belém': 'PA',           // Pará
-    'Porto Velho': 'RO',     // Rondônia
-    'Boa Vista': 'RR',       // Roraima
-    'Palmas': 'TO',          // Tocantins
-    
+    'Rio Branco': 'AC', // Acre
+    'Macapá': 'AP', // Amapá
+    'Manaus': 'AM', // Amazonas
+    'Belém': 'PA', // Pará
+    'Porto Velho': 'RO', // Rondônia
+    'Boa Vista': 'RR', // Roraima
+    'Palmas': 'TO', // Tocantins
+
     // REGIÃO NORDESTE (9 capitais)
-    'Maceió': 'AL',          // Alagoas
-    'Salvador': 'BA',        // Bahia
-    'Fortaleza': 'CE',       // Ceará
-    'São Luís': 'MA',        // Maranhão
-    'João Pessoa': 'PB',     // Paraíba
-    'Recife': 'PE',          // Pernambuco
-    'Teresina': 'PI',        // Piauí
-    'Natal': 'RN',           // Rio Grande do Norte
-    'Aracaju': 'SE',         // Sergipe
-    
+    'Maceió': 'AL', // Alagoas
+    'Salvador': 'BA', // Bahia
+    'Fortaleza': 'CE', // Ceará
+    'São Luís': 'MA', // Maranhão
+    'João Pessoa': 'PB', // Paraíba
+    'Recife': 'PE', // Pernambuco
+    'Teresina': 'PI', // Piauí
+    'Natal': 'RN', // Rio Grande do Norte
+    'Aracaju': 'SE', // Sergipe
+
     // REGIÃO CENTRO-OESTE (4 capitais)
-    'Brasília': 'DF',        // Distrito Federal
-    'Goiânia': 'GO',         // Goiás
-    'Cuiabá': 'MT',          // Mato Grosso
-    'Campo Grande': 'MS',    // Mato Grosso do Sul
-    
+    'Brasília': 'DF', // Distrito Federal
+    'Goiânia': 'GO', // Goiás
+    'Cuiabá': 'MT', // Mato Grosso
+    'Campo Grande': 'MS', // Mato Grosso do Sul
+
     // REGIÃO SUDESTE (4 capitais)
-    'Vitória': 'ES',         // Espírito Santo
-    'Belo Horizonte': 'MG',  // Minas Gerais
-    'Rio de Janeiro': 'RJ',  // Rio de Janeiro
-    'São Paulo': 'SP',       // São Paulo
-    
+    'Vitória': 'ES', // Espírito Santo
+    'Belo Horizonte': 'MG', // Minas Gerais
+    'Rio de Janeiro': 'RJ', // Rio de Janeiro
+    'São Paulo': 'SP', // São Paulo
+
     // REGIÃO SUL (3 capitais)
-    'Curitiba': 'PR',        // Paraná
-    'Florianópolis': 'SC',   // Santa Catarina
-    'Porto Alegre': 'RS',    // Rio Grande do Sul
+    'Curitiba': 'PR', // Paraná
+    'Florianópolis': 'SC', // Santa Catarina
+    'Porto Alegre': 'RS', // Rio Grande do Sul
   };
 
   // ═══════════════════════════════════════════════════════════════════════
   // TIMEOUTS - Durações de Timeout para Operações Assíncronas
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Timeout para chamadas de API (quando implementadas).
   ///
   /// **Valor:** 30 segundos
@@ -646,7 +647,7 @@ class AppConstants {
   /// - Não afeta app atual (sem chamadas de rede)
   /// - Crítico para produção (previne ANR - App Not Responding)
   static const Duration apiTimeout = Duration(seconds: 30);
-  
+
   /// Debounce para busca em tempo real (evita requests excessivos).
   ///
   /// **Valor:** 500 milissegundos (0.5 segundos)
@@ -685,7 +686,7 @@ class AppConstants {
   /// **Implementação típica:**
   /// ```dart
   /// Timer? _debounce;
-  /// 
+  ///
   /// void onSearchChanged(String query) {
   ///   _debounce?.cancel();
   ///   _debounce = Timer(AppConstants.searchDebounce, () {
@@ -712,7 +713,7 @@ class AppConstants {
   // ═══════════════════════════════════════════════════════════════════════
   // CACHE - Durações de Expiração de Cache
   // ═══════════════════════════════════════════════════════════════════════
-  
+
   /// Duração até cache de dados expirar e precisar ser recarregado.
   ///
   /// **Valor:** 24 horas (1 dia)
@@ -730,11 +731,11 @@ class AppConstants {
   /// // Salvar com timestamp
   /// await prefs.setString('professionals_data', jsonEncode(data));
   /// await prefs.setString('professionals_timestamp', DateTime.now().toIso8601String());
-  /// 
+  ///
   /// // Verificar se expirou
   /// final timestamp = DateTime.parse(prefs.getString('professionals_timestamp')!);
   /// final age = DateTime.now().difference(timestamp);
-  /// 
+  ///
   /// if (age > AppConstants.cacheExpiration) {
   ///   // Cache expirado, recarregar da API
   ///   data = await fetchFromApi();
@@ -770,4 +771,3 @@ class AppConstants {
   /// - Economia de bateria: ~70% menos requests
   static const Duration cacheExpiration = Duration(hours: 24);
 }
-

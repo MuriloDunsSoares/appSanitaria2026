@@ -4,15 +4,6 @@ import 'package:app_sanitaria/domain/entities/message_entity.dart';
 ///
 /// Representa uma conversa entre dois usuários
 class ConversationEntity {
-  final String id;
-  final List<String> participants; // [userId1, userId2]
-  final String otherUserId;
-  final String otherUserName;
-  final String? otherUserSpecialty;
-  final MessageEntity? lastMessage;
-  final int unreadCount;
-  final DateTime updatedAt;
-
   ConversationEntity({
     required this.id,
     List<String>? participants,
@@ -24,10 +15,10 @@ class ConversationEntity {
     DateTime? lastMessageTime,
     this.unreadCount = 0,
     DateTime? updatedAt,
-  }) : participants = participants ?? participantIds ?? [],
-       otherUserId = otherUserId ?? '',
-       otherUserName = otherUserName ?? 'Usuário',
-       updatedAt = updatedAt ?? lastMessageTime ?? DateTime.now();
+  })  : participants = participants ?? participantIds ?? [],
+        otherUserId = otherUserId ?? '',
+        otherUserName = otherUserName ?? 'Usuário',
+        updatedAt = updatedAt ?? lastMessageTime ?? DateTime.now();
 
   /// Cria conversa a partir de Map
   factory ConversationEntity.fromMap(
@@ -55,6 +46,14 @@ class ConversationEntity {
           : DateTime.now(),
     );
   }
+  final String id;
+  final List<String> participants; // [userId1, userId2]
+  final String otherUserId;
+  final String otherUserName;
+  final String? otherUserSpecialty;
+  final MessageEntity? lastMessage;
+  final int unreadCount;
+  final DateTime updatedAt;
 
   /// Converte conversa para Map
   Map<String, dynamic> toMap() {
@@ -74,7 +73,8 @@ class ConversationEntity {
   Map<String, dynamic> toJson() => toMap();
 
   /// Alias para fromMap (compatibilidade com datasources)
-  static ConversationEntity fromJson(Map<String, dynamic> json, String currentUserId) =>
+  static ConversationEntity fromJson(
+          Map<String, dynamic> json, String currentUserId) =>
       ConversationEntity.fromMap(json, currentUserId);
 
   /// Getter para participantIds (alias de participants)

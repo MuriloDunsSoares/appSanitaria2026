@@ -25,8 +25,7 @@ void main() {
   group('LogoutUser', () {
     test('deve fazer logout com sucesso', () async {
       // Arrange
-      when(mockRepository.logout())
-          .thenAnswer((_) async => const Right(unit));
+      when(mockRepository.logout()).thenAnswer((_) async => const Right(unit));
 
       // Act
       final result = await useCase(NoParams());

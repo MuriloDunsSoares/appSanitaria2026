@@ -9,30 +9,23 @@ import '../../entities/professional_entity.dart';
 import '../../repositories/professionals_repository.dart';
 
 /// Use Case para obter profissional por ID.
-class GetProfessionalById
-    extends UseCase<ProfessionalEntity, String> {
-  final ProfessionalsRepository repository;
-
+class GetProfessionalById extends UseCase<ProfessionalEntity, String> {
   GetProfessionalById(this.repository);
+  final ProfessionalsRepository repository;
 
   @override
   Future<Either<Failure, ProfessionalEntity>> call(
     String professionalId,
   ) async {
-    return await repository.getProfessionalById(professionalId);
+    return repository.getProfessionalById(professionalId);
   }
 }
 
 /// Parâmetros para buscar profissional por ID.
 class ProfessionalByIdParams extends Equatable {
-  final String id;
-
   const ProfessionalByIdParams(this.id);
+  final String id;
 
   @override
   List<Object?> get props => [id];
 }
-
-
-
-

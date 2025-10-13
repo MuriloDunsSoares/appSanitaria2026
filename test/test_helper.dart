@@ -1,5 +1,5 @@
 /// Test Helper
-/// 
+///
 /// Arquivo central para configuração de mocks usando Mockito.
 /// Todos os testes devem importar os mocks gerados deste arquivo.
 library;
@@ -24,4 +24,3 @@ import 'package:mockito/annotations.dart';
   ReviewsRepository,
 ])
 void main() {}
-

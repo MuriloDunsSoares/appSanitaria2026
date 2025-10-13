@@ -2,16 +2,6 @@
 ///
 /// Representa uma mensagem individual em uma conversa
 class MessageEntity {
-  final String id;
-  final String conversationId;
-  final String senderId;
-  final String senderName;
-  final String receiverId;
-  final String text;
-  final String content; // Alias para text (compatibilidade)
-  final DateTime timestamp;
-  final bool isRead;
-
   MessageEntity({
     required this.id,
     String? conversationId,
@@ -42,6 +32,15 @@ class MessageEntity {
       isRead: (map['isRead'] ?? false) as bool,
     );
   }
+  final String id;
+  final String conversationId;
+  final String senderId;
+  final String senderName;
+  final String receiverId;
+  final String text;
+  final String content; // Alias para text (compatibilidade)
+  final DateTime timestamp;
+  final bool isRead;
 
   /// Converte mensagem para Map
   Map<String, dynamic> toMap() {

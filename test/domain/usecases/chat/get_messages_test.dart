@@ -1,5 +1,5 @@
 /// Testes para GetMessages Use Case
-/// 
+///
 /// Objetivo: Validar busca de mensagens entre dois usuários
 /// Regras de negócio:
 /// - Deve retornar lista ordenada por timestamp
@@ -33,7 +33,7 @@ void main() {
     // Dados REALISTAS para testes
     const tUserId1 = 'patient123';
     const tUserId2 = 'prof456';
-    
+
     final tMessage1 = MessageEntity(
       id: 'msg1',
       conversationId: 'conv_patient123_prof456',
@@ -53,7 +53,6 @@ void main() {
       receiverId: tUserId1,
       content: 'Olá Maria! Claro, quando você precisa?',
       timestamp: DateTime(2025, 10, 9, 14, 35),
-      isRead: false,
     );
 
     final tMessage3 = MessageEntity(
@@ -64,17 +63,18 @@ void main() {
       receiverId: tUserId2,
       content: 'Seria possível começar na próxima segunda-feira?',
       timestamp: DateTime(2025, 10, 9, 14, 40),
-      isRead: false,
     );
 
     final tMessages = [tMessage1, tMessage2, tMessage3];
 
-    final tParams = GetMessagesParams(
+    const tParams = GetMessagesParams(
       userId1: tUserId1,
       userId2: tUserId2,
     );
 
-    test('deve retornar lista de mensagens entre dois usuários quando existem mensagens', () async {
+    test(
+        'deve retornar lista de mensagens entre dois usuários quando existem mensagens',
+        () async {
       // Arrange
       when(mockRepository.getMessages(
         userId1: tUserId1,
@@ -106,7 +106,9 @@ void main() {
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar lista vazia quando não existem mensagens entre os usuários', () async {
+    test(
+        'deve retornar lista vazia quando não existem mensagens entre os usuários',
+        () async {
       // Arrange
       when(mockRepository.getMessages(
         userId1: tUserId1,
@@ -131,7 +133,8 @@ void main() {
       )).called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao buscar mensagens', () async {
+    test('deve retornar StorageFailure quando ocorre erro ao buscar mensagens',
+        () async {
       // Arrange
       when(mockRepository.getMessages(
         userId1: tUserId1,

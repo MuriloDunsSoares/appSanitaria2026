@@ -17,20 +17,18 @@ import '../datasources/firebase_chat_datasource.dart';
 /// - Mensagens sincronizam automaticamente entre dispositivos
 /// - Persistência automática pelo Firestore (cache offline)
 class ChatRepositoryFirebaseImpl implements ChatRepository {
-  final FirebaseChatDataSource firebaseChatDataSource;
-
   ChatRepositoryFirebaseImpl({
     required this.firebaseChatDataSource,
   });
+  final FirebaseChatDataSource firebaseChatDataSource;
 
   @override
   Future<Either<Failure, List<ConversationEntity>>> getUserConversations(
     String userId,
   ) async {
     try {
-      final conversations = await firebaseChatDataSource
-          .getUserConversationsStream(userId)
-          .first;
+      final conversations =
+          await firebaseChatDataSource.getUserConversationsStream(userId).first;
       return Right(conversations);
     } on NetworkException {
       return const Left(NetworkFailure());
@@ -49,11 +47,11 @@ class ChatRepositoryFirebaseImpl implements ChatRepository {
         userId1,
         userId2,
       );
-      
+
       if (conversation == null) {
         return const Left(NotFoundFailure('Conversa não encontrada'));
       }
-      
+
       return Right(conversation);
     } on NotFoundException {
       return const Left(NotFoundFailure('Conversa não encontrada'));
@@ -164,9 +162,8 @@ class ChatRepositoryFirebaseImpl implements ChatRepository {
   @override
   Future<Either<Failure, int>> getUnreadCount(String userId) async {
     try {
-      final conversations = await firebaseChatDataSource
-          .getUserConversationsStream(userId)
-          .first;
+      final conversations =
+          await firebaseChatDataSource.getUserConversationsStream(userId).first;
       final totalUnread = conversations.fold<int>(
         0,
         (sum, conv) => sum + conv.unreadCount,
@@ -177,4 +174,3 @@ class ChatRepositoryFirebaseImpl implements ChatRepository {
     }
   }
 }
-

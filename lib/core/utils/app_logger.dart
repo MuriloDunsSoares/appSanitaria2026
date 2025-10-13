@@ -113,7 +113,7 @@ class AppLogger {
   // ───────────────────────────────────────────────────────────────────────
   // CONSTANTE PRIVADA - Prefixo para Identificação
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Prefixo adicionado a todos os logs para identificação visual.
   ///
   /// **Valor:** '🏥 AppSanitaria'
@@ -253,7 +253,7 @@ class AppLogger {
     if (kDebugMode) {
       /// Imprime mensagem principal com emoji de aviso.
       debugPrint('$_prefix ⚠️  $message');
-      
+
       /// Se um erro foi fornecido, imprime detalhes indentados.
       ///
       /// **Null safety:** `error != null` garante que só imprime se fornecido.
@@ -332,12 +332,12 @@ class AppLogger {
     if (kDebugMode) {
       /// Imprime mensagem principal com emoji de erro.
       debugPrint('$_prefix ❌ $message');
-      
+
       /// Imprime detalhes do erro, se fornecido.
       if (error != null) {
         debugPrint('   └─ Error: $error');
       }
-      
+
       /// Imprime stack trace resumido (5 primeiras linhas).
       ///
       /// **Por que apenas 5 linhas?**

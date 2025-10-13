@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o dropdown
 /// - Validação: Inclui validador de formulário
 class ServiceTypeSelector extends StatelessWidget {
-  final String? selectedService;
-  final ValueChanged<String?> onChanged;
-  final List<String> services;
-
   const ServiceTypeSelector({
     super.key,
     required this.selectedService,
     required this.onChanged,
     required this.services,
   });
+  final String? selectedService;
+  final ValueChanged<String?> onChanged;
+  final List<String> services;
 
   @override
   Widget build(BuildContext context) {
@@ -63,5 +62,3 @@ class ServiceTypeSelector extends StatelessWidget {
     );
   }
 }
-
-

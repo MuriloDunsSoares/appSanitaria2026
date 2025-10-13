@@ -10,9 +10,8 @@ import '../../domain/repositories/contracts_repository.dart';
 import '../datasources/firebase_contracts_datasource.dart';
 
 class ContractsRepositoryImpl implements ContractsRepository {
-  final FirebaseContractsDataSource dataSource;
-
   ContractsRepositoryImpl({required this.dataSource});
+  final FirebaseContractsDataSource dataSource;
 
   @override
   Future<Either<Failure, ContractEntity>> createContract(
@@ -59,7 +58,8 @@ class ContractsRepositoryImpl implements ContractsRepository {
     String professionalId,
   ) async {
     try {
-      final contracts = await dataSource.getContractsByProfessional(professionalId);
+      final contracts =
+          await dataSource.getContractsByProfessional(professionalId);
       return Right(contracts);
     } on LocalStorageException catch (_) {
       return const Left(StorageFailure());
@@ -137,7 +137,3 @@ class ContractsRepositoryImpl implements ContractsRepository {
     }
   }
 }
-
-
-
-

@@ -52,5 +52,3 @@ abstract class ReviewsRepository {
   /// - [Left(StorageFailure)]: erro ao contar
   Future<Either<Failure, int>> getReviewsCount(String professionalId);
 }
-
-

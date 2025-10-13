@@ -9,11 +9,6 @@ import 'package:intl/intl.dart';
 /// - Single Responsibility: Renderiza seletores de data/hora
 /// - Delegação: Callbacks para ações externas
 class DateTimeSelector extends StatelessWidget {
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
-  final VoidCallback onDateTap;
-  final VoidCallback onTimeTap;
-
   const DateTimeSelector({
     super.key,
     required this.selectedDate,
@@ -21,6 +16,10 @@ class DateTimeSelector extends StatelessWidget {
     required this.onDateTap,
     required this.onTimeTap,
   });
+  final DateTime? selectedDate;
+  final TimeOfDay? selectedTime;
+  final VoidCallback onDateTap;
+  final VoidCallback onTimeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -80,5 +79,3 @@ class DateTimeSelector extends StatelessWidget {
     );
   }
 }
-
-

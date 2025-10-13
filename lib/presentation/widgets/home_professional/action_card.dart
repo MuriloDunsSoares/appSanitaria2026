@@ -8,11 +8,6 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza um card de ação
 /// - Reusabilidade: Pode ser usado em qualquer lista de ações
 class ActionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
   const ActionCard({
     super.key,
     required this.icon,
@@ -20,6 +15,10 @@ class ActionCard extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
   });
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -82,5 +81,3 @@ class ActionCard extends StatelessWidget {
     );
   }
 }
-
-

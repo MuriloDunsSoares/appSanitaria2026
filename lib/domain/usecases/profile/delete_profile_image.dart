@@ -11,23 +11,20 @@ import '../../repositories/profile_repository.dart';
 ///
 /// **Responsabilidade única:** Remover imagem de perfil.
 class DeleteProfileImage extends UseCase<Unit, String> {
-  final ProfileRepository repository;
-
   DeleteProfileImage(this.repository);
+  final ProfileRepository repository;
 
   @override
   Future<Either<Failure, Unit>> call(String userId) async {
-    return await repository.deleteProfileImage(userId);
+    return repository.deleteProfileImage(userId);
   }
 }
 
 /// Parâmetros do Use Case DeleteProfileImage.
 class DeleteProfileImageParams extends Equatable {
-  final String userId;
-
   const DeleteProfileImageParams({required this.userId});
+  final String userId;
 
   @override
   List<Object?> get props => [userId];
 }
-

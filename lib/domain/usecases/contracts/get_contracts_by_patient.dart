@@ -9,30 +9,23 @@ import '../../entities/contract_entity.dart';
 import '../../repositories/contracts_repository.dart';
 
 /// Use Case para obter contratos do paciente.
-class GetContractsByPatient
-    extends UseCase<List<ContractEntity>, String> {
-  final ContractsRepository repository;
-
+class GetContractsByPatient extends UseCase<List<ContractEntity>, String> {
   GetContractsByPatient(this.repository);
+  final ContractsRepository repository;
 
   @override
   Future<Either<Failure, List<ContractEntity>>> call(
     String patientId,
   ) async {
-    return await repository.getContractsByPatient(patientId);
+    return repository.getContractsByPatient(patientId);
   }
 }
 
 /// Parâmetros para buscar por paciente ID.
 class PatientIdParams extends Equatable {
-  final String patientId;
-
   const PatientIdParams(this.patientId);
+  final String patientId;
 
   @override
   List<Object?> get props => [patientId];
 }
-
-
-
-

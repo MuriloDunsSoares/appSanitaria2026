@@ -10,18 +10,13 @@ import '../../repositories/profile_repository.dart';
 /// Use Case para atualizar perfil de profissional.
 class UpdateProfessionalProfile
     extends UseCase<ProfessionalEntity, ProfessionalEntity> {
-  final ProfileRepository repository;
-
   UpdateProfessionalProfile(this.repository);
+  final ProfileRepository repository;
 
   @override
   Future<Either<Failure, ProfessionalEntity>> call(
     ProfessionalEntity professional,
   ) async {
-    return await repository.updateProfessionalProfile(professional);
+    return repository.updateProfessionalProfile(professional);
   }
 }
-
-
-
-

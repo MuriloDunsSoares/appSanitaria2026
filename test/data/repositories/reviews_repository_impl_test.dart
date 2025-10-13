@@ -1,13 +1,12 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_reviews_datasource.dart';
 import 'package:app_sanitaria/data/repositories/reviews_repository_impl.dart';
 import 'package:app_sanitaria/domain/entities/review_entity.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([FirebaseReviewsDataSource])
 import 'reviews_repository_impl_test.mocks.dart';
@@ -81,7 +80,8 @@ void main() {
       verify(mockDataSource.getReviewsByProfessional(professionalId));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       const professionalId = 'prof-1';
       when(mockDataSource.getReviewsByProfessional(professionalId))
@@ -94,7 +94,8 @@ void main() {
       expect(result, const Left(StorageFailure()));
     });
 
-    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada', () async {
+    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada',
+        () async {
       // arrange
       const professionalId = 'prof-1';
       when(mockDataSource.getReviewsByProfessional(professionalId))
@@ -115,8 +116,7 @@ void main() {
   group('ReviewsRepositoryImpl - addReview', () {
     test('deve adicionar avaliação com sucesso', () async {
       // arrange
-      when(mockDataSource.addReview(any))
-          .thenAnswer((_) async => tReview1);
+      when(mockDataSource.addReview(any)).thenAnswer((_) async => tReview1);
 
       // act
       final result = await repository.addReview(tReview1);
@@ -139,7 +139,8 @@ void main() {
       expect(result, const Left(StorageFailure()));
     });
 
-    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada', () async {
+    test('deve retornar UnexpectedFailure quando ocorre exceção inesperada',
+        () async {
       // arrange
       when(mockDataSource.addReview(any))
           .thenThrow(Exception('Erro inesperado'));
@@ -160,8 +161,7 @@ void main() {
     test('deve deletar avaliação com sucesso', () async {
       // arrange
       const reviewId = '1';
-      when(mockDataSource.deleteReview(reviewId))
-          .thenAnswer((_) async => true);
+      when(mockDataSource.deleteReview(reviewId)).thenAnswer((_) async => true);
 
       // act
       final result = await repository.deleteReview(reviewId);
@@ -185,7 +185,8 @@ void main() {
       expect(result, const Left(NotFoundFailure('Avaliação')));
     });
 
-    test('deve retornar StorageFailure quando ocorre LocalStorageException', () async {
+    test('deve retornar StorageFailure quando ocorre LocalStorageException',
+        () async {
       // arrange
       const reviewId = '1';
       when(mockDataSource.deleteReview(reviewId))
@@ -203,8 +204,9 @@ void main() {
     test('deve retornar média das avaliações corretamente', () async {
       // arrange
       const professionalId = 'prof-1';
-      when(mockDataSource.getReviewsByProfessional(professionalId))
-          .thenAnswer((_) async => [tReview1, tReview2, tReview3]); // 5, 4, 5 = média 4.666...
+      when(mockDataSource.getReviewsByProfessional(professionalId)).thenAnswer(
+          (_) async =>
+              [tReview1, tReview2, tReview3]); // 5, 4, 5 = média 4.666...
 
       // act
       final result = await repository.getAverageRating(professionalId);
@@ -230,7 +232,7 @@ void main() {
       final result = await repository.getAverageRating(professionalId);
 
       // assert
-      expect(result, const Right(0.0));
+      expect(result, const Right(0));
     });
 
     test('deve retornar StorageFailure quando ocorre erro', () async {

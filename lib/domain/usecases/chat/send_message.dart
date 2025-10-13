@@ -10,15 +10,14 @@ import '../../repositories/chat_repository.dart';
 
 /// Parâmetros para enviar mensagem
 class SendMessageParams extends Equatable {
-  final String senderId;
-  final String receiverId;
-  final String content;
-
   const SendMessageParams({
     required this.senderId,
     required this.receiverId,
     required this.content,
   });
+  final String senderId;
+  final String receiverId;
+  final String content;
 
   @override
   List<Object?> get props => [senderId, receiverId, content];
@@ -26,9 +25,8 @@ class SendMessageParams extends Equatable {
 
 /// Use Case para enviar mensagem.
 class SendMessage extends UseCase<MessageEntity, SendMessageParams> {
-  final ChatRepository repository;
-
   SendMessage(this.repository);
+  final ChatRepository repository;
 
   @override
   Future<Either<Failure, MessageEntity>> call(SendMessageParams params) async {
@@ -37,14 +35,10 @@ class SendMessage extends UseCase<MessageEntity, SendMessageParams> {
       return const Left(ValidationFailure('Conteúdo vazio'));
     }
 
-    return await repository.sendMessage(
+    return repository.sendMessage(
       senderId: params.senderId,
       receiverId: params.receiverId,
       content: params.content,
     );
   }
 }
-
-
-
-

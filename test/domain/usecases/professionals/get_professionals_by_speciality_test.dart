@@ -1,5 +1,5 @@
 /// Testes para GetProfessionalsBySpeciality Use Case
-/// 
+///
 /// Objetivo: Validar busca de profissionais por especialidade
 /// Regras de negócio:
 /// - Deve retornar apenas profissionais da especialidade solicitada
@@ -43,14 +43,14 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Masculino',
-      dataCadastro: DateTime(2024, 6, 1),
+      dataCadastro: DateTime(2024, 6),
       especialidade: Speciality.tecnicosEnfermagem,
       formacao: 'Técnico em Enfermagem - SENAC 2010',
       certificados: 'COREN 123456-SP',
       experiencia: 10,
       biografia: 'Técnico especializado em cuidados domiciliares.',
       avaliacao: 4.8,
-      hourlyRate: 75.0,
+      hourlyRate: 75,
       averageRating: 4.8,
     );
 
@@ -72,14 +72,16 @@ void main() {
       experiencia: 8,
       biografia: 'Técnica com experiência em pediatria.',
       avaliacao: 4.9,
-      hourlyRate: 70.0,
+      hourlyRate: 70,
       averageRating: 4.9,
     );
 
     final tTecnicosEnfermagem = [tProfessional1, tProfessional2];
     const tSpeciality = Speciality.tecnicosEnfermagem;
 
-    test('deve retornar lista de profissionais da especialidade quando existem profissionais', () async {
+    test(
+        'deve retornar lista de profissionais da especialidade quando existem profissionais',
+        () async {
       // Arrange
       when(mockRepository.getProfessionalsBySpeciality(tSpeciality))
           .thenAnswer((_) async => Right(tTecnicosEnfermagem));
@@ -93,11 +95,11 @@ void main() {
         (failure) => fail('Deveria retornar lista de profissionais'),
         (professionals) {
           expect(professionals.length, 2);
-          
+
           // Todos devem ser da especialidade solicitada
           expect(professionals[0].especialidade, Speciality.tecnicosEnfermagem);
           expect(professionals[1].especialidade, Speciality.tecnicosEnfermagem);
-          
+
           // Verificar dados específicos
           expect(professionals[0].nome, 'João Santos');
           expect(professionals[0].experiencia, 10);
@@ -106,14 +108,17 @@ void main() {
         },
       );
 
-      verify(mockRepository.getProfessionalsBySpeciality(tSpeciality)).called(1);
+      verify(mockRepository.getProfessionalsBySpeciality(tSpeciality))
+          .called(1);
       verifyNoMoreInteractions(mockRepository);
     });
 
-    test('deve retornar lista vazia quando não existem profissionais da especialidade', () async {
+    test(
+        'deve retornar lista vazia quando não existem profissionais da especialidade',
+        () async {
       // Arrange
       const tSpecialityVazia = Speciality.enfermeiros;
-      
+
       when(mockRepository.getProfessionalsBySpeciality(tSpecialityVazia))
           .thenAnswer((_) async => const Right([]));
 
@@ -129,10 +134,13 @@ void main() {
         },
       );
 
-      verify(mockRepository.getProfessionalsBySpeciality(tSpecialityVazia)).called(1);
+      verify(mockRepository.getProfessionalsBySpeciality(tSpecialityVazia))
+          .called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao buscar profissionais', () async {
+    test(
+        'deve retornar StorageFailure quando ocorre erro ao buscar profissionais',
+        () async {
       // Arrange
       when(mockRepository.getProfessionalsBySpeciality(tSpeciality))
           .thenAnswer((_) async => const Left(StorageFailure()));
@@ -149,10 +157,12 @@ void main() {
         (professionals) => fail('Deveria retornar StorageFailure'),
       );
 
-      verify(mockRepository.getProfessionalsBySpeciality(tSpeciality)).called(1);
+      verify(mockRepository.getProfessionalsBySpeciality(tSpeciality))
+          .called(1);
     });
 
-    test('deve funcionar corretamente para cada tipo de especialidade', () async {
+    test('deve funcionar corretamente para cada tipo de especialidade',
+        () async {
       // Arrange - Teste com Cuidadores
       const tCuidadores = Speciality.cuidadores;
       final tCuidadorProfessional = ProfessionalEntity(
@@ -166,15 +176,15 @@ void main() {
         cidade: 'São Paulo',
         estado: 'SP',
         sexo: 'Feminino',
-        dataCadastro: DateTime(2024, 8, 1),
+        dataCadastro: DateTime(2024, 8),
         especialidade: Speciality.cuidadores,
         formacao: 'Curso de Cuidador de Idosos',
         certificados: 'Certificado Nacional',
         experiencia: 5,
         biografia: 'Cuidadora especializada em idosos.',
-        avaliacao: 5.0,
-        hourlyRate: 60.0,
-        averageRating: 5.0,
+        avaliacao: 5,
+        hourlyRate: 60,
+        averageRating: 5,
       );
 
       when(mockRepository.getProfessionalsBySpeciality(tCuidadores))
@@ -193,7 +203,8 @@ void main() {
         },
       );
 
-      verify(mockRepository.getProfessionalsBySpeciality(tCuidadores)).called(1);
+      verify(mockRepository.getProfessionalsBySpeciality(tCuidadores))
+          .called(1);
     });
   });
 }

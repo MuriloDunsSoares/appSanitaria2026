@@ -9,35 +9,26 @@
 /// **Interação:** Todas as telas usam BuildContext para navegação.
 library;
 
-import 'package:flutter/material.dart';
+/// [presentation/providers/auth_provider.dart]
+/// Provider de estado de autenticação (Riverpod).
+///
+/// **Interação:**
+/// - goRouterProvider observa authProviderV2 para redirects
+/// - Quando authState muda, redirect() é chamado novamente
+/// - Permite auto-login e proteção de rotas
 
-/// [flutter_riverpod/flutter_riverpod.dart]
-/// State management usado para observar authProviderV2.
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/// [domain/entities/user_entity.dart]
+/// Define UserType enum (paciente vs profissional).
+///
+/// **Interação:**
+/// - redirect() usa UserType para decidir qual home mostrar
+/// - UserType.paciente → '/home/patient'
+/// - UserType.profissional → '/home/professional'
+import 'package:app_sanitaria/domain/entities/user_entity.dart';
 
 /// [presentation/providers/auth_provider_v2.dart]
 /// Provider de autenticação migrado para Clean Architecture.
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-
-/// [go_router/go_router.dart]
-/// Package de navegação declarativa para Flutter (versão ~14.8.1).
-/// 
-/// **Por que GoRouter?**
-/// - Navegação declarativa (mais fácil de debugar)
-/// - Deep linking nativo
-/// - Redirecionamentos globais (ex: auto-login)
-/// - Type-safe navigation
-/// - Suporta web (URLs reais, não #hash)
-///
-/// **Alternativas:**
-/// - Navigator 1.0: Imperativo, difícil manter estado
-/// - Navigator 2.0: Complexo, muito boilerplate
-/// - AutoRoute: Mais features mas mais pesado
-///
-/// **Interação:** 
-/// - MaterialApp.router usa GoRouter como engine de navegação
-/// - context.go() e context.push() são métodos do GoRouter
-import 'package:go_router/go_router.dart';
 
 /// [presentation/screens/screens.dart]
 /// Barrel file que exporta todas as telas da aplicação.
@@ -56,23 +47,31 @@ import 'package:go_router/go_router.dart';
 ///
 /// **Interação:** Todas as rotas usam telas importadas daqui
 import 'package:app_sanitaria/presentation/screens/screens.dart';
+import 'package:flutter/material.dart';
 
-/// [presentation/providers/auth_provider.dart]
-/// Provider de estado de autenticação (Riverpod).
+/// [flutter_riverpod/flutter_riverpod.dart]
+/// State management usado para observar authProviderV2.
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// [go_router/go_router.dart]
+/// Package de navegação declarativa para Flutter (versão ~14.8.1).
 ///
-/// **Interação:** 
-/// - goRouterProvider observa authProviderV2 para redirects
-/// - Quando authState muda, redirect() é chamado novamente
-/// - Permite auto-login e proteção de rotas
-
-/// [domain/entities/user_entity.dart]
-/// Define UserType enum (paciente vs profissional).
+/// **Por que GoRouter?**
+/// - Navegação declarativa (mais fácil de debugar)
+/// - Deep linking nativo
+/// - Redirecionamentos globais (ex: auto-login)
+/// - Type-safe navigation
+/// - Suporta web (URLs reais, não #hash)
+///
+/// **Alternativas:**
+/// - Navigator 1.0: Imperativo, difícil manter estado
+/// - Navigator 2.0: Complexo, muito boilerplate
+/// - AutoRoute: Mais features mas mais pesado
 ///
 /// **Interação:**
-/// - redirect() usa UserType para decidir qual home mostrar
-/// - UserType.paciente → '/home/patient'
-/// - UserType.profissional → '/home/professional'
-import 'package:app_sanitaria/domain/entities/user_entity.dart';
+/// - MaterialApp.router usa GoRouter como engine de navegação
+/// - context.go() e context.push() são métodos do GoRouter
+import 'package:go_router/go_router.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PROVIDER DO ROUTER - Configuração de Navegação Global
@@ -196,7 +195,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   // ───────────────────────────────────────────────────────────────────────
   // OBSERVAÇÃO DO ESTADO DE AUTENTICAÇÃO
   // ───────────────────────────────────────────────────────────────────────
-  
+
   /// Observa o estado de autenticação para implementar auto-login.
   ///
   /// **ref.watch():**
@@ -222,7 +221,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   // ───────────────────────────────────────────────────────────────────────
   // CONSTRUÇÃO DO GOROUTER
   // ───────────────────────────────────────────────────────────────────────
-  
+
   return GoRouter(
     /// Localização inicial ao abrir o app.
     ///
@@ -240,7 +239,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     /// Se app abrir com URL específica (ex: myapp://professional/user_123),
     /// initialLocation é substituída pela URL deep linkada.
     initialLocation: '/',
-    
+
     /// Enable debug logging para desenvolvimento.
     ///
     /// **true:** Imprime logs de navegação no console
@@ -260,7 +259,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     // ═══════════════════════════════════════════════════════════════════════
     // REDIRECT GLOBAL - Implementa Auto-Login e Proteção de Rotas
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     /// Função de redirect global chamada ANTES de cada navegação.
     ///
     /// **Quando é chamada:**
@@ -316,23 +315,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       /// **isAuthenticated:** `true` se usuário está logado
       /// **Fonte:** authProviderV2.isAuthenticated
       final isAuthenticated = authState.isAuthenticated;
-      
+
       /// Obtém tipo do usuário (paciente ou profissional).
       ///
       /// **userType:** `UserType.paciente` ou `UserType.profissional`
       /// **null:** Se não autenticado
       /// **Uso:** Decidir qual home mostrar
       final userType = authState.userType;
-      
+
       /// Verifica se está tentando acessar página de login.
       ///
       /// **matchedLocation:** Path da rota (sem query params)
       /// **Exemplo:** '/login', '/professionals', '/chat/user_123'
       final isOnLoginPage = state.matchedLocation == '/';
-      
+
       /// Verifica se está tentando acessar página de seleção de tipo.
       final isOnSelectionPage = state.matchedLocation == '/selection';
-      
+
       /// Verifica se está tentando acessar qualquer página de registro.
       ///
       /// **startsWith('/register'):** Captura ambas rotas:

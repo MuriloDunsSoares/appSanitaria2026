@@ -1,10 +1,10 @@
+import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
+import 'package:app_sanitaria/presentation/widgets/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
-import 'package:app_sanitaria/domain/entities/user_entity.dart';
-import 'package:app_sanitaria/presentation/widgets/review_card.dart';
 
 /// Widget: Seção de Avaliações
 ///
@@ -15,14 +15,13 @@ import 'package:app_sanitaria/presentation/widgets/review_card.dart';
 /// - State Management: Usa Riverpod para acessar reviews
 /// - Composição: Usa ReviewCard para cada avaliação
 class ReviewsSection extends ConsumerWidget {
-  final String professionalId;
-  final String professionalName;
-
   const ReviewsSection({
     super.key,
     required this.professionalId,
     required this.professionalName,
   });
+  final String professionalId;
+  final String professionalName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +72,9 @@ class ReviewsSection extends ConsumerWidget {
           ),
         ),
         // Botão "Avaliar" (apenas para pacientes)
-        if (isPaciente && currentUserId != null && currentUserId != professionalId)
+        if (isPaciente &&
+            currentUserId != null &&
+            currentUserId != professionalId)
           ElevatedButton.icon(
             onPressed: () => _onEvaluateTap(context, ref, currentUserId),
             icon: const Icon(Icons.rate_review, size: 16),
@@ -86,10 +87,12 @@ class ReviewsSection extends ConsumerWidget {
     );
   }
 
-  void _onEvaluateTap(BuildContext context, WidgetRef ref, String currentUserId) async {
+  Future<void> _onEvaluateTap(
+      BuildContext context, WidgetRef ref, String currentUserId) async {
     // Verificar se já avaliou
     final reviewsState = ref.read(reviewsProviderV2);
-    final userReviews = reviewsState.reviewsByProfessional[professionalId] ?? [];
+    final userReviews =
+        reviewsState.reviewsByProfessional[professionalId] ?? [];
     final hasReviewed = userReviews.any((r) => r.patientId == currentUserId);
 
     if (hasReviewed && context.mounted) {
@@ -118,7 +121,7 @@ class ReviewsSection extends ConsumerWidget {
         if (reviewsState.isLoading) {
           return const Center(
             child: Padding(
-              padding: EdgeInsets.all(24.0),
+              padding: EdgeInsets.all(24),
               child: CircularProgressIndicator(),
             ),
           );
@@ -129,7 +132,7 @@ class ReviewsSection extends ConsumerWidget {
 
         if (professionalReviews.isEmpty) {
           return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 24.0),
+            padding: EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: Text(
                 'Nenhuma avaliação ainda. Seja o primeiro a avaliar!',
@@ -161,9 +164,10 @@ class ReviewsSection extends ConsumerWidget {
     );
   }
 
-  Widget _buildAverageRating(BuildContext context, double avgRating, int count) {
+  Widget _buildAverageRating(
+      BuildContext context, double avgRating, int count) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -191,5 +195,3 @@ class ReviewsSection extends ConsumerWidget {
     );
   }
 }
-
-

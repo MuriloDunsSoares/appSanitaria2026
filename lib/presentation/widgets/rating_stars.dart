@@ -6,13 +6,6 @@ import 'package:flutter/material.dart';
 /// - Display: Apenas exibição (isInteractive = false)
 /// - Interactive: Permite seleção (isInteractive = true)
 class RatingStars extends StatefulWidget {
-  final int rating; // 0 a 5
-  final bool isInteractive;
-  final Function(int rating)? onRatingChanged;
-  final double size;
-  final Color activeColor;
-  final Color inactiveColor;
-
   const RatingStars({
     super.key,
     required this.rating,
@@ -22,6 +15,12 @@ class RatingStars extends StatefulWidget {
     this.activeColor = Colors.amber,
     this.inactiveColor = Colors.grey,
   });
+  final int rating; // 0 a 5
+  final bool isInteractive;
+  final Function(int rating)? onRatingChanged;
+  final double size;
+  final Color activeColor;
+  final Color inactiveColor;
 
   @override
   State<RatingStars> createState() => _RatingStarsState();
@@ -79,11 +78,6 @@ class _RatingStarsState extends State<RatingStars> {
 
 /// Widget para exibir média de avaliações com estrelas + número
 class RatingDisplay extends StatelessWidget {
-  final double rating; // 0.0 a 5.0
-  final int totalReviews;
-  final double size;
-  final bool showCount;
-
   const RatingDisplay({
     super.key,
     required this.rating,
@@ -91,6 +85,10 @@ class RatingDisplay extends StatelessWidget {
     this.size = 20,
     this.showCount = true,
   });
+  final double rating; // 0.0 a 5.0
+  final int totalReviews;
+  final double size;
+  final bool showCount;
 
   @override
   Widget build(BuildContext context) {

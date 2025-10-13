@@ -11,16 +11,11 @@ import '../../repositories/auth_repository.dart';
 ///
 /// **Responsabilidade única:** Criar conta de paciente.
 class RegisterPatient extends UseCase<PatientEntity, PatientEntity> {
-  final AuthRepository repository;
-
   RegisterPatient(this.repository);
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, PatientEntity>> call(PatientEntity patient) async {
-    return await repository.registerPatient(patient);
+    return repository.registerPatient(patient);
   }
 }
-
-
-
-

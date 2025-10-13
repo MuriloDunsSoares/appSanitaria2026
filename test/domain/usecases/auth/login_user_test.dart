@@ -1,5 +1,5 @@
 /// Testes para LoginUser Use Case
-/// 
+///
 /// Objetivo: Validar autenticação de usuários
 /// Regras de negócio:
 /// - Email deve ser válido
@@ -36,7 +36,7 @@ void main() {
     // Dados REALISTAS para testes
     const tEmail = 'maria.silva@email.com';
     const tPassword = 'senha123';
-    
+
     final tPatient = PatientEntity(
       id: 'patient123',
       nome: 'Maria Silva',
@@ -48,11 +48,11 @@ void main() {
       cidade: 'São Paulo',
       estado: 'SP',
       sexo: 'Feminino',
-      dataCadastro: DateTime(2025, 1, 1),
+      dataCadastro: DateTime(2025),
       condicoesMedicas: 'Hipertensão controlada',
     );
 
-    final tParams = LoginParams(email: tEmail, password: tPassword);
+    const tParams = LoginParams(email: tEmail, password: tPassword);
 
     test('deve retornar UserEntity quando login é bem-sucedido', () async {
       // Arrange
@@ -76,7 +76,8 @@ void main() {
         },
       );
 
-      verify(mockRepository.login(email: tEmail, password: tPassword)).called(1);
+      verify(mockRepository.login(email: tEmail, password: tPassword))
+          .called(1);
       verify(mockRepository.setKeepLoggedIn(false)).called(1);
     });
 
@@ -156,12 +157,14 @@ void main() {
     });
     */
 
-    test('deve retornar AuthenticationFailure quando credenciais estão incorretas', () async {
+    test(
+        'deve retornar AuthenticationFailure quando credenciais estão incorretas',
+        () async {
       // Arrange
       when(mockRepository.login(email: tEmail, password: 'senhaErrada'))
           .thenAnswer((_) async => const Left(InvalidCredentialsFailure()));
 
-      final wrongParams = LoginParams(email: tEmail, password: 'senhaErrada');
+      const wrongParams = LoginParams(email: tEmail, password: 'senhaErrada');
 
       // Act
       final result = await useCase(wrongParams);
@@ -175,10 +178,12 @@ void main() {
         (user) => fail('Deveria retornar AuthenticationFailure'),
       );
 
-      verify(mockRepository.login(email: tEmail, password: 'senhaErrada')).called(1);
+      verify(mockRepository.login(email: tEmail, password: 'senhaErrada'))
+          .called(1);
     });
 
-    test('deve retornar StorageFailure quando ocorre erro ao autenticar', () async {
+    test('deve retornar StorageFailure quando ocorre erro ao autenticar',
+        () async {
       // Arrange
       when(mockRepository.login(email: tEmail, password: tPassword))
           .thenAnswer((_) async => const Left(StorageFailure()));
@@ -195,7 +200,8 @@ void main() {
         (user) => fail('Deveria retornar StorageFailure'),
       );
 
-      verify(mockRepository.login(email: tEmail, password: tPassword)).called(1);
+      verify(mockRepository.login(email: tEmail, password: tPassword))
+          .called(1);
     });
   });
 }

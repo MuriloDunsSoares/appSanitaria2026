@@ -1,9 +1,8 @@
+import 'package:app_sanitaria/core/usecases/usecase.dart';
+import 'package:app_sanitaria/domain/usecases/auth/check_authentication.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-
-import 'package:app_sanitaria/core/usecases/usecase.dart';
-import 'package:app_sanitaria/domain/usecases/auth/check_authentication.dart';
 
 import '../../../helpers/test_helper.mocks.dart';
 
@@ -43,5 +42,3 @@ void main() {
     });
   });
 }
-
-

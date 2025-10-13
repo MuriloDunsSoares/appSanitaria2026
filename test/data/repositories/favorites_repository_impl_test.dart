@@ -2,10 +2,10 @@ import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_favorites_datasource.dart';
 import 'package:app_sanitaria/data/repositories/favorites_repository_impl.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:dartz/dartz.dart';
 
 import 'favorites_repository_impl_test.mocks.dart';
 
@@ -63,7 +63,7 @@ void main() {
     test('deve retornar StorageFailure quando ocorrer erro', () async {
       // Arrange
       when(mockDataSource.getFavorites(userId))
-          .thenThrow(LocalStorageException('Erro ao carregar favoritos', null));
+          .thenThrow(const LocalStorageException('Erro ao carregar favoritos'));
 
       // Act
       final result = await repository.getFavorites(userId);
@@ -94,7 +94,7 @@ void main() {
     test('deve retornar StorageFailure quando ocorrer erro', () async {
       // Arrange
       when(mockDataSource.addFavorite(userId, professionalId))
-          .thenThrow(LocalStorageException('Erro ao adicionar favorito', null));
+          .thenThrow(const LocalStorageException('Erro ao adicionar favorito'));
 
       // Act
       final result = await repository.addFavorite(userId, professionalId);
@@ -125,7 +125,7 @@ void main() {
     test('deve retornar StorageFailure quando ocorrer erro', () async {
       // Arrange
       when(mockDataSource.removeFavorite(userId, professionalId))
-          .thenThrow(LocalStorageException('Erro ao remover favorito', null));
+          .thenThrow(const LocalStorageException('Erro ao remover favorito'));
 
       // Act
       final result = await repository.removeFavorite(userId, professionalId);
@@ -140,7 +140,8 @@ void main() {
   });
 
   group('FavoritesRepositoryImpl - isFavorite', () {
-    test('deve retornar true quando profissional estiver nos favoritos', () async {
+    test('deve retornar true quando profissional estiver nos favoritos',
+        () async {
       // Arrange
       when(mockDataSource.isFavorite(userId, professionalId))
           .thenAnswer((_) async => true);
@@ -156,7 +157,8 @@ void main() {
       );
     });
 
-    test('deve retornar false quando profissional não estiver nos favoritos', () async {
+    test('deve retornar false quando profissional não estiver nos favoritos',
+        () async {
       // Arrange
       when(mockDataSource.isFavorite(userId, professionalId))
           .thenAnswer((_) async => false);
@@ -175,7 +177,7 @@ void main() {
     test('deve retornar StorageFailure quando ocorrer erro', () async {
       // Arrange
       when(mockDataSource.isFavorite(userId, professionalId))
-          .thenThrow(LocalStorageException('Erro ao verificar favorito', null));
+          .thenThrow(const LocalStorageException('Erro ao verificar favorito'));
 
       // Act
       final result = await repository.isFavorite(userId, professionalId);
@@ -189,4 +191,3 @@ void main() {
     });
   });
 }
-

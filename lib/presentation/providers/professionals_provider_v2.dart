@@ -1,23 +1,16 @@
 /// ProfessionalsProvider migrado para Clean Architecture com Use Cases.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_sanitaria/core/di/injection_container.dart';
 import 'package:app_sanitaria/core/usecases/usecase.dart';
 import 'package:app_sanitaria/domain/entities/professional_entity.dart';
 import 'package:app_sanitaria/domain/usecases/professionals/get_all_professionals.dart';
 import 'package:app_sanitaria/domain/usecases/professionals/search_professionals.dart'
     show SearchProfessionals, SearchProfessionalsParams;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Estado da lista de profissionais (Clean Architecture)
 class ProfessionalsState {
-  final List<ProfessionalEntity> professionals;
-  final bool isLoading;
-  final String? errorMessage;
-  final String searchQuery;
-  final String? selectedCity;
-  final String? selectedSpecialty;
-
   ProfessionalsState({
     this.professionals = const [],
     this.isLoading = false,
@@ -26,6 +19,12 @@ class ProfessionalsState {
     this.selectedCity,
     this.selectedSpecialty,
   });
+  final List<ProfessionalEntity> professionals;
+  final bool isLoading;
+  final String? errorMessage;
+  final String searchQuery;
+  final String? selectedCity;
+  final String? selectedSpecialty;
 
   ProfessionalsState copyWith({
     List<ProfessionalEntity>? professionals,
@@ -77,19 +76,18 @@ class ProfessionalsState {
 
 /// ProfessionalsNotifier V2 - Clean Architecture
 class ProfessionalsNotifierV2 extends StateNotifier<ProfessionalsState> {
-  final GetAllProfessionals _getAllProfessionals;
-  final SearchProfessionals _searchProfessionals;
-
   ProfessionalsNotifierV2({
     required GetAllProfessionals getAllProfessionals,
     required SearchProfessionals searchProfessionals,
   })  : _getAllProfessionals = getAllProfessionals,
         _searchProfessionals = searchProfessionals,
         super(ProfessionalsState());
+  final GetAllProfessionals _getAllProfessionals;
+  final SearchProfessionals _searchProfessionals;
 
   /// Carrega todos os profissionais
   Future<void> loadProfessionals() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true);
 
     final result = await _getAllProfessionals.call(NoParams());
 
@@ -144,8 +142,6 @@ class ProfessionalsNotifierV2 extends StateNotifier<ProfessionalsState> {
   void clearFilters() {
     state = state.copyWith(
       searchQuery: '',
-      selectedCity: null,
-      selectedSpecialty: null,
     );
   }
 
@@ -173,4 +169,3 @@ final professionalsProviderV2 =
     searchProfessionals: getIt<SearchProfessionals>(),
   );
 });
-

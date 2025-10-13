@@ -1,16 +1,16 @@
+import 'package:app_sanitaria/core/routes/app_router.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/presentation/providers/favorites_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/professionals_provider_v2.dart';
+import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_profile/action_buttons_row.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_profile/contact_info_section.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_profile/info_section_card.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_profile/profile_header.dart';
+import 'package:app_sanitaria/presentation/widgets/professional_profile/reviews_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app_sanitaria/presentation/providers/professionals_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/favorites_provider_v2.dart';
-import 'package:app_sanitaria/presentation/providers/reviews_provider_v2.dart';
-import 'package:app_sanitaria/core/routes/app_router.dart';
-import 'package:app_sanitaria/domain/entities/professional_entity.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_profile/profile_header.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_profile/action_buttons_row.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_profile/info_section_card.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_profile/contact_info_section.dart';
-import 'package:app_sanitaria/presentation/widgets/professional_profile/reviews_section.dart';
 
 /// Tela de Perfil Detalhado do Profissional - REFATORADA
 ///
@@ -30,12 +30,11 @@ import 'package:app_sanitaria/presentation/widgets/professional_profile/reviews_
 /// - ✅ Manutenibilidade: Mudanças localizadas
 /// - ✅ Reusabilidade: Widgets podem ser usados em outras telas
 class ProfessionalProfileDetailScreen extends ConsumerStatefulWidget {
-  final String professionalId;
-
   const ProfessionalProfileDetailScreen({
     super.key,
     required this.professionalId,
   });
+  final String professionalId;
 
   @override
   ConsumerState<ProfessionalProfileDetailScreen> createState() =>
@@ -58,9 +57,7 @@ class _ProfessionalProfileDetailScreenState
     _loadProfileImage();
     // Carregar avaliações do profissional
     Future.microtask(() {
-      ref
-          .read(reviewsProviderV2.notifier)
-          .loadReviews(widget.professionalId);
+      ref.read(reviewsProviderV2.notifier).loadReviews(widget.professionalId);
     });
   }
 
@@ -98,9 +95,7 @@ class _ProfessionalProfileDetailScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            isFavorite
-                ? 'Removido dos favoritos'
-                : 'Adicionado aos favoritos',
+            isFavorite ? 'Removido dos favoritos' : 'Adicionado aos favoritos',
           ),
           duration: const Duration(seconds: 1),
         ),
@@ -108,7 +103,7 @@ class _ProfessionalProfileDetailScreenState
     }
   }
 
-  void _handleChatTap(String professionalName) async {
+  Future<void> _handleChatTap(String professionalName) async {
     try {
       if (context.mounted) {
         context.goToChat(widget.professionalId, professionalName);
@@ -154,7 +149,7 @@ class _ProfessionalProfileDetailScreenState
     final city = prof.cidade;
     final phone = prof.telefone;
     final email = prof.email;
-    final isVerified = true; // TODO: Implementar verificação
+    const isVerified = true; // TODO: Implementar verificação
 
     // Estados
     final favoritesState = ref.watch(favoritesProviderV2);
@@ -185,86 +180,86 @@ class _ProfessionalProfileDetailScreenState
           ],
         ),
         body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Header com foto e info básica
-            ProfileHeader(
-              profileImagePath: _profileImagePath,
-              name: name,
-              specialty: specialty,
-              coren: coren,
-              isVerified: isVerified,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header com foto e info básica
+              ProfileHeader(
+                profileImagePath: _profileImagePath,
+                name: name,
+                specialty: specialty,
+                coren: coren,
+                isVerified: isVerified,
+              ),
 
-            // Botões de ação
-            ActionButtonsRow(
-              onHireTap: () {
-                context.goToHiring(widget.professionalId);
-              },
-              onChatTap: () => _handleChatTap(name),
-            ),
+              // Botões de ação
+              ActionButtonsRow(
+                onHireTap: () {
+                  context.goToHiring(widget.professionalId);
+                },
+                onChatTap: () => _handleChatTap(name),
+              ),
 
-            // Descrição
-            InfoSectionCard(
-              title: 'Descrição',
-              child: Text(
-                'Sou técnica de enfermagem com experiência em acompanhamento hospitalar, oferecendo apoio humano e profissional para pacientes internados. Auxílio em cuidados básicos, monitoramento do bem-estar geral, comunicação com a equipe médica, principalmente, na presença acolhedora para dar tranquilidade aos familiares. Meu objetivo é garantir segurança, dignidade e companhia durante o internação, permitindo que a família tenha mais confiança e tranquilidade nesse momento.',
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey.shade700,
-                  height: 1.5,
+              // Descrição
+              InfoSectionCard(
+                title: 'Descrição',
+                child: Text(
+                  'Sou técnica de enfermagem com experiência em acompanhamento hospitalar, oferecendo apoio humano e profissional para pacientes internados. Auxílio em cuidados básicos, monitoramento do bem-estar geral, comunicação com a equipe médica, principalmente, na presença acolhedora para dar tranquilidade aos familiares. Meu objetivo é garantir segurança, dignidade e companhia durante o internação, permitindo que a família tenha mais confiança e tranquilidade nesse momento.',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey.shade700,
+                    height: 1.5,
+                  ),
                 ),
               ),
-            ),
 
-            // Serviços oferecidos
-            InfoSectionCard(
-              title: 'Serviços oferecidos',
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BulletPoint('Higiene pessoal'),
-                  BulletPoint('Administração de medicamentos'),
-                  BulletPoint('Mobilidade'),
-                  BulletPoint('Alimentação'),
-                ],
+              // Serviços oferecidos
+              const InfoSectionCard(
+                title: 'Serviços oferecidos',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BulletPoint('Higiene pessoal'),
+                    BulletPoint('Administração de medicamentos'),
+                    BulletPoint('Mobilidade'),
+                    BulletPoint('Alimentação'),
+                  ],
+                ),
               ),
-            ),
 
-            // Experiências
-            InfoSectionCard(
-              title: 'Experiências',
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BulletPoint('Casa de repouso'),
-                  BulletPoint('Hospital dos pescadores'),
-                  BulletPoint('Cuidador domiciliar'),
-                ],
+              // Experiências
+              const InfoSectionCard(
+                title: 'Experiências',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BulletPoint('Casa de repouso'),
+                    BulletPoint('Hospital dos pescadores'),
+                    BulletPoint('Cuidador domiciliar'),
+                  ],
+                ),
               ),
-            ),
 
-            // Avaliações (INTEGRADO COM SISTEMA REAL)
-            ReviewsSection(
-              professionalId: widget.professionalId,
-              professionalName: name,
-            ),
-
-            // Informações de contato
-            InfoSectionCard(
-              title: 'Informações de Contato',
-              child: ContactInfoSection(
-                city: city,
-                phone: phone,
-                email: email,
+              // Avaliações (INTEGRADO COM SISTEMA REAL)
+              ReviewsSection(
+                professionalId: widget.professionalId,
+                professionalName: name,
               ),
-            ),
 
-            const SizedBox(height: 80),
-          ],
+              // Informações de contato
+              InfoSectionCard(
+                title: 'Informações de Contato',
+                child: ContactInfoSection(
+                  city: city,
+                  phone: phone,
+                  email: email,
+                ),
+              ),
+
+              const SizedBox(height: 80),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

@@ -14,14 +14,17 @@ abstract class ProfileRepository {
   Future<Either<Failure, String?>> getProfileImage(String userId);
 
   /// Salva caminho da foto de perfil de um usuário.
-  Future<Either<Failure, Unit>> saveProfileImage(String userId, String imagePath);
+  Future<Either<Failure, Unit>> saveProfileImage(
+      String userId, String imagePath);
 
   /// Deleta foto de perfil de um usuário.
   Future<Either<Failure, Unit>> deleteProfileImage(String userId);
 
   /// Atualiza perfil de um paciente.
-  Future<Either<Failure, PatientEntity>> updatePatientProfile(PatientEntity patient);
+  Future<Either<Failure, PatientEntity>> updatePatientProfile(
+      PatientEntity patient);
 
   /// Atualiza perfil de um profissional.
-  Future<Either<Failure, ProfessionalEntity>> updateProfessionalProfile(ProfessionalEntity professional);
+  Future<Either<Failure, ProfessionalEntity>> updateProfessionalProfile(
+      ProfessionalEntity professional);
 }

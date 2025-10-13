@@ -58,5 +58,3 @@ abstract class FavoritesRepository {
     String professionalId,
   );
 }
-
-

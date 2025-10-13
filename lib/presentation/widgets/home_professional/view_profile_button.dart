@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 /// - Single Responsibility: Apenas renderiza o botão
 /// - Visual: Gradiente + sombra + interação
 class ViewProfileButton extends StatelessWidget {
-  final VoidCallback onTap;
-
   const ViewProfileButton({
     super.key,
     required this.onTap,
   });
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -72,5 +71,3 @@ class ViewProfileButton extends StatelessWidget {
     );
   }
 }
-
-

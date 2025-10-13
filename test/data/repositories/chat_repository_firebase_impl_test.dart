@@ -1,14 +1,13 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
 import 'package:app_sanitaria/core/error/exceptions.dart';
 import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/data/datasources/firebase_chat_datasource.dart';
 import 'package:app_sanitaria/data/repositories/chat_repository_firebase_impl.dart';
 import 'package:app_sanitaria/domain/entities/conversation_entity.dart';
 import 'package:app_sanitaria/domain/entities/message_entity.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 @GenerateMocks([FirebaseChatDataSource])
 import 'chat_repository_firebase_impl_test.mocks.dart';
@@ -42,8 +41,7 @@ void main() {
     senderName: 'João Silva',
     receiverId: 'user-2',
     text: 'Olá, tudo bem?',
-    timestamp: DateTime(2025, 10, 7, 10, 0),
-    isRead: false,
+    timestamp: DateTime(2025, 10, 7, 10),
   );
 
   final tConversation1 = ConversationEntity(
@@ -62,10 +60,7 @@ void main() {
     participants: ['user-1', 'user-3'],
     otherUserId: 'user-3',
     otherUserName: 'Pedro Oliveira',
-    otherUserSpecialty: null,
-    lastMessage: null,
-    lastMessageTime: DateTime(2025, 10, 7, 9, 0),
-    unreadCount: 0,
+    lastMessageTime: DateTime(2025, 10, 7, 9),
   );
 
   group('ChatRepositoryFirebaseImpl - getUserConversations', () {
@@ -79,7 +74,10 @@ void main() {
       final result = await repository.getUserConversations(userId);
 
       // assert
-      expect(result, Right<Failure, List<ConversationEntity>>([tConversation1, tConversation2]));
+      expect(
+          result,
+          Right<Failure, List<ConversationEntity>>(
+              [tConversation1, tConversation2]));
       verify(mockDataSource.getUserConversationsStream(userId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -107,7 +105,8 @@ void main() {
       final result = await repository.getUserConversations(userId);
 
       // assert
-      expect(result, const Left<Failure, List<ConversationEntity>>(NetworkFailure()));
+      expect(result,
+          const Left<Failure, List<ConversationEntity>>(NetworkFailure()));
     });
 
     test('deve retornar StorageFailure quando ocorrer erro genérico', () async {
@@ -120,7 +119,8 @@ void main() {
       final result = await repository.getUserConversations(userId);
 
       // assert
-      expect(result, const Left<Failure, List<ConversationEntity>>(StorageFailure()));
+      expect(result,
+          const Left<Failure, List<ConversationEntity>>(StorageFailure()));
     });
   });
 
@@ -151,9 +151,11 @@ void main() {
       final result = await repository.getConversationBetween(userId1, userId2);
 
       // assert
-      expect(result, const Left<Failure, ConversationEntity>(
-        NotFoundFailure('Conversa não encontrada'),
-      ));
+      expect(
+          result,
+          const Left<Failure, ConversationEntity>(
+            NotFoundFailure('Conversa não encontrada'),
+          ));
     });
 
     test('deve retornar StorageFailure quando ocorrer erro', () async {
@@ -176,7 +178,7 @@ void main() {
       // arrange
       const userId1 = 'user-1';
       const userId2 = 'user-2';
-      final conversationId = '$userId1-$userId2';
+      const conversationId = '$userId1-$userId2';
       when(mockDataSource.getMessagesStream(conversationId))
           .thenAnswer((_) => Stream.value([tMessage1, tMessage2]));
 
@@ -187,14 +189,15 @@ void main() {
       );
 
       // assert
-      expect(result, Right<Failure, List<MessageEntity>>([tMessage1, tMessage2]));
+      expect(
+          result, Right<Failure, List<MessageEntity>>([tMessage1, tMessage2]));
     });
 
     test('deve retornar lista vazia quando não houver mensagens', () async {
       // arrange
       const userId1 = 'user-1';
       const userId2 = 'user-2';
-      final conversationId = '$userId1-$userId2';
+      const conversationId = '$userId1-$userId2';
       when(mockDataSource.getMessagesStream(conversationId))
           .thenAnswer((_) => Stream.value([]));
 
@@ -212,7 +215,7 @@ void main() {
       // arrange
       const userId1 = 'user-1';
       const userId2 = 'user-2';
-      final conversationId = '$userId1-$userId2';
+      const conversationId = '$userId1-$userId2';
       when(mockDataSource.getMessagesStream(conversationId))
           .thenThrow(Exception('Erro'));
 
@@ -223,7 +226,8 @@ void main() {
       );
 
       // assert
-      expect(result, const Left<Failure, List<MessageEntity>>(StorageFailure()));
+      expect(
+          result, const Left<Failure, List<MessageEntity>>(StorageFailure()));
     });
   });
 
@@ -233,8 +237,8 @@ void main() {
       const senderId = 'user-1';
       const receiverId = 'user-2';
       const content = 'Olá!';
-      final conversationId = '$senderId-$receiverId';
-      
+      const conversationId = '$senderId-$receiverId';
+
       when(mockDataSource.sendMessage(
         conversationId: conversationId,
         senderId: senderId,
@@ -259,8 +263,8 @@ void main() {
       const senderId = 'user-1';
       const receiverId = 'user-2';
       const content = 'Olá!';
-      final conversationId = '$senderId-$receiverId';
-      
+      const conversationId = '$senderId-$receiverId';
+
       when(mockDataSource.sendMessage(
         conversationId: conversationId,
         senderId: senderId,
@@ -285,8 +289,8 @@ void main() {
       const senderId = 'user-1';
       const receiverId = 'user-2';
       const content = 'Olá!';
-      final conversationId = '$senderId-$receiverId';
-      
+      const conversationId = '$senderId-$receiverId';
+
       when(mockDataSource.sendMessage(
         conversationId: conversationId,
         senderId: senderId,
@@ -405,7 +409,8 @@ void main() {
       final result = await repository.getUnreadCount(userId);
 
       // assert
-      expect(result, const Right<Failure, int>(2)); // tConversation1 tem 2 unread
+      expect(
+          result, const Right<Failure, int>(2)); // tConversation1 tem 2 unread
     });
 
     test('deve retornar 0 quando não houver mensagens não lidas', () async {

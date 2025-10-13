@@ -11,23 +11,20 @@ import '../../repositories/profile_repository.dart';
 ///
 /// **Responsabilidade única:** Buscar caminho da imagem de perfil.
 class GetProfileImage extends UseCase<String?, String> {
-  final ProfileRepository repository;
-
   GetProfileImage(this.repository);
+  final ProfileRepository repository;
 
   @override
   Future<Either<Failure, String?>> call(String userId) async {
-    return await repository.getProfileImage(userId);
+    return repository.getProfileImage(userId);
   }
 }
 
 /// Parâmetros do Use Case GetProfileImage.
 class GetProfileImageParams extends Equatable {
-  final String userId;
-
   const GetProfileImageParams({required this.userId});
+  final String userId;
 
   @override
   List<Object?> get props => [userId];
 }
-
