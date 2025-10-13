@@ -93,7 +93,7 @@ void main() async {
     await setupDependencyInjection();
 
     // Aguardar mínimo 500ms para splash não piscar
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
   } catch (e, stackTrace) {
     print('❌ Erro na inicialização: $e');
     print(stackTrace);
