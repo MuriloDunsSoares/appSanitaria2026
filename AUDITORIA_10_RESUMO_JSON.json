@@ -1,0 +1,384 @@
+{
+  "metadata": {
+    "project_name": "AppSanitaria",
+    "audit_date": "2025-10-07",
+    "flutter_version": "3.35.5",
+    "dart_version": "3.9.2",
+    "auditor": "AI Senior Flutter Engineer",
+    "total_files": 56,
+    "total_lines": 14973
+  },
+  
+  "current_state": {
+    "architecture": {
+      "pattern": "Clean Architecture (Partial)",
+      "layers": {
+        "presentation": "90%",
+        "domain": "40%",
+        "data": "60%",
+        "core": "80%"
+      },
+      "missing": ["Use Cases Layer", "Repository Interfaces", "Complete DI"]
+    },
+    "metrics": {
+      "god_objects": 7,
+      "max_lines_per_file": 853,
+      "test_coverage": 2,
+      "warnings": 13,
+      "apk_size_mb": 49,
+      "cold_start_ms": 270,
+      "davey_ms": 0,
+      "skipped_frames": 416
+    },
+    "dependencies": {
+      "total": 10,
+      "main": ["flutter_riverpod", "go_router", "shared_preferences", "intl", "equatable"],
+      "dev": ["flutter_test", "flutter_lints"]
+    }
+  },
+  
+  "target_state": {
+    "architecture": {
+      "pattern": "Clean Architecture (Complete)",
+      "layers": {
+        "presentation": "100%",
+        "domain": "100%",
+        "data": "100%",
+        "core": "100%"
+      }
+    },
+    "metrics": {
+      "god_objects": 0,
+      "max_lines_per_file": 300,
+      "test_coverage": 70,
+      "warnings": 0,
+      "apk_size_mb": 45,
+      "cold_start_ms": 200,
+      "davey_ms": 0,
+      "skipped_frames": 400
+    }
+  },
+  
+  "files_to_change": [
+    {
+      "action": "create",
+      "category": "domain",
+      "files": [
+        "lib/domain/repositories/auth_repository.dart",
+        "lib/domain/repositories/professionals_repository.dart",
+        "lib/domain/repositories/contracts_repository.dart",
+        "lib/domain/repositories/chat_repository.dart",
+        "lib/domain/repositories/favorites_repository.dart",
+        "lib/domain/repositories/reviews_repository.dart",
+        "lib/domain/repositories/profile_repository.dart",
+        "lib/domain/usecases/auth/login_user.dart",
+        "lib/domain/usecases/auth/register_user.dart",
+        "lib/domain/usecases/auth/logout_user.dart",
+        "lib/domain/usecases/auth/check_auth_session.dart"
+      ],
+      "count": 30
+    },
+    {
+      "action": "create",
+      "category": "data",
+      "files": [
+        "lib/data/repositories/auth_repository_impl.dart",
+        "lib/data/repositories/professionals_repository_impl.dart",
+        "lib/data/repositories/contracts_repository_impl.dart",
+        "lib/data/repositories/chat_repository_impl.dart",
+        "lib/data/repositories/favorites_repository_impl.dart",
+        "lib/data/repositories/reviews_repository_impl.dart",
+        "lib/data/repositories/profile_repository_impl.dart",
+        "lib/data/models/user_model.dart"
+      ],
+      "count": 14
+    },
+    {
+      "action": "create",
+      "category": "core",
+      "files": [
+        "lib/core/error/failures.dart",
+        "lib/core/error/exceptions.dart",
+        "lib/core/usecases/usecase.dart",
+        "lib/injection_container.dart"
+      ],
+      "count": 4
+    },
+    {
+      "action": "create",
+      "category": "tests",
+      "files": [
+        "test/domain/usecases/auth/login_user_test.dart"
+      ],
+      "count": 100
+    },
+    {
+      "action": "edit",
+      "category": "presentation",
+      "files": [
+        "lib/presentation/providers/auth_provider.dart",
+        "lib/presentation/providers/chat_provider.dart",
+        "lib/presentation/providers/contracts_provider.dart",
+        "lib/presentation/providers/professionals_provider.dart",
+        "lib/presentation/providers/favorites_provider.dart",
+        "lib/presentation/providers/reviews_provider.dart",
+        "lib/presentation/screens/home_patient_screen.dart",
+        "lib/presentation/screens/hiring_screen.dart",
+        "lib/presentation/screens/home_professional_screen.dart"
+      ],
+      "count": 37
+    },
+    {
+      "action": "edit",
+      "category": "config",
+      "files": [
+        "pubspec.yaml",
+        "analysis_options.yaml",
+        "lib/main.dart"
+      ],
+      "count": 8
+    },
+    {
+      "action": "delete",
+      "category": "deprecated",
+      "files": [
+        "lib/data/datasources/local_storage_datasource.dart",
+        "lib/data/datasources/users_storage_datasource.dart.wip",
+        "lib/data/datasources/chat_storage_datasource.dart.wip",
+        "lib/data/datasources/profile_storage_datasource.dart.wip",
+        "test/widget_test.dart"
+      ],
+      "count": 5
+    }
+  ],
+  
+  "added_dependencies": [
+    {"name": "get_it", "version": "^8.0.3", "category": "DI"},
+    {"name": "dartz", "version": "^0.10.1", "category": "Functional"},
+    {"name": "logger", "version": "^2.5.0", "category": "Logging"},
+    {"name": "hive", "version": "^2.2.3", "category": "Cache"},
+    {"name": "hive_flutter", "version": "^1.1.0", "category": "Cache"},
+    {"name": "mockito", "version": "^5.4.4", "category": "Testing", "dev": true},
+    {"name": "build_runner", "version": "^2.4.14", "category": "Codegen", "dev": true},
+    {"name": "import_sorter", "version": "^4.6.0", "category": "Linting", "dev": true}
+  ],
+  
+  "removed_dependencies": [],
+  
+  "refactoring_steps": [
+    {
+      "wave": 1,
+      "name": "Foundation + Use Cases",
+      "duration_days": 7,
+      "risk": "high",
+      "tasks": [
+        "Setup dependencies (get_it, dartz)",
+        "Create core classes (UseCase, Failure, Exception)",
+        "Create 7 repository interfaces",
+        "Implement 15+ use cases",
+        "Write 30+ unit tests",
+        "Setup DI container"
+      ],
+      "deliverables": [
+        "15+ use cases tested",
+        "7 repository interfaces",
+        "DI setup complete",
+        "30+ tests passing"
+      ],
+      "acceptance_criteria": [
+        "All use cases have >=5 tests",
+        "Coverage >80% in domain/usecases",
+        "0 compilation errors",
+        "flutter analyze passes"
+      ]
+    },
+    {
+      "wave": 2,
+      "name": "Repositories + Migration",
+      "duration_days": 7,
+      "risk": "high",
+      "tasks": [
+        "Implement 7 repository classes",
+        "Migrate providers to use cases",
+        "Update DI container",
+        "Write repository tests",
+        "Validate all features work"
+      ],
+      "deliverables": [
+        "7 repositories implemented",
+        "7 providers migrated",
+        "50+ tests total",
+        "App fully functional"
+      ],
+      "acceptance_criteria": [
+        "All features working",
+        "Providers use only use cases",
+        "No direct datasource access",
+        "Integration tests passing"
+      ]
+    },
+    {
+      "wave": 3,
+      "name": "God Objects Refactoring",
+      "duration_days": 7,
+      "risk": "medium",
+      "tasks": [
+        "Split home_patient_screen (671 -> 3 files)",
+        "Split hiring_screen (611 -> 2 files)",
+        "Split home_professional_screen (597 -> 3 files)",
+        "Delete local_storage_datasource (use SRP datasources)",
+        "Apply SRP everywhere"
+      ],
+      "deliverables": [
+        "0 god objects (all <300 lines)",
+        "SRP applied",
+        "Tests maintained"
+      ],
+      "acceptance_criteria": [
+        "No file >300 lines",
+        "All tests still passing",
+        "No regression in features"
+      ]
+    },
+    {
+      "wave": 4,
+      "name": "Tests + Performance",
+      "duration_days": 7,
+      "risk": "low",
+      "tasks": [
+        "Achieve 70% test coverage",
+        "Optimize cold start",
+        "Reduce APK size",
+        "Setup CI/CD pipeline",
+        "Fix all warnings"
+      ],
+      "deliverables": [
+        "100+ unit tests",
+        "30+ widget tests",
+        "10+ integration tests",
+        "CI/CD working",
+        "0 warnings"
+      ],
+      "acceptance_criteria": [
+        "Coverage >70%",
+        "APK <45MB",
+        "Cold start <200ms",
+        "CI pipeline green",
+        "dart analyze clean"
+      ]
+    }
+  ],
+  
+  "risks": [
+    {
+      "id": "R1",
+      "description": "Breaking changes in providers migration",
+      "probability": "high",
+      "impact": "high",
+      "mitigation": "Incremental migration, extensive testing, rollback strategy",
+      "wave": 2
+    },
+    {
+      "id": "R2",
+      "description": "Dependencies conflict",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Test pub get immediately, use compatible versions",
+      "wave": 1
+    },
+    {
+      "id": "R3",
+      "description": "God objects split causes regressions",
+      "probability": "medium",
+      "impact": "medium",
+      "mitigation": "Preserve behavior, integration tests",
+      "wave": 3
+    },
+    {
+      "id": "R4",
+      "description": "Performance degradation",
+      "probability": "low",
+      "impact": "medium",
+      "mitigation": "Profile before/after, optimize incrementally",
+      "wave": 4
+    }
+  ],
+  
+  "lints": [
+    {
+      "rule": "always_declare_return_types",
+      "enabled": true,
+      "severity": "error"
+    },
+    {
+      "rule": "prefer_const_constructors",
+      "enabled": true,
+      "severity": "warning"
+    },
+    {
+      "rule": "use_build_context_synchronously",
+      "enabled": true,
+      "severity": "warning"
+    },
+    {
+      "rule": "avoid_print",
+      "enabled": true,
+      "severity": "warning"
+    }
+  ],
+  
+  "metrics_targets": {
+    "code_quality": {
+      "god_objects": {"current": 7, "target": 0},
+      "max_lines_per_file": {"current": 853, "target": 300},
+      "cyclomatic_complexity": {"current": 15, "target": 10},
+      "warnings": {"current": 13, "target": 0}
+    },
+    "testing": {
+      "unit_tests": {"current": 1, "target": 100},
+      "widget_tests": {"current": 0, "target": 30},
+      "integration_tests": {"current": 0, "target": 10},
+      "coverage_percent": {"current": 2, "target": 70}
+    },
+    "performance": {
+      "cold_start_ms": {"current": 270, "target": 200},
+      "apk_size_mb": {"current": 49, "target": 45},
+      "davey_ms": {"current": 0, "target": 0},
+      "skipped_frames": {"current": 416, "target": 400}
+    },
+    "architecture": {
+      "use_cases": {"current": 0, "target": 15},
+      "repositories": {"current": 1, "target": 7},
+      "layers_complete": {"current": 40, "target": 100}
+    }
+  },
+  
+  "estimated_effort": {
+    "total_hours": 160,
+    "total_weeks": 4,
+    "breakdown": {
+      "wave_1": {"hours": 40, "focus": "Foundation"},
+      "wave_2": {"hours": 40, "focus": "Migration"},
+      "wave_3": {"hours": 40, "focus": "Refactoring"},
+      "wave_4": {"hours": 40, "focus": "Quality"}
+    }
+  },
+  
+  "success_criteria": {
+    "architecture": "Clean Architecture 100% implemented",
+    "code_quality": "0 god objects, 0 warnings, SRP applied",
+    "testing": "70%+ coverage, 145+ tests",
+    "performance": "APK <45MB, cold start <200ms",
+    "documentation": "All public APIs documented",
+    "ci_cd": "Pipeline green, automated tests"
+  },
+  
+  "next_steps": [
+    "Read AUDITORIA_01_SUMARIO_EXECUTIVO.md",
+    "Review AUDITORIA_02_DIAGNOSTICO.md for detailed issues",
+    "Follow AUDITORIA_04_PLANO_REFATORACAO.md wave by wave",
+    "Execute refactor_wave_1.sh to begin",
+    "Validate with run_tests.sh after each wave"
+  ]
+}
+

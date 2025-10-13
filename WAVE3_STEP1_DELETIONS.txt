@@ -1,0 +1,47 @@
+╔═══════════════════════════════════════════════════════════════╗
+║         WAVE 3 - STEP 1: DELETAR CÓDIGO LEGADO               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+ARQUIVOS A DELETAR:
+───────────────────────────────────────────────────────────────
+1. ❌ lib/data/datasources/local_storage_datasource.dart (853L)
+   → God Object obsoleto
+
+2. ❌ lib/presentation/providers/chat_provider.dart
+   → Substituído por chat_provider_v2.dart
+
+3. ❌ lib/presentation/providers/contracts_provider.dart
+   → Substituído por contracts_provider_v2.dart
+
+4. ❌ lib/presentation/providers/favorites_provider.dart
+   → Substituído por favorites_provider_v2.dart
+
+5. ❌ lib/presentation/providers/professionals_provider.dart
+   → Substituído por professionals_provider_v2.dart
+
+6. ❌ lib/presentation/providers/ratings_cache_provider.dart
+   → Ainda usa LocalStorageDataSource, precisa migrar
+
+7. ❌ lib/presentation/providers/reviews_provider.dart
+   → Substituído por reviews_provider_v2.dart
+
+8. ❌ lib/data/datasources/chat_storage_datasource.dart.wip
+   → Arquivo .wip não utilizado
+
+9. ❌ lib/data/datasources/profile_storage_datasource.dart.wip
+   → Arquivo .wip não utilizado
+
+10. ❌ lib/data/datasources/users_storage_datasource.dart.wip
+    → Arquivo .wip não utilizado
+
+
+ARQUIVOS A ATUALIZAR:
+───────────────────────────────────────────────────────────────
+1. ✏️  lib/core/utils/seed_data.dart
+   → Migrar para usar datasources especializados
+
+2. ✏️  lib/main.dart
+   → Remover override de localStorageProvider
+
+
+TOTAL A DELETAR: 10 arquivos (~ 2.500+ linhas)

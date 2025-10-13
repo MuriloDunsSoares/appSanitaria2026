@@ -1,0 +1,1 @@
+ /Users/dcpduns/Desktop/appSanitaria/.dart_tool/flutter_build/1f4b2a80b4f05abf6b3403dbdad06119/native_assets.json: 

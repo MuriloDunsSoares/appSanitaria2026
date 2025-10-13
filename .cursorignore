@@ -1,0 +1,8 @@
+# Ignorar diretório Android para evitar Gradle Language Server
+android/
+ios/
+build/
+.dart_tool/
+.gradle/
+*.lock
+

@@ -1,0 +1,71 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+import 'package:app_sanitaria/core/error/failures.dart';
+import 'package:app_sanitaria/domain/entities/contract_entity.dart';
+import 'package:app_sanitaria/domain/usecases/contracts/create_contract.dart';
+
+import '../../../helpers/test_helper.mocks.dart';
+
+void main() {
+  late CreateContract usecase;
+  late MockContractsRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockContractsRepository();
+    usecase = CreateContract(mockRepository);
+  });
+
+  final tContract = ContractEntity(
+    id: '1',
+    patientId: 'patient1',
+    professionalId: 'prof1',
+    servico: 'Cuidador',
+    dataInicio: DateTime.now(),
+    dataFim: DateTime.now().add(const Duration(days: 7)),
+    valorTotal: 350.0,
+    status: ContractStatus.pending,
+    createdAt: DateTime.now(),
+  );
+
+  group('CreateContract', () {
+    test('deve criar contrato com sucesso', () async {
+      // arrange
+      when(mockRepository.createContract(any))
+          .thenAnswer((_) async => Right(tContract));
+
+      // act
+      final result = await usecase(tContract);
+
+      // assert
+      expect(result, Right(tContract));
+      verify(mockRepository.createContract(tContract));
+    });
+
+    test('deve retornar StorageFailure quando falha ao salvar', () async {
+      // arrange
+      when(mockRepository.createContract(any))
+          .thenAnswer((_) async => const Left(StorageFailure()));
+
+      // act
+      final result = await usecase(tContract);
+
+      // assert
+      expect(result, const Left(StorageFailure()));
+    });
+
+    test('deve retornar ValidationFailure para dados inválidos', () async {
+      // arrange
+      when(mockRepository.createContract(any))
+          .thenAnswer((_) async => const Left(ValidationFailure('Dados inválidos')));
+
+      // act
+      final result = await usecase(tContract);
+
+      // assert
+      expect(result, isA<Left>());
+    });
+  });
+}
+

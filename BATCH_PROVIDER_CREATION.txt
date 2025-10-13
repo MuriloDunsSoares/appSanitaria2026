@@ -1,0 +1,4 @@
+Criando 4 providers em paralelo:
+- Favorites V2
+- Reviews V2
+- (Contracts e Chat são mais complexos, farei sequencialmente)

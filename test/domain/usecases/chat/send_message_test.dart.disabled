@@ -1,0 +1,96 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+import 'package:app_sanitaria/core/error/failures.dart';
+import 'package:app_sanitaria/domain/entities/message_entity.dart';
+import 'package:app_sanitaria/domain/usecases/chat/send_message.dart';
+
+import '../../../helpers/test_helper.mocks.dart';
+
+void main() {
+  late SendMessage usecase;
+  late MockChatRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockChatRepository();
+    usecase = SendMessage(mockRepository);
+  });
+
+  final tMessage = MessageEntity(
+    id: '1',
+    conversationId: 'conv1',
+    senderId: 'user1',
+    receiverId: 'user2',
+    content: 'Olá!',
+    timestamp: DateTime.now(),
+    isRead: false,
+  );
+
+  group('SendMessage', () {
+    test('deve enviar mensagem com sucesso', () async {
+      // arrange
+      when(mockRepository.sendMessage(
+        conversationId: anyNamed('conversationId'),
+        message: anyNamed('message'),
+      )).thenAnswer((_) async => Right(tMessage));
+
+      // act
+      final result = await usecase(SendMessageParamsUseCase(
+        conversationId: 'conv1',
+        message: tMessage,
+      ));
+
+      // assert
+      expect(result, Right(tMessage));
+      verify(mockRepository.sendMessage(
+        conversationId: 'conv1',
+        message: tMessage,
+      ));
+    });
+
+    test('deve retornar ValidationFailure para mensagem vazia', () async {
+      // arrange
+      final emptyMessage = MessageEntity(
+        id: '1',
+        conversationId: 'conv1',
+        senderId: 'user1',
+        receiverId: 'user2',
+        content: '',
+        timestamp: DateTime.now(),
+        isRead: false,
+      );
+      when(mockRepository.sendMessage(
+        conversationId: anyNamed('conversationId'),
+        message: anyNamed('message'),
+      )).thenAnswer((_) async => const Left(ValidationFailure('Mensagem vazia')));
+
+      // act
+      final result = await usecase(SendMessageParamsUseCase(
+        conversationId: 'conv1',
+        message: emptyMessage,
+      ));
+
+      // assert
+      expect(result, isA<Left>());
+    });
+
+    test('deve retornar StorageFailure quando falha', () async {
+      // arrange
+      when(mockRepository.sendMessage(
+        conversationId: anyNamed('conversationId'),
+        message: anyNamed('message'),
+      )).thenAnswer((_) async => const Left(StorageFailure()));
+
+      // act
+      final result = await usecase(SendMessageParamsUseCase(
+        conversationId: 'conv1',
+        message: tMessage,
+      ));
+
+      // assert
+      expect(result, const Left(StorageFailure()));
+    });
+  });
+}
+

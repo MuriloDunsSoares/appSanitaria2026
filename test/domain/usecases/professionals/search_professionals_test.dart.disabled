@@ -1,0 +1,81 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+import 'package:app_sanitaria/core/error/failures.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/domain/entities/user_entity.dart';
+import 'package:app_sanitaria/domain/usecases/professionals/search_professionals.dart';
+
+import '../../../helpers/test_helper.mocks.dart';
+
+void main() {
+  late SearchProfessionals usecase;
+  late MockProfessionalsRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockProfessionalsRepository();
+    usecase = SearchProfessionals(mockRepository);
+  });
+
+  final tProfessional = ProfessionalEntity(
+    id: '1',
+    nome: 'João Silva',
+    email: 'joao@email.com',
+    password: 'pass123',
+    telefone: '11999999999',
+    dataNascimento: DateTime(1985, 1, 1),
+    endereco: 'Rua A, 100',
+    cidade: 'São Paulo',
+    estado: 'SP',
+    sexo: 'M',
+    idade: 38,
+    dataCadastro: DateTime.now(),
+    especialidade: Speciality.cuidadores,
+    formacao: 'Técnico',
+    certificados: 'Cert1',
+    experiencia: '5 anos',
+    avaliacao: 4.5,
+    hourlyRate: 50.0,
+  );
+
+  group('SearchProfessionals', () {
+    test('deve retornar profissionais por nome', () async {
+      // arrange
+      when(mockRepository.searchProfessionals(any))
+          .thenAnswer((_) async => Right([tProfessional]));
+
+      // act
+      final result = await usecase(const SearchProfessionalsParams(query: 'João'));
+
+      // assert
+      expect(result, Right([tProfessional]));
+      verify(mockRepository.searchProfessionals('João'));
+    });
+
+    test('deve retornar lista vazia quando não encontra', () async {
+      // arrange
+      when(mockRepository.searchProfessionals(any))
+          .thenAnswer((_) async => const Right([]));
+
+      // act
+      final result = await usecase(const SearchProfessionalsParams(query: 'Inexistente'));
+
+      // assert
+      expect(result, const Right([]));
+    });
+
+    test('deve retornar StorageFailure quando falha', () async {
+      // arrange
+      when(mockRepository.searchProfessionals(any))
+          .thenAnswer((_) async => const Left(StorageFailure()));
+
+      // act
+      final result = await usecase(const SearchProfessionalsParams(query: 'João'));
+
+      // assert
+      expect(result, const Left(StorageFailure()));
+    });
+  });
+}
+

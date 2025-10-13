@@ -1,0 +1,215 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// ARQUIVO: seed_data.dart
+// PROPÓSITO: Popular dados de teste para desenvolvimento (Clean Architecture)
+// ═══════════════════════════════════════════════════════════════════════════
+
+import 'package:app_sanitaria/core/utils/app_logger.dart';
+import 'package:app_sanitaria/data/datasources/users_storage_datasource.dart';
+import 'package:app_sanitaria/domain/entities/patient_entity.dart';
+import 'package:app_sanitaria/domain/entities/professional_entity.dart';
+import 'package:app_sanitaria/core/constants/app_constants.dart';
+import 'package:app_sanitaria/core/di/injection_container.dart';
+
+/// Função que popula banco de dados local com contas de teste.
+///
+/// **PROPÓSITO:**
+/// - Facilitar desenvolvimento (não precisar registrar manualmente)
+/// - Demonstração para stakeholders
+/// - Testes de UI e fluxos
+///
+/// **CONTAS CRIADAS:**
+/// - **4 Profissionais** (1 de cada especialidade):
+///   1. maria.santos@email.com / maria123
+///   2. jose.oliveira@email.com / jose123
+///   3. ana.rodrigues@email.com / ana123
+///   4. carlos.lima@email.com / carlos123
+/// - **4 Pacientes**:
+///   1. joao.silva@email.com / joao123
+///   2. fernanda.costa@email.com / fernanda123
+///   3. roberto.alves@email.com / roberto123
+///   4. patricia.souza@email.com / patricia123
+///
+/// **COMO USAR:**
+/// ```dart
+/// import 'package:app_sanitaria/core/di/injection_container.dart';
+/// await seedTestAccounts();
+/// ```
+Future<void> seedTestAccounts() async {
+  AppLogger.info('🌱 Iniciando seed de contas de teste...');
+
+  // Obter datasources do DI container
+  final usersDataSource = getIt<UsersStorageDataSource>();
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // PROFISSIONAIS (4 contas)
+  // ═══════════════════════════════════════════════════════════════════════
+
+  final professionals = <ProfessionalEntity>[
+    ProfessionalEntity(
+      id: 'user_1',
+      nome: 'Maria Helena Santos',
+      email: 'maria.santos@email.com',
+      password: 'maria123',
+      telefone: '(11) 98765-4321',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      foto: null,
+      especialidade: Speciality.cuidadoresIdosos,
+      experienciaAnos: 5,
+      valorHora: 45.0,
+      descricao: 'Cuidadora experiente com idosos',
+      certificacoes: ['Curso de Primeiros Socorros'],
+      disponibilidade: {'seg': true, 'ter': true, 'qua': true},
+      avaliacaoMedia: 4.8,
+      totalAvaliacoes: 12,
+    ),
+    ProfessionalEntity(
+      id: 'user_2',
+      nome: 'José Carlos Oliveira',
+      email: 'jose.oliveira@email.com',
+      password: 'jose123',
+      telefone: '(21) 97654-3210',
+      cidade: 'Rio de Janeiro',
+      estado: 'RJ',
+      foto: null,
+      especialidade: Speciality.tecnicosEnfermagem,
+      experienciaAnos: 8,
+      valorHora: 60.0,
+      descricao: 'Técnico de enfermagem qualificado',
+      certificacoes: ['COREN-RJ 123456'],
+      disponibilidade: {'seg': true, 'ter': true, 'qua': true, 'qui': true},
+      avaliacaoMedia: 4.9,
+      totalAvaliacoes: 25,
+    ),
+    ProfessionalEntity(
+      id: 'user_3',
+      nome: 'Ana Paula Rodrigues',
+      email: 'ana.rodrigues@email.com',
+      password: 'ana123',
+      telefone: '(31) 96543-2109',
+      cidade: 'Belo Horizonte',
+      estado: 'MG',
+      foto: null,
+      especialidade: Speciality.acompanhantesHospitalares,
+      experienciaAnos: 3,
+      valorHora: 35.0,
+      descricao: 'Acompanhante hospitalar dedicada',
+      certificacoes: ['Curso de Acompanhante Hospitalar'],
+      disponibilidade: {'seg': true, 'ter': true, 'qua': true, 'qui': true, 'sex': true},
+      avaliacaoMedia: 4.7,
+      totalAvaliacoes: 8,
+    ),
+    ProfessionalEntity(
+      id: 'user_4',
+      nome: 'Carlos Alberto Lima',
+      email: 'carlos.lima@email.com',
+      password: 'carlos123',
+      telefone: '(41) 95432-1098',
+      cidade: 'Curitiba',
+      estado: 'PR',
+      foto: null,
+      especialidade: Speciality.servicosSaudeDomiciliar,
+      experienciaAnos: 10,
+      valorHora: 70.0,
+      descricao: 'Profissional de saúde domiciliar',
+      certificacoes: ['Curso de Cuidados Domiciliares'],
+      disponibilidade: {'seg': true, 'ter': true, 'qua': true, 'qui': true, 'sex': true, 'sab': true},
+      avaliacaoMedia: 5.0,
+      totalAvaliacoes: 30,
+    ),
+  ];
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // PACIENTES (4 contas)
+  // ═══════════════════════════════════════════════════════════════════════
+
+  final patients = <PatientEntity>[
+    PatientEntity(
+      id: 'user_5',
+      nome: 'João Pedro Silva',
+      email: 'joao.silva@email.com',
+      password: 'joao123',
+      telefone: '(11) 91234-5678',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      foto: null,
+      dataNascimento: DateTime(1985, 3, 15),
+      cpf: '123.456.789-00',
+      endereco: 'Rua das Flores, 123',
+      favoritos: [],
+    ),
+    PatientEntity(
+      id: 'user_6',
+      nome: 'Fernanda Costa',
+      email: 'fernanda.costa@email.com',
+      password: 'fernanda123',
+      telefone: '(21) 92345-6789',
+      cidade: 'Rio de Janeiro',
+      estado: 'RJ',
+      foto: null,
+      dataNascimento: DateTime(1990, 7, 22),
+      cpf: '234.567.890-11',
+      endereco: 'Av. Atlântica, 456',
+      favoritos: [],
+    ),
+    PatientEntity(
+      id: 'user_7',
+      nome: 'Roberto Alves',
+      email: 'roberto.alves@email.com',
+      password: 'roberto123',
+      telefone: '(31) 93456-7890',
+      cidade: 'Belo Horizonte',
+      estado: 'MG',
+      foto: null,
+      dataNascimento: DateTime(1978, 11, 10),
+      cpf: '345.678.901-22',
+      endereco: 'Rua da Bahia, 789',
+      favoritos: [],
+    ),
+    PatientEntity(
+      id: 'user_8',
+      nome: 'Patrícia Souza',
+      email: 'patricia.souza@email.com',
+      password: 'patricia123',
+      telefone: '(41) 94567-8901',
+      cidade: 'Curitiba',
+      estado: 'PR',
+      foto: null,
+      dataNascimento: DateTime(1995, 5, 30),
+      cpf: '456.789.012-33',
+      endereco: 'Rua XV de Novembro, 321',
+      favoritos: [],
+    ),
+  ];
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // SALVAR NO STORAGE
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // Salvar profissionais
+  for (final professional in professionals) {
+    await usersDataSource.saveProfessional(professional);
+  }
+
+  // Salvar pacientes
+  for (final patient in patients) {
+    await usersDataSource.savePatient(patient);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // LOG DE SUCESSO
+  // ═══════════════════════════════════════════════════════════════════════
+
+  AppLogger.info('✅ ${professionals.length + patients.length} contas criadas com sucesso!');
+  AppLogger.debug('');
+  AppLogger.debug('═══ PROFISSIONAIS ═══');
+  for (var prof in professionals) {
+    AppLogger.debug('📧 ${prof.email} / 🔑 ${prof.password}');
+  }
+  AppLogger.debug('');
+  AppLogger.debug('═══ PACIENTES ═══');
+  for (var pat in patients) {
+    AppLogger.debug('📧 ${pat.email} / 🔑 ${pat.password}');
+  }
+  AppLogger.debug('');
+}

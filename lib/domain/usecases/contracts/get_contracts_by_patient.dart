@@ -1,0 +1,38 @@
+/// Use Case: Obter contratos de um paciente.
+library;
+
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import '../../../core/error/failures.dart';
+import '../../../core/usecases/usecase.dart';
+import '../../entities/contract_entity.dart';
+import '../../repositories/contracts_repository.dart';
+
+/// Use Case para obter contratos do paciente.
+class GetContractsByPatient
+    extends UseCase<List<ContractEntity>, String> {
+  final ContractsRepository repository;
+
+  GetContractsByPatient(this.repository);
+
+  @override
+  Future<Either<Failure, List<ContractEntity>>> call(
+    String patientId,
+  ) async {
+    return await repository.getContractsByPatient(patientId);
+  }
+}
+
+/// Parâmetros para buscar por paciente ID.
+class PatientIdParams extends Equatable {
+  final String patientId;
+
+  const PatientIdParams(this.patientId);
+
+  @override
+  List<Object?> get props => [patientId];
+}
+
+
+
+
