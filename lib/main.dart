@@ -39,6 +39,10 @@ import 'core/routes/app_router.dart';
 /// Serviço de inicialização e gerenciamento do Firebase.
 import 'core/services/firebase_service.dart';
 
+/// [presentation/screens/splash_screen.dart]
+/// Tela de splash otimizada para inicialização assíncrona.
+import 'presentation/screens/splash_screen.dart';
+
 // ═══════════════════════════════════════════════════════════════════════════
 // ENTRY POINT - Função Principal da Aplicação
 // ═══════════════════════════════════════════════════════════════════════════
@@ -71,56 +75,34 @@ void main() async {
   // ───────────────────────────────────────────────────────────────────────
 
   /// Garante que o binding do Flutter esteja inicializado antes de operações async.
-  ///
-  /// **Por que é necessário?**
-  /// - runApp() espera que o binding já esteja pronto
-  /// - Operações async (await) antes de runApp() requerem binding ativo
-  /// - Firebase.initialize() precisa do binding ativo
-  ///
-  /// **O que faz internamente:**
-  /// - Inicializa WidgetsBinding (gerenciador de widgets)
-  /// - Configura rendering engine
-  /// - Prepara event loop para gestures e inputs
-  ///
-  /// **Performance:** ~5-10ms de overhead (executado apenas 1x)
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ───────────────────────────────────────────────────────────────────────
-  // INICIALIZAÇÃO DO FIREBASE
-  // ───────────────────────────────────────────────────────────────────────
-
-  /// Inicializa Firebase Core e Cloud Messaging.
-  ///
-  /// **O que faz:**
-  /// - Conecta o app ao projeto Firebase (app-sanitaria)
-  /// - Configura Firebase Auth (autenticação)
-  /// - Inicializa Cloud Firestore (banco de dados NoSQL em tempo real)
-  /// - Configura Firebase Storage (armazenamento de arquivos)
-  /// - Inicializa Firebase Cloud Messaging (notificações push)
-  ///
-  /// **Importante:** DEVE ser executado antes de qualquer operação Firebase
-  ///
-  /// **Performance:** ~100-300ms (executado apenas 1x)
-  await FirebaseService().initialize();
+  // ✅ OTIMIZAÇÃO: Mostrar splash screen IMEDIATAMENTE
+  // Isso evita tela branca durante inicialização
+  runApp(const SplashScreen());
 
   // ───────────────────────────────────────────────────────────────────────
-  // INICIALIZAÇÃO DO DEPENDENCY INJECTION (GetIt)
+  // INICIALIZAÇÃO EM BACKGROUND (não bloqueia UI)
   // ───────────────────────────────────────────────────────────────────────
 
-  /// Configura Dependency Injection usando GetIt.
-  ///
-  /// **O que faz:**
-  /// - Registra todos os Use Cases (domain layer)
-  /// - Registra todos os Repositories (data layer)
-  /// - Registra todos os DataSources Firebase (data layer)
-  /// - Registra serviços auxiliares (Logger, Connectivity, etc)
-  ///
-  /// **Performance:** ~50-100ms (executado apenas 1x)
-  /// **Importância:** Essencial para Clean Architecture
-  await setupDependencyInjection();
+  try {
+    // Inicializar Firebase (~100-300ms)
+    await FirebaseService().initialize();
+
+    // Configurar Dependency Injection (~50-100ms)
+    await setupDependencyInjection();
+
+    // Aguardar mínimo 500ms para splash não piscar
+    await Future.delayed(const Duration(milliseconds: 500));
+  } catch (e, stackTrace) {
+    print('❌ Erro na inicialização: $e');
+    print(stackTrace);
+    // TODO: Mostrar tela de erro apropriada
+    rethrow;
+  }
 
   // ───────────────────────────────────────────────────────────────────────
-  // LINHAS 21-31: Inicialização da Árvore de Widgets
+  // SUBSTITUIR SPLASH PELO APP REAL
   // ───────────────────────────────────────────────────────────────────────
 
   /// Inicia a aplicação Flutter com ProviderScope como raiz.

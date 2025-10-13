@@ -40,13 +40,27 @@ class FirebaseService {
       _initialized = true;
       AppLogger.info('✅ Firebase inicializado com sucesso');
 
-      // Configurar FCM
-      await _setupFCM();
+      // ✅ OTIMIZAÇÃO: Configurar FCM em background para não bloquear UI
+      // Aguarda o próximo frame antes de inicializar FCM
+      _setupFCMLater();
     } catch (e, stackTrace) {
       AppLogger.error('Erro ao inicializar Firebase',
           error: e, stackTrace: stackTrace);
       rethrow;
     }
+  }
+
+  /// Configura FCM após o primeiro frame para não bloquear a UI
+  void _setupFCMLater() {
+    // Executa após o frame atual terminar
+    Future.microtask(() async {
+      try {
+        await _setupFCM();
+      } catch (e, stackTrace) {
+        AppLogger.error('Erro ao configurar FCM em background',
+            error: e, stackTrace: stackTrace);
+      }
+    });
   }
 
   /// Configura o Firebase Cloud Messaging (FCM)

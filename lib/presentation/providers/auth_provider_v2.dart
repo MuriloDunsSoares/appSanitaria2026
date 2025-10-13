@@ -82,8 +82,15 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
         _registerPatient = registerPatient,
         _registerProfessional = registerProfessional,
         super(AuthState.initial()) {
+    // ✅ OTIMIZAÇÃO: NÃO verifica sessão aqui para evitar bloquear UI
+    // A verificação será feita após o primeiro frame (lazy initialization)
+  }
+
+  /// Inicializa verificação de sessão (deve ser chamado após primeiro frame)
+  void initializeSession() {
     _checkSession();
   }
+
   final CheckAuthentication _checkAuthentication;
   final GetCurrentUser _getCurrentUser;
   final LoginUser _loginUser;
@@ -232,7 +239,7 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
 
 /// Provider para AuthNotifierV2 (Clean Architecture)
 final authProviderV2 = StateNotifierProvider<AuthNotifierV2, AuthState>((ref) {
-  return AuthNotifierV2(
+  final notifier = AuthNotifierV2(
     checkAuthentication: getIt<CheckAuthentication>(),
     getCurrentUser: getIt<GetCurrentUser>(),
     loginUser: getIt<LoginUser>(),
@@ -240,6 +247,13 @@ final authProviderV2 = StateNotifierProvider<AuthNotifierV2, AuthState>((ref) {
     registerPatient: getIt<RegisterPatient>(),
     registerProfessional: getIt<RegisterProfessional>(),
   );
+
+  // ✅ OTIMIZAÇÃO: Verifica sessão APÓS o primeiro frame para não bloquear UI
+  Future.microtask(() {
+    notifier.initializeSession();
+  });
+
+  return notifier;
 });
 
 /// Providers auxiliares
