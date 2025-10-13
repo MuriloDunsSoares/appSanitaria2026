@@ -17,7 +17,7 @@ class ConversationsFeed extends StatelessWidget {
     required this.onSeeAllTap,
   });
   final List<dynamic> conversations;
-  final Function(String userId, String userName) onConversationTap;
+  final void Function(String userId, String userName) onConversationTap;
   final VoidCallback onSeeAllTap;
 
   @override

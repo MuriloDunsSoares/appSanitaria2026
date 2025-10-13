@@ -103,7 +103,6 @@ class ChatRepositoryFirebaseImpl implements ChatRepository {
     }
   }
 
-  @override
   Future<Either<Failure, ConversationEntity>> startConversation({
     required String userId1,
     required String userId2,

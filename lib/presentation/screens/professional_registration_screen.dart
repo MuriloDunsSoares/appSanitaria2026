@@ -67,30 +67,6 @@ class _ProfessionalRegistrationScreenState
     super.dispose();
   }
 
-  /// Calcula idade com base na data de nascimento
-  int _calculateAge(String birthDate) {
-    try {
-      final parts = birthDate.split('-');
-      if (parts.length != 3) return 0;
-
-      final birth = DateTime(
-        int.parse(parts[0]),
-        int.parse(parts[1]),
-        int.parse(parts[2]),
-      );
-
-      final now = DateTime.now();
-      int age = now.year - birth.year;
-      if (now.month < birth.month ||
-          (now.month == birth.month && now.day < birth.day)) {
-        age--;
-      }
-      return age;
-    } catch (e) {
-      return 0;
-    }
-  }
-
   /// Realiza cadastro
   Future<void> _handleRegistration() async {
     if (!_formKey.currentState!.validate()) {

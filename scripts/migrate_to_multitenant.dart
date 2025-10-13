@@ -306,7 +306,7 @@ Future<void> createUserProfiles(FirebaseFirestore firestore) async {
       await firestore.collection('userProfiles').doc(doc.id).set({
         'email': data['email'],
         'organizationId': DEFAULT_ORG_ID,
-        'role': _getUserRole(data['tipo']),
+        'role': _getUserRole(data['tipo'] as String?),
         'status': 'active',
         'createdAt': FieldValue.serverTimestamp(),
       });

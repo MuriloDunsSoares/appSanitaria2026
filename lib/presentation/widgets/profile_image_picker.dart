@@ -14,7 +14,7 @@ class ProfileImagePicker extends StatefulWidget {
     this.size = 120,
   });
   final String? initialImagePath;
-  final Function(String imagePath) onImageSelected;
+  final void Function(String imagePath) onImageSelected;
   final double size;
 
   @override
@@ -33,7 +33,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Future<void> _showImageSourceDialog() async {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),

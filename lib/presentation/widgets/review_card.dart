@@ -79,7 +79,7 @@ class ReviewCard extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete_outline, color: Colors.red),
                     onPressed: () {
-                      showDialog(
+                      showDialog<void>(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text('Deletar Avaliação'),

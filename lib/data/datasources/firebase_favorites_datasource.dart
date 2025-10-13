@@ -30,7 +30,7 @@ class FirebaseFavoritesDataSource {
 
       final data = doc.data()!;
       final favorites = List<String>.from(
-        (data[FirestoreCollections.professionalIds] ?? []) as List,
+        (data[FirestoreCollections.professionalIds] ?? <dynamic>[]) as List,
       );
 
       AppLogger.info('✅ ${favorites.length} favoritos encontrados');

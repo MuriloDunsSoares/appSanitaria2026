@@ -35,7 +35,7 @@ void main() {
       final result = await repository.getProfileImage(tUserId);
 
       // assert
-      expect(result, const Right(tImagePath));
+      expect(result, const Right<Failure, dynamic>(tImagePath));
       verify(mockDataSource.getProfileImage(tUserId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -49,7 +49,7 @@ void main() {
       final result = await repository.getProfileImage(tUserId);
 
       // assert
-      expect(result, const Right(null));
+      expect(result, const Right<Failure, dynamic>(null));
       verify(mockDataSource.getProfileImage(tUserId));
     });
 
@@ -63,7 +63,7 @@ void main() {
       final result = await repository.getProfileImage(tUserId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
       verify(mockDataSource.getProfileImage(tUserId));
     });
 
@@ -77,7 +77,7 @@ void main() {
       final result = await repository.getProfileImage(tUserId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -91,7 +91,7 @@ void main() {
       final result = await repository.saveProfileImage(tUserId, tImagePath);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.saveProfileImage(tUserId, tImagePath));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -105,7 +105,7 @@ void main() {
       final result = await repository.saveProfileImage(tUserId, tNewImagePath);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.saveProfileImage(tUserId, tNewImagePath));
     });
 
@@ -119,7 +119,7 @@ void main() {
       final result = await repository.saveProfileImage(tUserId, tImagePath);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve retornar StorageFailure quando ocorre exceção genérica',
@@ -132,7 +132,7 @@ void main() {
       final result = await repository.saveProfileImage(tUserId, tImagePath);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve validar caminho de imagem vazio', () async {
@@ -145,7 +145,7 @@ void main() {
       final result = await repository.saveProfileImage(tUserId, emptyPath);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.saveProfileImage(tUserId, emptyPath));
     });
   });
@@ -160,7 +160,7 @@ void main() {
       final result = await repository.deleteProfileImage(tUserId);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.deleteProfileImage(tUserId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -175,7 +175,7 @@ void main() {
       final result = await repository.deleteProfileImage(tUserId);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
     });
 
     test('deve retornar StorageFailure quando ocorre LocalStorageException',
@@ -188,7 +188,7 @@ void main() {
       final result = await repository.deleteProfileImage(tUserId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve retornar StorageFailure quando ocorre exceção genérica',
@@ -201,7 +201,7 @@ void main() {
       final result = await repository.deleteProfileImage(tUserId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve lidar com usuário inexistente graciosamente', () async {
@@ -214,7 +214,7 @@ void main() {
       final result = await repository.deleteProfileImage(nonExistentUserId);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.deleteProfileImage(nonExistentUserId));
     });
   });

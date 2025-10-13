@@ -73,7 +73,7 @@ class _HomeProfessionalScreenState extends ConsumerState<HomeProfessionalScreen>
   }
 
   void _showHelpDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Ajuda e Suporte'),

@@ -61,7 +61,7 @@ void main() {
         final result = await repository.createContract(tContract1);
 
         // assert
-        expect(result, Right(tContract1));
+        expect(result, Right<Failure, dynamic>(tContract1));
         verify(mockDataSource.createContract(tContract1));
       });
 
@@ -75,7 +75,7 @@ void main() {
         final result = await repository.createContract(tContract1);
 
         // assert
-        expect(result, const Left(StorageFailure('Erro ao criar contrato')));
+        expect(result, const Left<Failure, dynamic>(StorageFailure('Erro ao criar contrato')));
       });
     });
 
@@ -90,7 +90,7 @@ void main() {
         final result = await repository.getContractsByPatient(patientId);
 
         // assert
-        expect(result, Right([tContract1, tContract2]));
+        expect(result, Right<Failure, dynamic>([tContract1, tContract2]));
         verify(mockDataSource.getContractsByPatient(patientId));
       });
 
@@ -104,7 +104,7 @@ void main() {
         final result = await repository.getContractsByPatient(patientId);
 
         // assert
-        expect(result, const Right([]));
+        expect(result, const Right<Failure, dynamic>(<dynamic>[]));
       });
 
       test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -117,7 +117,7 @@ void main() {
         final result = await repository.getContractsByPatient(patientId);
 
         // assert
-        expect(result, const Left(StorageFailure('Erro')));
+        expect(result, const Left<Failure, dynamic>(StorageFailure('Erro')));
       });
     });
 
@@ -133,7 +133,7 @@ void main() {
             await repository.getContractsByProfessional(professionalId);
 
         // assert
-        expect(result, Right([tContract1]));
+        expect(result, Right<Failure, dynamic>([tContract1]));
         verify(mockDataSource.getContractsByProfessional(professionalId));
       });
 
@@ -148,7 +148,7 @@ void main() {
             await repository.getContractsByProfessional(professionalId);
 
         // assert
-        expect(result, const Right([]));
+        expect(result, const Right<Failure, dynamic>(<dynamic>[]));
       });
 
       test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -162,7 +162,7 @@ void main() {
             await repository.getContractsByProfessional(professionalId);
 
         // assert
-        expect(result, const Left(StorageFailure('Erro')));
+        expect(result, const Left<Failure, dynamic>(StorageFailure('Erro')));
       });
     });
 

@@ -32,7 +32,7 @@ abstract class BaseFirestoreDataSource {
   }
 
   /// Converte FirebaseException para StorageException
-  Never handleFirestoreException(error, StackTrace stackTrace) {
+  Never handleFirestoreException(Object error, StackTrace stackTrace) {
     if (error is FirebaseException) {
       throw StorageException(
         error.message ?? 'Firebase error: ${error.code}',
@@ -61,7 +61,7 @@ abstract class BaseFirestoreDataSource {
   }
 
   /// Helper: Converte Timestamp para DateTime (null-safe)
-  DateTime? timestampToDateTime(timestamp) {
+  DateTime? timestampToDateTime(Object? timestamp) {
     if (timestamp == null) return null;
     if (timestamp is Timestamp) {
       return timestamp.toDate();

@@ -117,7 +117,7 @@ void main() {
       // ASSERT: Logout deve ser bem-sucedido
       logoutResult.fold(
         (failure) => fail('Logout falhou: ${failure.message}'),
-        (_) => {}, // Sucesso
+        (_) => <String, dynamic>{}, // Sucesso
       );
 
       // ════════════════════════════════════════════════════════════
@@ -127,7 +127,7 @@ void main() {
 
       // ASSERT: NÃO deve haver usuário logado
       getCurrentUserResult2.fold(
-        (failure) => {}, // Esperado: falha
+        (failure) => <String, dynamic>{}, // Esperado: falha
         (user) => fail('Não deveria haver usuário logado após logout'),
       );
 
@@ -209,7 +209,7 @@ void main() {
       // VERIFICAR: Sessão deve continuar vazia
       final getCurrentUserResult = await getCurrentUserUseCase(NoParams());
       getCurrentUserResult.fold(
-        (failure) => {}, // Esperado: sem usuário logado
+        (failure) => <String, dynamic>{}, // Esperado: sem usuário logado
         (user) => fail('Não deveria haver usuário logado após login falhado'),
       );
     });

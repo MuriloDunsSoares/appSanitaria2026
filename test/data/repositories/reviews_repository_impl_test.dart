@@ -61,7 +61,7 @@ void main() {
       final result = await repository.getReviewsByProfessional(professionalId);
 
       // assert
-      expect(result, Right([tReview1, tReview2, tReview3]));
+      expect(result, Right<Failure, dynamic>([tReview1, tReview2, tReview3]));
       verify(mockDataSource.getReviewsByProfessional(professionalId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -76,7 +76,7 @@ void main() {
       final result = await repository.getReviewsByProfessional(professionalId);
 
       // assert
-      expect(result, const Right([]));
+      expect(result, const Right<Failure, dynamic>(<dynamic>[]));
       verify(mockDataSource.getReviewsByProfessional(professionalId));
     });
 
@@ -91,7 +91,7 @@ void main() {
       final result = await repository.getReviewsByProfessional(professionalId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve retornar UnexpectedFailure quando ocorre exceção inesperada',
@@ -122,7 +122,7 @@ void main() {
       final result = await repository.addReview(tReview1);
 
       // assert
-      expect(result, Right(tReview1));
+      expect(result, Right<Failure, dynamic>(tReview1));
       verify(mockDataSource.addReview(tReview1));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -136,7 +136,7 @@ void main() {
       final result = await repository.addReview(tReview1);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
 
     test('deve retornar UnexpectedFailure quando ocorre exceção inesperada',
@@ -167,7 +167,7 @@ void main() {
       final result = await repository.deleteReview(reviewId);
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockDataSource.deleteReview(reviewId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -182,7 +182,7 @@ void main() {
       final result = await repository.deleteReview(reviewId);
 
       // assert
-      expect(result, const Left(NotFoundFailure('Avaliação')));
+      expect(result, const Left<Failure, dynamic>(NotFoundFailure('Avaliação')));
     });
 
     test('deve retornar StorageFailure quando ocorre LocalStorageException',
@@ -196,7 +196,7 @@ void main() {
       final result = await repository.deleteReview(reviewId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -232,7 +232,7 @@ void main() {
       final result = await repository.getAverageRating(professionalId);
 
       // assert
-      expect(result, const Right(0));
+      expect(result, const Right<Failure, dynamic>(0));
     });
 
     test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -245,7 +245,7 @@ void main() {
       final result = await repository.getAverageRating(professionalId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -260,7 +260,7 @@ void main() {
       final result = await repository.getReviewsCount(professionalId);
 
       // assert
-      expect(result, const Right(3));
+      expect(result, const Right<Failure, dynamic>(3));
       verify(mockDataSource.getReviewsByProfessional(professionalId));
     });
 
@@ -274,7 +274,7 @@ void main() {
       final result = await repository.getReviewsCount(professionalId);
 
       // assert
-      expect(result, const Right(0));
+      expect(result, const Right<Failure, dynamic>(0));
     });
 
     test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -287,7 +287,7 @@ void main() {
       final result = await repository.getReviewsCount(professionalId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 }

@@ -1,3 +1,4 @@
+import 'package:app_sanitaria/core/error/failures.dart';
 import 'package:app_sanitaria/core/usecases/usecase.dart';
 import 'package:app_sanitaria/domain/usecases/auth/check_authentication.dart';
 import 'package:dartz/dartz.dart';
@@ -19,26 +20,26 @@ void main() {
     test('deve retornar true quando usuário está autenticado', () async {
       // arrange
       when(mockAuthRepository.isAuthenticated())
-          .thenAnswer((_) async => const Right(true));
+          .thenAnswer((_) async => const Right<Failure, bool>(true));
 
       // act
       final result = await usecase(NoParams());
 
       // assert
-      expect(result, const Right(true));
+      expect(result, const Right<Failure, bool>(true));
       verify(mockAuthRepository.isAuthenticated());
     });
 
     test('deve retornar false quando usuário não está autenticado', () async {
       // arrange
       when(mockAuthRepository.isAuthenticated())
-          .thenAnswer((_) async => const Right(false));
+          .thenAnswer((_) async => const Right<Failure, bool>(false));
 
       // act
       final result = await usecase(NoParams());
 
       // assert
-      expect(result, const Right(false));
+      expect(result, const Right<Failure, bool>(false));
     });
   });
 }

@@ -25,7 +25,7 @@ class ConversationEntity {
     Map<String, dynamic> map,
     String currentUserId,
   ) {
-    final participants = List<String>.from((map['participants'] ?? []) as List);
+    final participants = List<String>.from((map['participants'] ?? <dynamic>[]) as List);
     final otherUserId = participants.firstWhere(
       (id) => id != currentUserId,
       orElse: () => '',

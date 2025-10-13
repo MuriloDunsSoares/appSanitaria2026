@@ -221,7 +221,9 @@ class AuthNotifierV2 extends StateNotifier<AuthState> {
       StorageFailure() =>
         'Erro ao conectar com o servidor. Verifique sua internet e tente novamente.',
       NetworkFailure(:final message) =>
-        message ?? 'Sem conexão com a internet. Conecte-se e tente novamente.',
+        message.isEmpty
+            ? 'Sem conexão com a internet. Conecte-se e tente novamente.'
+            : message,
       _ =>
         'Erro inesperado. Tente novamente ou entre em contato com o suporte.',
     };

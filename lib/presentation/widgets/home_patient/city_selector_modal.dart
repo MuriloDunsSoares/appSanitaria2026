@@ -13,7 +13,7 @@ class CitySelectorModal extends StatefulWidget {
     super.key,
     required this.onCitySelected,
   });
-  final Function(String city) onCitySelected;
+  final void Function(String city) onCitySelected;
 
   @override
   State<CitySelectorModal> createState() => _CitySelectorModalState();

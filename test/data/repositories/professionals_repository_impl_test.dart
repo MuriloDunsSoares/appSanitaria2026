@@ -75,7 +75,7 @@ void main() {
       final result = await repository.getAllProfessionals();
 
       // assert
-      expect(result, Right([tProfessional1, tProfessional2]));
+      expect(result, Right<Failure, dynamic>([tProfessional1, tProfessional2]));
       verify(mockDataSource.getAllProfessionals());
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -89,7 +89,7 @@ void main() {
       final result = await repository.getAllProfessionals();
 
       // assert
-      expect(result, const Right([]));
+      expect(result, const Right<Failure, dynamic>(<dynamic>[]));
       verify(mockDataSource.getAllProfessionals());
     });
 
@@ -103,7 +103,7 @@ void main() {
       final result = await repository.getAllProfessionals();
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
       verify(mockDataSource.getAllProfessionals());
     });
 
@@ -136,7 +136,7 @@ void main() {
       final result = await repository.getProfessionalById(professionalId);
 
       // assert
-      expect(result, Right(tProfessional1));
+      expect(result, Right<Failure, dynamic>(tProfessional1));
       verify(mockDataSource.getProfessionalById(professionalId));
       verifyNoMoreInteractions(mockDataSource);
     });
@@ -152,7 +152,7 @@ void main() {
       final result = await repository.getProfessionalById(professionalId);
 
       // assert
-      expect(result, const Left(NotFoundFailure('Profissional')));
+      expect(result, const Left<Failure, dynamic>(NotFoundFailure('Profissional')));
       verify(mockDataSource.getProfessionalById(professionalId));
     });
 
@@ -167,7 +167,7 @@ void main() {
       final result = await repository.getProfessionalById(professionalId);
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -181,7 +181,7 @@ void main() {
       final result = await repository.searchProfessionals();
 
       // assert
-      expect(result, Right([tProfessional1, tProfessional2]));
+      expect(result, Right<Failure, dynamic>([tProfessional1, tProfessional2]));
       verify(mockDataSource.getAllProfessionals());
     });
 
@@ -238,7 +238,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Right([]));
+      expect(result, const Right<Failure, dynamic>(<dynamic>[]));
     });
   });
 
@@ -278,7 +278,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Right([]));
+      expect(result, const Right<Failure, dynamic>(<dynamic>[]));
     });
   });
 
@@ -313,7 +313,7 @@ void main() {
       final result = await repository.getProfessionalsByCity('Brasília');
 
       // assert
-      expect(result, const Right([]));
+      expect(result, const Right<Failure, dynamic>(<dynamic>[]));
     });
   });
 }

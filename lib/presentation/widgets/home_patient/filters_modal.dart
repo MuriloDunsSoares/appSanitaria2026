@@ -13,7 +13,7 @@ class FiltersModal extends StatefulWidget {
     super.key,
     required this.onApplyFilters,
   });
-  final Function({String? specialty, String? city}) onApplyFilters;
+  final void Function({String? specialty, String? city}) onApplyFilters;
 
   @override
   State<FiltersModal> createState() => _FiltersModalState();

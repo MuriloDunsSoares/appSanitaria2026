@@ -13,7 +13,7 @@ class PatientServicesGrid extends StatelessWidget {
     super.key,
     required this.onServiceTap,
   });
-  final Function(String specialty) onServiceTap;
+  final void Function(String specialty) onServiceTap;
 
   @override
   Widget build(BuildContext context) {

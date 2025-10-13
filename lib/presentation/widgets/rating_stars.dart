@@ -17,7 +17,7 @@ class RatingStars extends StatefulWidget {
   });
   final int rating; // 0 a 5
   final bool isInteractive;
-  final Function(int rating)? onRatingChanged;
+  final void Function(int rating)? onRatingChanged;
   final double size;
   final Color activeColor;
   final Color inactiveColor;

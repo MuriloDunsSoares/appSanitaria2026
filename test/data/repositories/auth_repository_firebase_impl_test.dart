@@ -74,7 +74,7 @@ void main() {
       );
 
       // assert
-      expect(result, Right(tPatient));
+      expect(result, Right<Failure, dynamic>(tPatient));
       verify(mockFirebaseAuthDataSource.login(
         email: 'joao@teste.com',
         password: '123456',
@@ -97,7 +97,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Left(InvalidCredentialsFailure()));
+      expect(result, const Left<Failure, dynamic>(InvalidCredentialsFailure()));
     });
 
     test('deve retornar UserNotFoundFailure quando usuário não existe',
@@ -115,7 +115,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Left(UserNotFoundFailure()));
+      expect(result, const Left<Failure, dynamic>(UserNotFoundFailure()));
     });
 
     test('deve retornar NetworkFailure quando sem conexão', () async {
@@ -132,7 +132,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Left(NetworkFailure()));
+      expect(result, const Left<Failure, dynamic>(NetworkFailure()));
     });
 
     test('deve retornar StorageFailure quando ocorre erro genérico', () async {
@@ -149,7 +149,7 @@ void main() {
       );
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -163,7 +163,7 @@ void main() {
       final result = await repository.registerPatient(tPatient);
 
       // assert
-      expect(result, Right(tPatient));
+      expect(result, Right<Failure, dynamic>(tPatient));
       verify(mockFirebaseAuthDataSource.registerPatient(tPatient));
       verifyNoMoreInteractions(mockFirebaseAuthDataSource);
     });
@@ -178,7 +178,7 @@ void main() {
       final result = await repository.registerPatient(tPatient);
 
       // assert
-      expect(result, const Left(EmailAlreadyExistsFailure()));
+      expect(result, const Left<Failure, dynamic>(EmailAlreadyExistsFailure()));
     });
 
     test('deve retornar ValidationFailure quando dados inválidos', () async {
@@ -190,7 +190,7 @@ void main() {
       final result = await repository.registerPatient(tPatient);
 
       // assert
-      expect(result, const Left(ValidationFailure('Email inválido')));
+      expect(result, const Left<Failure, dynamic>(ValidationFailure('Email inválido')));
     });
 
     test('deve retornar NetworkFailure quando sem conexão', () async {
@@ -202,7 +202,7 @@ void main() {
       final result = await repository.registerPatient(tPatient);
 
       // assert
-      expect(result, const Left(NetworkFailure()));
+      expect(result, const Left<Failure, dynamic>(NetworkFailure()));
     });
   });
 
@@ -216,7 +216,7 @@ void main() {
       final result = await repository.registerProfessional(tProfessional);
 
       // assert
-      expect(result, Right(tProfessional));
+      expect(result, Right<Failure, dynamic>(tProfessional));
       verify(mockFirebaseAuthDataSource.registerProfessional(tProfessional));
       verifyNoMoreInteractions(mockFirebaseAuthDataSource);
     });
@@ -231,7 +231,7 @@ void main() {
       final result = await repository.registerProfessional(tProfessional);
 
       // assert
-      expect(result, const Left(EmailAlreadyExistsFailure()));
+      expect(result, const Left<Failure, dynamic>(EmailAlreadyExistsFailure()));
     });
   });
 
@@ -244,7 +244,7 @@ void main() {
       final result = await repository.logout();
 
       // assert
-      expect(result, const Right(unit));
+      expect(result, const Right<Failure, dynamic>(unit));
       verify(mockFirebaseAuthDataSource.logout());
     });
 
@@ -257,7 +257,7 @@ void main() {
       final result = await repository.logout();
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -271,7 +271,7 @@ void main() {
       final result = await repository.getCurrentUser();
 
       // assert
-      expect(result, Right(tPatient));
+      expect(result, Right<Failure, dynamic>(tPatient));
       verify(mockFirebaseAuthDataSource.getCurrentUser());
     });
 
@@ -284,7 +284,7 @@ void main() {
       final result = await repository.getCurrentUser();
 
       // assert
-      expect(result, const Left(UserNotFoundFailure()));
+      expect(result, const Left<Failure, dynamic>(UserNotFoundFailure()));
     });
 
     test('deve retornar StorageFailure quando ocorre erro', () async {
@@ -296,7 +296,7 @@ void main() {
       final result = await repository.getCurrentUser();
 
       // assert
-      expect(result, const Left(StorageFailure()));
+      expect(result, const Left<Failure, dynamic>(StorageFailure()));
     });
   });
 
@@ -310,7 +310,7 @@ void main() {
       final result = await repository.isAuthenticated();
 
       // assert
-      expect(result, const Right(true));
+      expect(result, const Right<Failure, dynamic>(true));
     });
 
     test('deve retornar false quando não há usuário autenticado', () async {
@@ -322,7 +322,7 @@ void main() {
       final result = await repository.isAuthenticated();
 
       // assert
-      expect(result, const Right(false));
+      expect(result, const Right<Failure, dynamic>(false));
     });
   });
 }
