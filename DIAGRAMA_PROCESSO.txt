@@ -1,0 +1,111 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    PROCESSO SISTEMÁTICO DE FIXES                          ║
+║                         368 Issues em lib/                                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+INÍCIO
+  │
+  ├─ 📊 FASE 1: VALIDAÇÃO INICIAL
+  │   ├─ ✅ Status Git: LIMPO
+  │   ├─ ✅ Issues iniciais: 368 
+  │   └─ ✅ Checkpoint: feito (commit 2e95b66)
+  │
+  ├─ 🎯 FASE 2: ESCOLHER TIER
+  │   │
+  │   ├─ OPÇÃO A: TIER 1 APENAS (SEGURO)
+  │   │   ├─ 45 issues (FÁCIL)
+  │   │   ├─ ~90 min
+  │   │   └─ 80% confiança
+  │   │
+  │   ├─ OPÇÃO B: TIER 1 + 2 (MODERADO)
+  │   │   ├─ 82 issues (FÁCIL + MÉDIO)
+  │   │   ├─ ~275 min = ~4.5h
+  │   │   └─ 60% confiança
+  │   │
+  │   └─ OPÇÃO C: TODOS (ARRISCADO - NÃO RECOMENDADO)
+  │       ├─ 368 issues (TUDO)
+  │       ├─ 3+ horas
+  │       └─ 20% confiança
+  │
+  ├─ 🔄 FASE 3: EXECUTAR POR ISSUE
+  │   │
+  │   ├─ Passo 1: ESTUDAR
+  │   │   └─ Entender problema (não mexer no código)
+  │   │
+  │   ├─ Passo 2: LISTAR
+  │   │   └─ Contar arquivos afetados (dart analyze)
+  │   │
+  │   ├─ Passo 3: BRANCH
+  │   │   └─ git checkout -b fix/tipo-issue
+  │   │
+  │   ├─ Passo 4: CORRIGIR
+  │   │   ├─ Máximo 5 arquivos
+  │   │   ├─ Revisar cada mudança (git diff)
+  │   │   └─ Testar (dart analyze file.dart)
+  │   │
+  │   ├─ Passo 5: VALIDAR
+  │   │   ├─ Contar issues antes
+  │   │   ├─ Contar issues depois
+  │   │   └─ Calcular redução
+  │   │
+  │   ├─ Passo 6: COMMIT
+  │   │   └─ git commit -m "fix: corrigir N issues de tipo-issue"
+  │   │
+  │   └─ Passo 7: MERGE
+  │       └─ git checkout main && git merge fix/tipo-issue
+  │
+  ├─ 🛡️ PROTEÇÕES DE SEGURANÇA
+  │   ├─ ✅ Verificar arquivo não vazio (wc -l)
+  │   ├─ ✅ Revisar diff antes (git diff)
+  │   ├─ ✅ Testar após cada fix (dart analyze)
+  │   └─ ✅ Se erro: git checkout -- file.dart
+  │
+  ├─ 📈 REPORTAR PROGRESSO
+  │   └─ RASTREAMENTO_FIXES.md atualizado
+  │
+  ├─ ✅ FASE 4: VALIDAÇÃO FINAL
+  │   ├─ Contar issues finais
+  │   ├─ Verificar nenhum arquivo vazio
+  │   ├─ Ver log de commits (git log --oneline)
+  │   └─ Se tudo OK: ✅ SUCESSO
+  │
+  └─ Se DESASTRE (arquivo deletado, código quebrado)
+      └─ git reset --hard HEAD~1
+
+═══════════════════════════════════════════════════════════════════════════
+
+BENEFÍCIOS DO MÉTODO:
+
+✅ SEGURANÇA
+  • Git commits a cada passo
+  • Branches isoladas
+  • Fácil reverter (git reset)
+  • Nenhuma mudança automática em batch
+
+✅ VISIBILIDADE
+  • Cada mudança revisada manualmente
+  • Antes/depois documentado
+  • Progresso rastreado
+
+✅ CONTROLE
+  • Um tipo de issue por vez
+  • Máximo 5 arquivos por lote
+  • Pode parar a qualquer momento
+
+✅ CONFIABILIDADE
+  • Método testado e documentado
+  • Checklist para cada passo
+  • Proteções de segurança em cada fase
+
+═══════════════════════════════════════════════════════════════════════════
+
+PRÓXIMOS PASSOS:
+
+1. ✅ Método criado (VOCÊ ESTÁ AQUI)
+2. ⏳ Confirmar qual TIER fazer (A, B ou C)
+3. ⏳ Começar com Issue 1 (pequeno)
+4. ⏳ Depois Issue 2, 3, 4...
+5. ⏳ Atualizar RASTREAMENTO_FIXES.md
+6. ⏳ Fim: Validação final
+
+═══════════════════════════════════════════════════════════════════════════

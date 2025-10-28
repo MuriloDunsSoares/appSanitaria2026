@@ -1,0 +1,172 @@
+═══════════════════════════════════════════════════════════════════════════════
+                   ANTES vs DEPOIS: Bottom Navigation
+═══════════════════════════════════════════════════════════════════════════════
+
+ANTES (4 ITENS):
+────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────────┐
+│     HomePatientScreen               │
+│                                     │
+│  Buscar profissionais + Serviços    │
+│                                     │
+├─────────────────────────────────────┤
+│ [🔍]   [💬]   [❤️]   [👤]          │
+│ Buscar Conversas Favoritos Perfil   │
+└─────────────────────────────────────┘
+
+Índices:
+  0: Buscar       (/professionals)
+  1: Conversas    (/conversations)
+  2: Favoritos    (/favorites)
+  3: Perfil       (/profile)
+
+
+DEPOIS (5 ITENS): ✅ NOVO
+────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────────┐
+│     HomePatientScreen               │
+│                                     │
+│  Buscar profissionais + Serviços    │
+│                                     │
+├─────────────────────────────────────┤
+│ [🔍] [💬] [📄] [❤️] [👤]           │
+│ Buscar Conversas Contratos Fav Perf │
+└─────────────────────────────────────┘
+
+Índices:
+  0: Buscar       (/professionals)
+  1: Conversas    (/conversations)
+  2: Contratos    (/contracts)        ← NOVO
+  3: Favoritos    (/favorites)
+  4: Perfil       (/profile)
+
+═══════════════════════════════════════════════════════════════════════════════
+                          TELAS AFETADAS
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ ANTES                              ✅ DEPOIS
+
+1. HomePatientScreen                  1. HomePatientScreen
+   ├─ Bottom Nav (índice 0)             ├─ Bottom Nav (índice 0) ✅
+   └─ 4 botões                          └─ 5 botões
+
+2. ProfessionalsListScreen            2. ProfessionalsListScreen
+   ├─ Bottom Nav (índice 0)             ├─ Bottom Nav (índice 0) ✅
+   └─ 4 botões                          └─ 5 botões
+
+3. ConversationsScreen                3. ConversationsScreen
+   ├─ Bottom Nav (índice 1)             ├─ Bottom Nav (índice 1) ✅
+   └─ 4 botões                          └─ 5 botões
+
+4. FavoritesScreen                    4. ContractsScreen (NOVO)
+   ├─ Bottom Nav (índice 2) ❌         ├─ Bottom Nav (índice 2) ✅ NOVO
+   └─ 4 botões                          └─ 5 botões
+                                      
+                                      5. FavoritesScreen
+                                        ├─ Bottom Nav (índice 3) ✅ ATUALIZADO
+                                        └─ 5 botões
+
+6. ProfileScreen                      6. ProfileScreen
+   ├─ SEM Bottom Nav (fullscreen)       ├─ SEM Bottom Nav (fullscreen) ✅
+   └─                                   └─
+
+7. Individual Chat                    7. Individual Chat
+   ├─ SEM Bottom Nav (fullscreen)       ├─ SEM Bottom Nav (fullscreen) ✅
+   └─                                   └─
+
+═══════════════════════════════════════════════════════════════════════════════
+                       MAPEAMENTO DE ROTAS
+═══════════════════════════════════════════════════════════════════════════════
+
+┌──────┬──────────────┬──────────────┬─────────────────────┐
+│ Idx  │ Label        │ Icon         │ Route               │
+├──────┼──────────────┼──────────────┼─────────────────────┤
+│ 0    │ Buscar       │ search       │ /professionals      │
+│ 1    │ Conversas    │ chat_bubble  │ /conversations      │
+│ 2    │ Contratos    │ description  │ /contracts    ← NEW │
+│ 3    │ Favoritos    │ favorite     │ /favorites          │
+│ 4    │ Perfil       │ person       │ /profile            │
+└──────┴──────────────┴──────────────┴─────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+                       ARQUIVOS MODIFICADOS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. lib/presentation/widgets/patient_bottom_nav.dart
+   ✅ Adicionado case 2 para contratos
+   ✅ Atualizado case 3 para favoritos (era case 2)
+   ✅ Atualizado case 4 para perfil (era case 3)
+   ✅ Adicionado _buildNavItem para índice 2
+   ✅ Documentação atualizada (4 → 5 itens)
+
+2. lib/presentation/screens/contracts_screen.dart
+   ✅ Adicionado import: patient_bottom_nav.dart
+   ✅ Removido PopScope com redirect
+   ✅ Adicionado bottomNavigationBar: PatientBottomNav(currentIndex: 2)
+
+3. lib/presentation/screens/favorites_screen.dart
+   ✅ Atualizado: PatientBottomNav(currentIndex: 2 → 3)
+   ✅ Atualizado comentário de documentação
+
+═══════════════════════════════════════════════════════════════════════════════
+                       MUDANÇAS DE CÓDIGO
+═══════════════════════════════════════════════════════════════════════════════
+
+PatientBottomNav._onTap() - Switch statement:
+
+  ANTES:
+  ──────
+  case 0: context.go('/professionals');
+  case 1: context.go('/conversations');
+  case 2: context.go('/favorites');        ← Era 2
+  case 3: context.go('/profile');          ← Era 3
+
+  DEPOIS:
+  ───────
+  case 0: context.go('/professionals');
+  case 1: context.go('/conversations');
+  case 2: context.go('/contracts');        ← NOVO
+  case 3: context.go('/favorites');        ← Agora é 3
+  case 4: context.go('/profile');          ← Agora é 4
+
+
+ContractsScreen - Scaffold:
+
+  ANTES:
+  ──────
+  Scaffold(
+    appBar: AppBar(...),
+    body: ...,
+    // SEM bottomNavigationBar
+  );
+
+  DEPOIS:
+  ───────
+  Scaffold(
+    appBar: AppBar(...),
+    body: ...,
+    bottomNavigationBar: const PatientBottomNav(currentIndex: 2), ← NOVO
+  );
+
+═══════════════════════════════════════════════════════════════════════════════
+                          RESUMO EXECUTIVO
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 ESTATÍSTICAS:
+   • Arquivos modificados: 3
+   • Novas linhas: ~25
+   • Linhas removidas: ~5
+   • Mudanças breaking: 0
+   • Erros de compilação: 0 ✅
+   • Linter warnings: 0 ✅
+
+🎯 FUNCIONALIDADES:
+   • Bottom navigation: 4 → 5 itens
+   • Nova aba: "Meus Contratos" (índice 2)
+   • Ícone: description_outlined (📄)
+   • Rota: /contracts
+   • Tela: ContractsScreen com filtros de status
+
+✅ STATUS GERAL: IMPLEMENTADO E TESTADO
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -9,6 +9,7 @@ import 'package:app_sanitaria/domain/usecases/contracts/create_contract.dart';
 import 'package:app_sanitaria/domain/usecases/contracts/get_contracts_by_patient.dart';
 import 'package:app_sanitaria/domain/usecases/contracts/get_contracts_by_professional.dart';
 import 'package:app_sanitaria/domain/usecases/contracts/update_contract_status.dart';
+import 'package:app_sanitaria/domain/usecases/contracts/cancel_contract.dart';
 import 'package:app_sanitaria/presentation/providers/auth_provider_v2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,12 +44,14 @@ class ContractsNotifierV2 extends StateNotifier<ContractsState> {
     required GetContractsByPatient getContractsByPatient,
     required GetContractsByProfessional getContractsByProfessional,
     required UpdateContractStatus updateContractStatus,
+    required CancelContract cancelContract,
     required String? userId,
     required bool isProfessional,
   })  : _createContract = createContract,
         _getContractsByPatient = getContractsByPatient,
         _getContractsByProfessional = getContractsByProfessional,
         _updateContractStatus = updateContractStatus,
+        _cancelContract = cancelContract,
         _userId = userId,
         _isProfessional = isProfessional,
         super(ContractsState()) {
@@ -58,6 +61,7 @@ class ContractsNotifierV2 extends StateNotifier<ContractsState> {
   final GetContractsByPatient _getContractsByPatient;
   final GetContractsByProfessional _getContractsByProfessional;
   final UpdateContractStatus _updateContractStatus;
+  final CancelContract _cancelContract;
   final String? _userId;
   final bool _isProfessional;
 
@@ -131,6 +135,34 @@ class ContractsNotifierV2 extends StateNotifier<ContractsState> {
     );
   }
 
+  /// Cancela um contrato
+  Future<bool> cancelContract(String contractId) async {
+    if (_userId == null) return false;
+    
+    final result = await _cancelContract.call(
+      CancelContractParams(
+        contractId: contractId,
+        currentUserId: _userId!,
+      ),
+    );
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(errorMessage: 'Erro ao cancelar contrato');
+        return false;
+      },
+      (cancelledContract) {
+        // Atualizar localmente
+        final updatedContracts = state.contracts.map((c) {
+          return c.id == contractId ? cancelledContract : c;
+        }).toList();
+
+        state = state.copyWith(contracts: updatedContracts);
+        return true;
+      },
+    );
+  }
+
   /// Obtém contrato por ID
   ContractEntity? getContractById(String contractId) {
     try {
@@ -151,6 +183,7 @@ final contractsProviderV2 =
     getContractsByPatient: getIt<GetContractsByPatient>(),
     getContractsByProfessional: getIt<GetContractsByProfessional>(),
     updateContractStatus: getIt<UpdateContractStatus>(),
+    cancelContract: getIt<CancelContract>(),
     userId: authState.userId,
     isProfessional: authState.userType == UserType.profissional,
   );

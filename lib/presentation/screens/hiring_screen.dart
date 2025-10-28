@@ -104,7 +104,7 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
-      locale: const Locale('pt', 'BR'),
+      useRootNavigator: true,
     );
     if (date != null) {
       setState(() {
@@ -117,6 +117,7 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
     final time = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 8, minute: 0),
+      useRootNavigator: true,
     );
     if (time != null) {
       setState(() {
@@ -219,10 +220,17 @@ class _HiringScreenState extends ConsumerState<HiringScreen> {
     final success =
         await ref.read(contractsProviderV2.notifier).createContract(contract);
 
-    if (!mounted) return;
-
     if (success) {
-      Navigator.pop(context);
+      if (!mounted) return;
+      
+      // Voltar para a tela anterior de forma segura
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        // Fallback: ir para a lista de profissionais
+        context.go('/professionals');
+      }
+      
       _showSnackBar(
         'Contratação realizada com sucesso!\nO profissional receberá a notificação.',
         Colors.green,

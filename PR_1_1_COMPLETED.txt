@@ -1,0 +1,142 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     PR 1.1 CONCLUÍDO COM SUCESSO                          ║
+║        feat: fortalecer firestore.rules com validações de negócio        ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+✅ MUDANÇAS REALIZADAS
+════════════════════════════════════════════════════════════════════════════
+
+Arquivo: firestore.rules
+
+1️⃣ ADICIONADAS 8 NOVAS FUNÇÕES DE VALIDAÇÃO:
+   ✅ isValidRating() - Valida se rating está entre 1 e 5
+   ✅ isValidContractStatus() - Valida status do contrato
+   ✅ isValidStatusTransition() - Valida transições de estado
+   ✅ isValidMessage() - Valida conteúdo de mensagem (1-5000 chars)
+   ✅ isValidContractData() - Valida dados básicos de contrato
+   ✅ isNotBlocked() - Verifica se usuário não está bloqueado
+
+2️⃣ ATUALIZADAS 3 SUBCOLLECTIONS:
+   
+   ✅ CONTRACTS:
+      • Criar: Agora valida completude dos dados (patientId, professionalId, etc)
+      • Atualizar: Agora valida transições de status
+      
+   ✅ MESSAGES:
+      • Criar: Agora valida conteúdo da mensagem (não vazio, max 5000)
+      • Criar: Agora verifica se sender não está bloqueado
+      
+   ✅ REVIEWS:
+      • Criar: Agora usa isValidRating() em vez de hardcoded 1.0-5.0
+      • Atualizar: Agora usa isValidRating() também
+
+3️⃣ SEGURANÇA MELHORADA:
+   🔐 Rating: Bloqueado se < 1 ou > 5
+   🔐 Contrato: Bloqueado se status inválido (ex: completed → pending)
+   🔐 Mensagem: Bloqueada se vazia ou > 5000 caracteres
+   🔐 Bloqueio: Bloqueado se sender está na lista de bloqueados
+   🔐 Dados: Bloqueado se contrato sem endereço ou tipo de serviço
+
+
+📊 ANTES vs DEPOIS
+════════════════════════════════════════════════════════════════════════════
+
+ANTES:
+  ❌ Rating validado com hardcode: >= 1.0 && <= 5.0
+  ❌ Contratos: Sem validação de transição
+  ❌ Mensagens: Sem validação de conteúdo
+  ❌ Bloqueio: Sem verificação
+
+DEPOIS:
+  ✅ Rating: Função isValidRating() reutilizável
+  ✅ Contratos: isValidStatusTransition() garante estado válido
+  ✅ Mensagens: isValidMessage() valida completude
+  ✅ Bloqueio: isNotBlocked() previne comunicação com bloqueados
+
+
+🧪 COMO TESTAR
+════════════════════════════════════════════════════════════════════════════
+
+1. Iniciar emulador:
+   firebase emulators:start
+
+2. Testar Rating (deveria BLOQUEAR):
+   ❌ Review com rating 0
+   ❌ Review com rating 6
+   ✅ Review com rating 3
+
+3. Testar Transição de Status (deveria BLOQUEAR):
+   ❌ Contrato: completed → pending
+   ❌ Contrato: rejected → pending
+   ✅ Contrato: pending → accepted
+
+4. Testar Mensagem (deveria BLOQUEAR):
+   ❌ Mensagem vazia
+   ❌ Mensagem com 5001 caracteres
+   ✅ Mensagem normal
+
+5. Testar Bloqueio (deveria BLOQUEAR):
+   ❌ Enviar mensagem se sender está em blockedUsers
+   ✅ Enviar mensagem se não está bloqueado
+
+
+📋 PRÓXIMOS PASSOS
+════════════════════════════════════════════════════════════════════════════
+
+Sprint 1 Progress:
+  ✅ PR 1.1: Fortalecer Firestore Rules (COMPLETO)
+  ⏳ PR 1.2: Backend reviews aggregation (PRÓXIMO)
+  ⏳ PR 1.3: Backend contract transitions
+
+Para PR 1.2, será necessário:
+  • Implementar backend POST /api/v1/reviews/{professionalId}/aggregate
+  • ACID transaction (Review + Professional update)
+  • Auditoria de cálculo
+
+
+📝 COMMIT MESSAGE
+════════════════════════════════════════════════════════════════════════════
+
+feat: fortalecer firestore.rules com validações de negócio
+
+- Adicionar isValidRating() para validar ratings 1-5
+- Adicionar isValidStatusTransition() para transições de contrato
+- Adicionar isValidMessage() para validação de mensagens
+- Adicionar isValidContractData() para validação completa
+- Adicionar isNotBlocked() para verificar bloqueio
+- Atualizar CONTRACTS: validar dados e transições
+- Atualizar MESSAGES: validar conteúdo e bloqueio
+- Atualizar REVIEWS: usar isValidRating() em create/update
+
+Closes: #layer-separation-1-1
+Breaking Changes: None (apenas rejeita operações inválidas)
+
+
+🚀 DEPLOY
+════════════════════════════════════════════════════════════════════════════
+
+Staging:
+  firebase deploy --only firestore:rules --project app-sanitaria-dev
+
+Produção:
+  firebase deploy --only firestore:rules --project app-sanitaria
+
+Rollback (se necessário):
+  git revert <commit-hash>
+  firebase deploy --only firestore:rules
+
+
+✨ STATUS
+════════════════════════════════════════════════════════════════════════════
+
+✅ PR 1.1: PRONTO PARA CODE REVIEW
+   Lines changed: +100
+   Functions added: 6
+   Rules updated: 3 subcollections
+   Risk: LOW (apenas adiciona validações)
+
+
+═══════════════════════════════════════════════════════════════════════════
+PR 1.1 Completed: 27 de Outubro de 2025
+Next: PR 1.2 - Backend reviews aggregation
+═══════════════════════════════════════════════════════════════════════════

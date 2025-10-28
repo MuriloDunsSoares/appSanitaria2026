@@ -1,0 +1,76 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║         🎯 PLANO ESTRUTURADO: Corrigir 111 Erros em 6 Fases            ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+PROGRESSO ATÉ AGORA:
+  ✅ FASE 0a: ContractStatus enum - ADICIONADO accepted + rejected
+  ✅ FASE 0b: Provider contracts - ADICIONADO userId, userRole
+  ✅ FASE 0c: ReviewsRepository - REMOVIDO getAverageRating
+  ❌ RESTANTES: 111 erros em lib/
+
+PRÓXIMAS 6 FASES:
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 1: Switch Statements (10 min)                      🔴 HIGH     │
+│ ├─ Arquivos: contract_detail_screen.dart (2x)                      │
+│ ├─          contracts_list_screen.dart (2x)                        │
+│ ├─          contract_card.dart (2x)                                │
+│ └─ Ação: Adicionar cases para accepted + rejected                  │
+│ Resultado esperado: 111 → 105 erros                                │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 2: getAverageRating (5 min)                        🔴 HIGH     │
+│ ├─ Arquivo: lib/domain/usecases/reviews/get_average_rating.dart    │
+│ └─ Ação: Remover arquivo ou retornar erro                          │
+│ Resultado esperado: 105 → 104 erros                                │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 3: Pagination Methods (30 min)                     🟠 MEDIUM   │
+│ ├─ Arquivo: lib/presentation/providers/contracts_provider_v2.dart  │
+│ ├─ Ação: Adicionar filteredContracts, currentPage, isLoadingMore   │
+│ ├─         Adicionar loadFirstPage, loadNextPage, refresh          │
+│ └─ Métodos: 3 novos métodos + 3 novos campos de estado             │
+│ Resultado esperado: 104 → 84 erros (-20)                           │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 4: Repository Methods (45 min)                     🟠 MEDIUM   │
+│ ├─ Adicionar a 5 repositories:                                      │
+│ │  ├─ AuthRepository: deleteAccount(), sendPasswordResetEmail()     │
+│ │  ├─ ChatRepository: getMessagesPaginated()                        │
+│ │  ├─ ContractsRepository: getContractsPaginated()                  │
+│ │  ├─ ProfessionalsRepository: getProfessionalsPaginated()          │
+│ │  └─ ReviewsRepository: getReviewsPaginated(), reportReview(), ... │
+│ └─ Implementar em cada *Impl correspondente                         │
+│ Resultado esperado: 84 → 59 erros (-25)                            │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 5: Exception/Failure (40 min)                      🟠 MEDIUM   │
+│ ├─ Corrigir: ServerException, RateLimitException                    │
+│ ├─ Arquivos: exception_to_failure_mapper.dart                       │
+│ │            http_messages_datasource.dart                          │
+│ │            http_professionals_datasource.dart                     │
+│ └─ Ação: Implementar classes corretamente + try-catch               │
+│ Resultado esperado: 59 → 29 erros (-30)                            │
+└─────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ FASE 6: Dependencies (20 min)                           🟡 LOW      │
+│ ├─ Pacotes faltantes: encrypt, geocoding, geolocator               │
+│ └─ Opções: Instalar / Remover datasources / Desabilitar imports    │
+│ Resultado esperado: 29 → 0 erros ✅                                │
+└─────────────────────────────────────────────────────────────────────┘
+
+TEMPO TOTAL: ~2-3 horas
+COMPLEXIDADE: Baixa-Média (alterações estruturadas, sem refatoração complexa)
+RISCO: Muito baixo (cada fase é independente, testes podem validar)
+
+═══════════════════════════════════════════════════════════════════════
+
+COMANDO PARA VALIDAR PROGRESSO:
+  flutter analyze lib/ 2>&1 | grep "^  error" | wc -l
+
+PRÓXIMA AÇÃO:
+  ⚡ Qual fase você quer começar? (1-6 ou todas?)

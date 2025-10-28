@@ -85,4 +85,21 @@ abstract class ContractsRepository {
   /// - [Left(NotFoundFailure)]: contrato não existe
   /// - [Left(StorageFailure)]: erro ao deletar
   Future<Either<Failure, Unit>> deleteContract(String contractId);
+
+  /// Cancela um contrato (soft delete via status update).
+  ///
+  /// Validações de negócio:
+  /// - Contrato deve existir
+  /// - Status deve ser 'pending'
+  /// - Usuário deve ser o paciente que criou o contrato
+  ///
+  /// Retorna:
+  /// - [Right(Unit)]: contrato cancelado com sucesso
+  /// - [Left(ValidationFailure)]: validações falharam
+  /// - [Left(NotFoundFailure)]: contrato não existe
+  /// - [Left(StorageFailure)]: erro ao salvar
+  Future<Either<Failure, Unit>> cancelContract(
+    String contractId,
+    String userId,
+  );
 }

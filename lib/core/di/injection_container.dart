@@ -61,6 +61,7 @@ import '../../domain/usecases/chat/get_user_conversations.dart';
 import '../../domain/usecases/chat/mark_messages_as_read.dart';
 import '../../domain/usecases/chat/send_message.dart';
 // Use cases - Contracts
+import '../../domain/usecases/contracts/cancel_contract.dart';
 import '../../domain/usecases/contracts/create_contract.dart';
 import '../../domain/usecases/contracts/get_contracts_by_patient.dart';
 import '../../domain/usecases/contracts/get_contracts_by_professional.dart';
@@ -226,6 +227,7 @@ Future<void> setupDependencyInjection() async {
   sl.registerLazySingleton(() => GetContractsByPatient(sl()));
   sl.registerLazySingleton(() => GetContractsByProfessional(sl()));
   sl.registerLazySingleton(() => UpdateContractStatus(sl()));
+  sl.registerLazySingleton(() => CancelContract(sl()));
 
   // Chat use cases
   sl.registerLazySingleton(() => GetUserConversations(sl()));

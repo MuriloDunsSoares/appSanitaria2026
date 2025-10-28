@@ -20,7 +20,7 @@ import 'package:go_router/go_router.dart';
 /// - Integrado com FavoritesProvider (futuro)
 ///
 /// Navigation:
-/// - Inclui PatientBottomNav (índice 2 = Favoritos)
+/// - Inclui PatientBottomNav (índice 3 = Favoritos)
 /// - Aparece apenas para PACIENTES
 class FavoritesScreen extends ConsumerStatefulWidget {
   const FavoritesScreen({super.key});
@@ -195,8 +195,8 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                     ),
                   ),
 
-        // Bottom Navigation (índice 2 = Favoritos)
-        bottomNavigationBar: const PatientBottomNav(currentIndex: 2),
+        // Bottom Navigation (índice 3 = Favoritos)
+        bottomNavigationBar: const PatientBottomNav(currentIndex: 3),
       ),
     );
   }

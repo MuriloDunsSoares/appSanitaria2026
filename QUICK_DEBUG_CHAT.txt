@@ -1,0 +1,210 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║              🐛 QUICK DEBUG GUIDE: ENVIO DE MENSAGENS NO CHAT                  ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔍 BUSCAR LOGS NO TERMINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📤 MENSAGEM SENDO ENVIADA:
+   flutter logs | grep "📤"
+
+   Esperado:
+   I/flutter (12345): 📤 Enviando mensagem de userId1 para userId2
+   I/flutter (12345): 📤 Repository.sendMessage: senderId=..., receiverId=...
+   I/flutter (12345): 📤 DataSource.sendMessage START
+
+────────────────────────────────────────────────────────────────────────────────
+
+📥 MENSAGENS SENDO CARREGADAS:
+   flutter logs | grep "📥"
+
+   Esperado:
+   I/flutter (12345): 📥 Carregando mensagens para: conversationId
+
+────────────────────────────────────────────────────────────────────────────────
+
+✅ SUCESSO:
+   flutter logs | grep "✅"
+
+   Esperado:
+   I/flutter (12345): ✅ Mensagem enviada com sucesso: messageId
+   I/flutter (12345): ✅ Conversa criada automaticamente
+
+────────────────────────────────────────────────────────────────────────────────
+
+❌ ERROS:
+   flutter logs | grep "❌"
+
+   Se houver, significa que algo deu errado!
+
+────────────────────────────────────────────────────────────────────────────────
+
+💡 CRIAÇÃO AUTOMÁTICA:
+   flutter logs | grep "💡"
+
+   Indicador: Conversa está sendo criada automaticamente
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔥 VERIFICAR FIREBASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. VERIFICAR CONVERSA CRIADA:
+   Firestore → organizations/default/conversations/
+   
+   Procure por: {userId1}-{userId2} (IMPORTANTE: hífen, não underscore)
+   
+   Exemplo: 
+   - badId_with_underscore ❌ (ERRADO)
+   + goodId-with-hyphen ✅ (CORRETO)
+
+────────────────────────────────────────────────────────────────────────────────
+
+2. VERIFICAR MENSAGEM SALVA:
+   Firestore → organizations/default/conversations/{id1}-{id2}/messages/
+   
+   Campos esperados:
+   - id: "messageId"
+   - senderId: "id do remetente"
+   - receiverId: "id do destinatário"
+   - text: "conteúdo da mensagem"
+   - timestamp: "2025-10-27 19:45:00"
+   - isRead: false
+   - conversationId: "{id1}-{id2}"
+
+────────────────────────────────────────────────────────────────────────────────
+
+3. VERIFICAR CONVERSA METADATA:
+   Firestore → organizations/default/conversations/{id1}-{id2}/
+   
+   Campos que devem estar:
+   - participants: [userId1, userId2]
+   - lastMessage: {...} (objeto da última mensagem)
+   - updatedAt: "última atualização"
+   - "{userId1}_unread": 0
+   - "{userId2}_unread": 1 (se não leu)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🚨 DIAGNÓSTICO RÁPIDO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLEMA: Mensagem não aparece na tela
+─────────────────────────────────────
+✓ Verifique logs: há ❌ ERROS?
+✓ Verifique Firebase: mensagem está em /messages/?
+✓ Verifique conversationId: usa hífen (-)?
+✓ Verifique timestamp: está recente?
+
+PROBLEMA: Conversa não é encontrada
+────────────────────────────────────
+✓ Verifique Firebase: conversa existe em /conversations/?
+✓ Verifique ID: é userId1-userId2 (com hífen)?
+✓ Verifique participants: contém os dois userIds?
+✓ Verifique sort: está alfabético? (userId1 < userId2)
+
+PROBLEMA: PERMISSION_DENIED
+──────────────────────────
+✓ Verificar autenticação: usuário autenticado?
+✓ Verificar status: usuário ativo (isActive)?
+✓ Verificar rules: /messages está dentro de /conversations?
+✓ Verificar participants: usuário é participante da conversa?
+
+PROBLEMA: Nenhum log aparece
+─────────────────────────────
+✓ ⚠️ Significa que _sendMessage() nem foi chamada
+✓ Verifique: input está vazio?
+✓ Verifique: _conversationId é null?
+✓ Verifique: senderId está vazio?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔧 FLOW DE ENVIO DE MENSAGEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USER CLICA BOTÃO "ENVIAR"
+     ↓
+IndividualChatScreen._sendMessage()
+     ↓ (LOG: 📤 Enviando mensagem de... para...)
+ChatProvider.sendMessage()
+     ↓ (LOG: 📤 ChatProvider.sendMessage: sending...)
+SendMessage UseCase.call()
+     ↓
+ChatRepository.sendMessage()
+     ↓ (LOG: 📤 Repository.sendMessage)
+     ↓ (Valida conversa existe)
+     ↓ (LOG: 💡 Criando conversa se não existir)
+FirebaseChatDataSource.sendMessage()
+     ↓ (LOG: 📤 DataSource.sendMessage START)
+     ↓ (LOG: 💾 Salvando mensagem)
+     ↓ (LOG: 🔄 Atualizando metadata)
+FIREBASE ← Mensagem Salva
+     ↓ (LOG: ✅ Mensagem enviada com sucesso)
+Provider ← Atualiza estado
+     ↓
+UI ← Mostra mensagem
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📊 ORDEM ALFABÉTICA (IMPORTANTE!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ConversationId SEMPRE deve estar em ordem alfabética!
+
+EXEMPLO:
+├─ userId1 = "abc123"
+├─ userId2 = "xyz789"
+│
+└─ SORT ALFABÉTICO
+   ├─ "abc123" < "xyz789" ✅
+   └─ conversationId = "abc123-xyz789"
+
+SE INVERTIDO:
+├─ senderId = "xyz789"
+├─ receiverId = "abc123"
+│
+├─ ANTES (ERRADO): "xyz789-abc123" ❌
+└─ AGORA (CORRETO): sort primeiro → "abc123-xyz789" ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📝 EXEMPLO DE LOGS BOM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+I/flutter ( 8888): 🔗 startConversation: userId123 <-> userId456 => userId123-userId456
+I/flutter ( 8888): 📥 Carregando mensagens para: userId123-userId456
+I/flutter ( 8888): ✓ Mensagens carregadas: 3 mensagens
+I/flutter ( 8888): 📤 ChatProvider.sendMessage: sending "Olá!"
+I/flutter ( 8888): 📤 Repository.sendMessage: senderId=userId123, receiverId=userId456 => conversationId=userId123-userId456
+I/flutter ( 8888): ✓ Conversa encontrada: userId123-userId456
+I/flutter ( 8888): 📤 DataSource.sendMessage START: conversationId=userId123-userId456, senderId=userId123
+I/flutter ( 8888): 💾 Salvando mensagem: msg_abc123
+I/flutter ( 8888): ✓ Mensagem salva com sucesso
+I/flutter ( 8888): 🔄 Atualizando metadata da conversa...
+I/flutter ( 8888): ✅ Conversa atualizada - Mensagem enviada com sucesso: msg_abc123
+I/flutter ( 8888): ✅ Mensagem enviada com sucesso: msg_abc123
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ❌ EXEMPLO DE LOGS RUIM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+W/Firestore(XXXX): PERMISSION_DENIED
+I/flutter ( 8888): ❌ Conversa não encontrada: userId456-userId123
+I/flutter ( 8888): ❌ Erro ao enviar mensagem
+
+^ INDICATIVO: conversationId com ordem errada!
+  Esperado: userId123-userId456
+  Recebido: userId456-userId123
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ⚡ DICAS RÁPIDAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Nenhum log? → _conversationId é null
+2. Logs mas sem ✅? → Verifique Firebase permissions
+3. Conversa não achada? → ConversationId não está em ordem alfabética
+4. PERMISSION_DENIED? → Usuário não é participante ou rules erradas
+5. Mensagem não persiste? → Verifique se salvou em /messages/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Arquivo: CHAT_FIXES_ENVIO_MENSAGENS.md (para mais detalhes)
+Data: 27 de outubro de 2025
+
+╚════════════════════════════════════════════════════════════════════════════════╝

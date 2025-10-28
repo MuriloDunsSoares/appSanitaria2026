@@ -1,0 +1,29 @@
+name: app_sanitaria_backend
+description: Backend for App Sanitária - Reviews aggregation and Contract validations
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
+  shelf_cors_headers: ^0.1.4
+  
+  # Firebase
+  firebase_admin: ^0.3.1
+  cloud_firestore: ^4.14.0
+  
+  # JWT
+  dart_jsonwebtoken: ^2.12.0
+  
+  # Utils
+  dotenv: ^4.1.0
+  logger: ^2.0.1
+  uuid: ^4.0.0
+
+dev_dependencies:
+  test: ^1.24.0
+  mockito: ^5.4.0
+  build_runner: ^2.4.0

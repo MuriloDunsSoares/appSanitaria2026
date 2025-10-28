@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 // LocalStorageDataSource removido - usando providers V2
 import 'package:intl/intl.dart';
+import 'package:app_sanitaria/presentation/providers/contracts_provider_v2.dart';
 
 /// Tela de detalhes do contrato
 ///
@@ -250,13 +251,59 @@ class ContractDetailScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Cancelamento de contrato em desenvolvimento...'),
+                  onPressed: () async {
+                    // Dialog de confirmação
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Cancelar Contrato?'),
+                        content: const Text(
+                          'Tem certeza que deseja cancelar este contrato? '
+                          'Esta ação não pode ser desfeita.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('Não'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            child: const Text('Sim, Cancelar'),
+                          ),
+                        ],
                       ),
                     );
+
+                    if (confirmed != true || !context.mounted) return;
+
+                    // Chamar provider para cancelar
+                    final success = await ref
+                        .read(contractsProviderV2.notifier)
+                        .cancelContract(contract.id);
+
+                    if (!context.mounted) return;
+
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Contrato cancelado com sucesso'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      // Voltar para lista de contratos
+                      context.pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Erro ao cancelar contrato'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                   icon: const Icon(Icons.cancel),
                   label: const Text('Cancelar Contrato'),

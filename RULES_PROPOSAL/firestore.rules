@@ -1,0 +1,393 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // HELPER FUNCTIONS - SEGURANÇA BÁSICA
+    // ==========================================
+    
+    /// Verifica se usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    /// Obtém dados do perfil do usuário (com cache)
+    function getUserProfile() {
+      return get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data;
+    }
+    
+    /// Retorna organization ID do usuário
+    function getOrgId() {
+      return getUserProfile().organizationId;
+    }
+    
+    /// Retorna role do usuário
+    function getUserRole() {
+      return getUserProfile().role;
+    }
+    
+    /// Verifica se usuário tem determinado role
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+    
+    /// Verifica se usuário pertence à mesma organização
+    function isSameOrg(orgId) {
+      return isAuthenticated() && getOrgId() == orgId;
+    }
+    
+    /// Verifica se usuário está ativo
+    function isActive() {
+      return getUserProfile().status == 'active';
+    }
+    
+    // ==========================================
+    // VALIDAÇÕES DE DADOS
+    // ==========================================
+    
+    /// Valida email com regex
+    function isValidEmail(email) {
+      return email is string && 
+             email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    /// Valida timestamp (aceita até 5 min no futuro - clock skew)
+    function isRecentTimestamp(timestamp) {
+      return timestamp is timestamp && 
+             timestamp <= request.time + duration.value(5, 'm');
+    }
+    
+    /// Verifica se apenas campos permitidos foram alterados
+    function onlyAllowedFieldsChanged(allowedFields) {
+      return request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(allowedFields);
+    }
+    
+    // ==========================================
+    // VALIDAÇÕES DE NEGÓCIO - CRÍTICAS
+    // ==========================================
+    
+    /// ⭐ NOVO: Valida rating de review (deve estar entre 1 e 5)
+    function isValidRating(rating) {
+      return rating is number && rating >= 1 && rating <= 5;
+    }
+    
+    /// ⭐ NOVO: Valida status de contrato
+    function isValidContractStatus(status) {
+      return status in ['pending', 'accepted', 'rejected', 'completed', 'cancelled'];
+    }
+    
+    /// ⭐ NOVO: Valida transição de status de contrato
+    /// Não permite transições inválidas
+    function isValidStatusTransition(currentStatus, newStatus) {
+      let validTransitions = {
+        'pending': ['accepted', 'rejected', 'cancelled'],
+        'accepted': ['completed', 'cancelled'],
+        'rejected': ['cancelled'],
+        'completed': [],  // Terminal state
+        'cancelled': [],  // Terminal state
+      };
+      
+      // Verificar se a transição é válida
+      return newStatus in validTransitions[currentStatus];
+    }
+    
+    /// ⭐ NOVO: Valida conteúdo de mensagem
+    function isValidMessage(text) {
+      return text is string && 
+             text.size() > 0 && 
+             text.size() <= 5000;
+    }
+    
+    /// ⭐ NOVO: Valida dados básicos de contrato
+    function isValidContractData(data) {
+      return data.patientId is string &&
+             data.professionalId is string &&
+             data.status is string &&
+             isValidContractStatus(data.status) &&
+             data.address is string &&
+             data.address.size() > 0 &&
+             data.serviceType is string &&
+             data.serviceType.size() > 0;
+    }
+    
+    /// ⭐ NOVO: Valida que usuário não está bloqueado
+    function isNotBlocked() {
+      return getUserProfile().blockedUsers is list ? 
+             true : 
+             !(request.auth.uid in getUserProfile().blockedUsers);
+    }
+    
+    // ==========================================
+    // ORGANIZAÇÕES (Multi-tenant Root)
+    // ==========================================
+    
+    match /organizations/{orgId} {
+      // Ler: apenas membros da org
+      allow get: if isSameOrg(orgId) && isActive();
+      
+      // Listar: NEGADO (enumeration attack)
+      allow list: if false;
+      
+      // Criar: NEGADO (usar Cloud Function)
+      allow create: if false;
+      
+      // Atualizar: apenas admin
+      allow update: if isSameOrg(orgId) && hasRole('admin');
+      
+      // Deletar: NEGADO
+      allow delete: if false;
+      
+      // ==========================================
+      // USERS (Subcollection)
+      // ==========================================
+      
+      match /users/{userId} {
+        // Ler: mesma org
+        allow get: if isSameOrg(orgId) && isActive();
+        
+        // Listar: mesma org (limite 100)
+        allow list: if isSameOrg(orgId) && 
+                       isActive() &&
+                       request.query.limit <= 100;
+        
+        // Criar: admin ou próprio usuário
+        allow create: if isSameOrg(orgId) && 
+                         (hasRole('admin') || request.auth.uid == userId) &&
+                         isValidEmail(request.resource.data.email);
+        
+        // Atualizar: admin ou próprio usuário (campos limitados)
+        allow update: if isSameOrg(orgId) && 
+                         (hasRole('admin') || 
+                          (request.auth.uid == userId && 
+                           onlyAllowedFieldsChanged(['nome', 'telefone', 'photoUrl', 'fcmToken'])));
+        
+        // Deletar: apenas admin (soft delete recomendado)
+        allow delete: if isSameOrg(orgId) && hasRole('admin');
+      }
+      
+      // ==========================================
+      // PROFESSIONALS (Subcollection)
+      // ==========================================
+      
+      match /professionals/{profId} {
+        // Ler: todos da org (profissionais são públicos)
+        allow get: if isSameOrg(orgId) && isActive();
+        
+        // Listar: todos da org (limite 50)
+        allow list: if isSameOrg(orgId) && 
+                       isActive() &&
+                       request.query.limit <= 50;
+        
+        // Criar: admin ou próprio usuário
+        allow create: if isSameOrg(orgId) && 
+                         (hasRole('admin') || 
+                          request.resource.data.userId == request.auth.uid);
+        
+        // Atualizar: admin ou próprio profissional
+        allow update: if isSameOrg(orgId) && 
+                         (hasRole('admin') || 
+                          resource.data.userId == request.auth.uid);
+        
+        // Deletar: apenas admin
+        allow delete: if isSameOrg(orgId) && hasRole('admin');
+      }
+      
+      // ==========================================
+      // CONTRACTS (Subcollection)
+      // ==========================================
+      
+      match /contracts/{contractId} {
+        // Ler: envolvido no contrato OU admin
+        allow get: if isSameOrg(orgId) && 
+                      isActive() &&
+                      (resource.data.patientId == request.auth.uid ||
+                       resource.data.professionalId == request.auth.uid ||
+                       hasRole('admin'));
+        
+        // Listar: apenas próprios contratos
+        allow list: if isSameOrg(orgId) && 
+                       isActive() &&
+                       (request.query.limit <= 100);
+        
+        // Criar: apenas paciente (para si mesmo)
+        // ⭐ MELHORADO: Validação de dados completa
+        allow create: if isSameOrg(orgId) && 
+                         isActive() &&
+                         request.resource.data.patientId == request.auth.uid &&
+                         request.resource.data.status == 'pending' &&
+                         isValidContractData(request.resource.data);
+        
+        // Atualizar: validar transição de status
+        // ⭐ NOVO: Valida transições de status (business logic)
+        allow update: if isSameOrg(orgId) && 
+                         isActive() &&
+                         (resource.data.patientId == request.auth.uid ||
+                          resource.data.professionalId == request.auth.uid ||
+                          hasRole('admin')) &&
+                         // Se está mudando status, validar transição
+                         (request.resource.data.status == resource.data.status ||
+                          isValidStatusTransition(resource.data.status, 
+                                                 request.resource.data.status));
+        
+        // Deletar: NEGADO (usar soft delete via update)
+        allow delete: if false;
+      }
+      
+      // ==========================================
+      // CONVERSATIONS (Subcollection)
+      // ==========================================
+      
+      match /conversations/{conversationId} {
+        // Ler: participante da conversa
+        allow get: if isSameOrg(orgId) && 
+                      isActive() &&
+                      request.auth.uid in resource.data.participants;
+        
+        // Listar: próprias conversas
+        allow list: if isSameOrg(orgId) && isActive();
+        
+        // Criar: participantes válidos
+        allow create: if isSameOrg(orgId) && 
+                         isActive() &&
+                         request.auth.uid in request.resource.data.participants &&
+                         request.resource.data.participants.size() == 2;
+        
+        // Atualizar: participante (apenas lastMessage, unreadCount)
+        allow update: if isSameOrg(orgId) && 
+                         isActive() &&
+                         request.auth.uid in resource.data.participants &&
+                         onlyAllowedFieldsChanged(['lastMessage', 'unreadCount', 'updatedAt']);
+        
+        // Deletar: NEGADO
+        allow delete: if false;
+      }
+      
+      // ==========================================
+      // MESSAGES (Subcollection)
+      // ==========================================
+      
+      match /messages/{messageId} {
+        // Ler: remetente ou destinatário
+        allow get: if isSameOrg(orgId) && 
+                      isActive() &&
+                      (resource.data.senderId == request.auth.uid ||
+                       resource.data.receiverId == request.auth.uid);
+        
+        // Listar: mensagens de conversas onde é participante
+        allow list: if isSameOrg(orgId) && isActive();
+        
+        // Criar: apenas o sender com validação de mensagem
+        // ⭐ NOVO: Valida conteúdo da mensagem
+        allow create: if isSameOrg(orgId) && 
+                         isActive() &&
+                         isNotBlocked() &&
+                         request.resource.data.senderId == request.auth.uid &&
+                         isRecentTimestamp(request.resource.data.timestamp) &&
+                         isValidMessage(request.resource.data.text);
+        
+        // Atualizar: apenas marcar como lido (destinatário)
+        allow update: if isSameOrg(orgId) && 
+                         isActive() &&
+                         resource.data.receiverId == request.auth.uid &&
+                         onlyAllowedFieldsChanged(['isRead']);
+        
+        // Deletar: NEGADO (mensagens são imutáveis)
+        allow delete: if false;
+      }
+      
+      // ==========================================
+      // REVIEWS (Subcollection)
+      // ==========================================
+      
+      match /reviews/{reviewId} {
+        // Ler: todos da org (reviews são públicas)
+        allow get: if isSameOrg(orgId) && isActive();
+        
+        // Listar: reviews de um profissional (limite 50)
+        allow list: if isSameOrg(orgId) && 
+                       isActive() &&
+                       request.query.limit <= 50;
+        
+        // Criar: apenas paciente com rating válido
+        // ⭐ NOVO: Valida rating na rules
+        allow create: if isSameOrg(orgId) && 
+                         isActive() &&
+                         request.resource.data.authorId == request.auth.uid &&
+                         isValidRating(request.resource.data.rating);
+        
+        // Atualizar: próprio autor (dentro de 24h) com rating válido
+        // ⭐ NOVO: Valida rating na update também
+        allow update: if isSameOrg(orgId) && 
+                         isActive() &&
+                         resource.data.authorId == request.auth.uid &&
+                         resource.data.createdAt > request.time - duration.value(24, 'h') &&
+                         isValidRating(request.resource.data.rating);
+        
+        // Deletar: admin ou autor
+        allow delete: if isSameOrg(orgId) && 
+                         (hasRole('admin') || 
+                          resource.data.authorId == request.auth.uid);
+      }
+      
+      // ==========================================
+      // FAVORITES (Subcollection)
+      // ==========================================
+      
+      match /favorites/{userId} {
+        // Ler/Escrever: apenas próprio usuário
+        allow read, write: if isSameOrg(orgId) && 
+                              isActive() &&
+                              request.auth.uid == userId;
+      }
+    }
+    
+    // ==========================================
+    // USER PROFILES (Global)
+    // ==========================================
+    
+    match /userProfiles/{userId} {
+      // Ler: apenas próprio perfil
+      allow get: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Listar: NEGADO (enumeration attack)
+      allow list: if false;
+      
+      // Criar: NEGADO (Cloud Function após signup)
+      allow create: if false;
+      
+      // Atualizar: próprio usuário (campos limitados)
+      allow update: if isAuthenticated() && 
+                       request.auth.uid == userId &&
+                       onlyAllowedFieldsChanged(['fcmToken', 'lastLogin']);
+      
+      // Deletar: NEGADO (usar Cloud Function)
+      allow delete: if false;
+    }
+    
+    // ==========================================
+    // AUDIT LOGS (Global)
+    // ==========================================
+    
+    match /auditLogs/{logId} {
+      // Ler: apenas admin da org
+      allow read: if isAuthenticated() && 
+                     hasRole('admin') &&
+                     resource.data.organizationId == getOrgId();
+      
+      // Criar: Cloud Functions apenas
+      allow create: if false;
+      
+      // Atualizar/Deletar: NEGADO (logs são imutáveis)
+      allow update, delete: if false;
+    }
+    
+    // ==========================================
+    // DEFAULT - NEGADO TUDO
+    // ==========================================
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

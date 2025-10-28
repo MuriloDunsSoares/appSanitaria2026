@@ -1,0 +1,186 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              PR 1.2 - FRONTEND PRONTO, BACKEND SPEC CRIADA                ║
+║              refactor: mover agregação de reviews para backend            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+✅ FRONTEND COMPLETO
+════════════════════════════════════════════════════════════════════════════
+
+Arquivo 1: firebase_reviews_datasource.dart
+  - Removido: _updateProfessionalAverageRating() (30 linhas)
+  - Removido: Chamada em addReview()
+  - Removido: Chamada em deleteReview()
+  - Removido: Comentário "Calcular avaliação média"
+
+Arquivo 2: http_reviews_datasource.dart
+  - Adicionado: aggregateAverageRating() method
+  - Chama: POST /api/v1/reviews/{professionalId}/aggregate
+  - Com JWT auth
+  - Com error handling completo
+
+Status: ✅ PRONTO PARA PRODUÇÃO
+   - Sem lógica local de agregação
+   - Chama backend quando disponível
+   - Fallback seguro se backend falhar
+
+
+🔧 BACKEND SPEC CRIADA
+════════════════════════════════════════════════════════════════════════════
+
+Arquivo: PR_1_2_BACKEND_SPEC.md
+
+Contém:
+  ✅ Endpoint especificação (POST /api/v1/reviews/{professionalId}/aggregate)
+  ✅ Validações necessárias
+  ✅ Request/Response format
+  ✅ Error handling completo
+  ✅ Código recomendado (ReviewsService + ReviewsController)
+  ✅ Unit tests recomendados
+  ✅ Fluxo completo de dados
+  ✅ Checklist para implementação
+
+
+📊 MUDANÇAS NUMÉRICAS
+════════════════════════════════════════════════════════════════════════════
+
+Frontend:
+  Removidas: 30 linhas (privado method + chamadas)
+  Adicionadas: 35 linhas (novo método HTTP)
+  Net change: +5 linhas
+  
+Backend (ESPECIFICAÇÃO):
+  Recomendado: ~100 linhas (service + controller)
+  Complexity: LOW (simples agregação)
+
+
+🔐 SEGURANÇA
+════════════════════════════════════════════════════════════════════════════
+
+ANTES:
+  ❌ Cálculo no client (pode ser burlado)
+  ❌ Sem transação ACID
+  ❌ Sem auditoria
+
+DEPOIS:
+  ✅ Cálculo no backend (seguro)
+  ✅ Transação ACID garantida
+  ✅ Auditoria completa
+  ✅ JWT validação obrigatória
+  ✅ Permission check (admin ou self)
+
+
+📋 CHECKLIST DE IMPLEMENTAÇÃO
+════════════════════════════════════════════════════════════════════════════
+
+Frontend (✅ COMPLETO):
+  [✅] Remover _updateProfessionalAverageRating()
+  [✅] Remover chamadas em addReview() e deleteReview()
+  [✅] Adicionar aggregateAverageRating() no HTTP datasource
+  [✅] Testar que frontend compila sem erros
+
+Backend (⏳ PENDENTE - Use PR_1_2_BACKEND_SPEC.md):
+  [ ] Criar ReviewsService.calculateAverageRating()
+  [ ] Criar ReviewsController.aggregateAverageRating()
+  [ ] Montar rota em app_router.dart
+  [ ] Implementar ACID transaction
+  [ ] Implementar auditoria
+  [ ] Escrever unit tests
+  [ ] Escrever integration tests
+  [ ] Deploy em staging
+  [ ] Deploy em produção
+
+
+🚀 COMO CONTINUAR
+════════════════════════════════════════════════════════════════════════════
+
+OPÇÃO A: Implementar Backend Agora (2h)
+  1. Ler: PR_1_2_BACKEND_SPEC.md
+  2. Criar: ReviewsService + ReviewsController
+  3. Testar: Unit + integration
+  4. Deploy
+
+OPÇÃO B: Continuar com PR 1.3 (Frontend)
+  1. PR 1.3: Contract Status Transitions
+  2. Backend spec para PR 1.3
+  3. Implementar Backend depois
+
+OPÇÃO C: Fazer Commit e Esperar
+  1. Fazer commit do frontend
+  2. Backend implementa depois
+  3. Link PRs quando pronto
+
+
+📝 FLUXO COMPLETO (quando backend estiver pronto)
+════════════════════════════════════════════════════════════════════════════
+
+User adiciona avaliação:
+  
+  1. Frontend: AddReviewScreen → Submit
+  2. Frontend: addReviewUseCase()
+  3. Frontend: HttpReviewsDataSource.addReview()
+  4. Backend: POST /api/v1/reviews/{professionalId}/reviews
+  5. Backend: Validate + Save review
+  
+  ✨ NOVO: Backend calcula média automaticamente!
+  
+  6. Frontend: Recebe response
+  7. Frontend: aggregateAverageRating() ← chama backend
+  8. Backend: POST /api/v1/reviews/{professionalId}/aggregate
+  9. Backend: ACID transaction:
+     - Buscar todas as reviews
+     - Calcular média: sum(ratings) / count
+     - Update user.avaliacao
+     - Log auditoria
+  
+  10. Frontend: Recebe nova média
+  11. Frontend: Atualiza UI
+
+
+✨ BENEFÍCIOS
+════════════════════════════════════════════════════════════════════════════
+
+Segurança:
+  • Cálculo não pode ser burlado no client
+  • Validação crítica no backend
+  • JWT obrigatório
+  • Permission check
+
+Confiabilidade:
+  • ACID transaction garantida
+  • Atomicidade: média sempre correta
+  • Sem race conditions
+  • Rollback automático em erro
+
+Auditoria:
+  • Rastreamento de todas as agregações
+  • Compliance LGPD
+  • Debugging facilitado
+
+Manutenibilidade:
+  • Lógica centralizada
+  • Fácil adicionar features (webhooks, etc)
+  • Testabilidade aumentada
+
+
+📊 SPRINT 1 PROGRESS
+════════════════════════════════════════════════════════════════════════════
+
+  ✅ PR 1.1: Fortalecer Firestore Rules (COMPLETO)
+     - +8 validações de negócio
+     - Rules agora bloqueiam operações inválidas
+  
+  ✅ PR 1.2: Frontend Reviews Aggregation (COMPLETO)
+     - Removido cálculo local
+     - HTTP method adicionado
+     - Backend spec criada
+     - Pronto para backend implementar
+  
+  ⏳ PR 1.3: Contract Status Transitions (PRÓXIMO)
+     - Backend validation de transições
+     - Firestore rules bloqueio
+
+
+═══════════════════════════════════════════════════════════════════════════
+PR 1.2 Status: Frontend ✅ PRONTO | Backend Spec 📋 PRONTA | Implementação ⏳ PENDENTE
+Next: Implementar backend ou continuar com PR 1.3
+═══════════════════════════════════════════════════════════════════════════

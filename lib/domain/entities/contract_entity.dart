@@ -45,11 +45,29 @@ class ContractEntity {
       observations: json['observations'] as String?,
       status: ContractStatus.fromString(json['status'] as String? ?? 'pending'),
       totalValue: (json['totalValue'] as num).toDouble(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: _parseDateTime(json['createdAt']),
       updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
+          ? _parseDateTime(json['updatedAt'])
           : null,
     );
+  }
+
+  static DateTime _parseDateTime(dynamic value) {
+    if (value is String) {
+      return DateTime.parse(value);
+    } else if (value is num) {
+      // Timestamp do Firebase em milissegundos
+      return DateTime.fromMillisecondsSinceEpoch(value.toInt());
+    } else {
+      // Fallback: assumir timestamp em milissegundos
+      try {
+        return DateTime.fromMillisecondsSinceEpoch(
+          (value as dynamic).millisecondsSinceEpoch as int,
+        );
+      } catch (_) {
+        return DateTime.now();
+      }
+    }
   }
   final String id;
   final String patientId;

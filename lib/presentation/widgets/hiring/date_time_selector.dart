@@ -53,7 +53,7 @@ class DateTimeSelector extends StatelessWidget {
         title: const Text('Data de Início'),
         subtitle: Text(
           selectedDate != null
-              ? DateFormat('dd/MM/yyyy - EEEE', 'pt_BR').format(selectedDate!)
+              ? DateFormat('dd/MM/yyyy - EEEE').format(selectedDate!)
               : 'Selecione uma data',
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),

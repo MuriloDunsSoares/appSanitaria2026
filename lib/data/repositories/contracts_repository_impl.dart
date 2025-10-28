@@ -136,4 +136,50 @@ class ContractsRepositoryImpl implements ContractsRepository {
       return Left(UnexpectedFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> cancelContract(
+    String contractId,
+    String userId,
+  ) async {
+    try {
+      // Buscar contrato
+      final contract = await dataSource.getContractById(contractId);
+      if (contract == null) {
+        return const Left(NotFoundFailure('Contrato'));
+      }
+
+      // Validação: Status é 'pending'?
+      if (contract.status != ContractStatus.pending) {
+        return const Left(
+          ValidationFailure(
+            'Apenas contratos em "Aguardando Confirmação" podem ser cancelados',
+          ),
+        );
+      }
+
+      // Validação: É o paciente que criou?
+      if (contract.patientId != userId) {
+        return const Left(
+          ValidationFailure(
+            'Apenas o paciente pode cancelar seu próprio contrato',
+          ),
+        );
+      }
+
+      // Atualizar status para 'cancelled'
+      final updated = contract.copyWith(status: ContractStatus.cancelled);
+      await dataSource.updateContract(updated);
+
+      return const Right(unit);
+    } on ValidationException catch (_) {
+      return const Left(ValidationFailure('Validação falhou'));
+    } on NotFoundException catch (_) {
+      return const Left(NotFoundFailure('Contrato'));
+    } on LocalStorageException catch (_) {
+      return const Left(StorageFailure());
+    } catch (e) {
+      return Left(UnexpectedFailure(e.toString()));
+    }
+  }
 }

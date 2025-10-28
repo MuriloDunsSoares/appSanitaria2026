@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 /// Bottom Navigation Bar para PACIENTES
 ///
 /// Responsabilidades:
-/// - Exibir 4 botões de navegação: Buscar, Conversas, Favoritos, Perfil
+/// - Exibir 5 botões de navegação: Buscar, Conversas, Meus Contratos, Favoritos, Perfil
 /// - Destacar botão ativo baseado na rota atual
 /// - Navegar entre telas principais do paciente
 ///
@@ -16,10 +16,11 @@ import 'package:go_router/go_router.dart';
 /// Aparece em:
 /// - Home Patient Screen
 /// - Professional List Screen (Buscar)
+/// - Conversations Screen
+/// - Contracts Screen (Meus Contratos)
 /// - Favorites Screen
 ///
 /// NÃO aparece em:
-/// - Conversations Screen (fullscreen)
 /// - Profile Screen (fullscreen)
 /// - Individual Chat
 /// - Professional Profile Detail
@@ -29,8 +30,8 @@ class PatientBottomNav extends StatelessWidget {
     required this.currentIndex,
   });
 
-  /// Índice do botão atualmente ativo (0-3)
-  /// 0 = Buscar, 1 = Conversas, 2 = Favoritos, 3 = Perfil
+  /// Índice do botão atualmente ativo (0-4)
+  /// 0 = Buscar, 1 = Conversas, 2 = Meus Contratos, 3 = Favoritos, 4 = Perfil
   final int currentIndex;
 
   /// Navega para a tela correspondente ao índice
@@ -48,10 +49,14 @@ class PatientBottomNav extends StatelessWidget {
         context.go('/conversations');
         break;
       case 2:
+        // Meus Contratos
+        context.go('/contracts');
+        break;
+      case 3:
         // Favoritos
         context.go('/favorites');
         break;
-      case 3:
+      case 4:
         // Perfil
         context.go('/profile');
         break;
@@ -94,12 +99,18 @@ class PatientBottomNav extends StatelessWidget {
               _buildNavItem(
                 context: context,
                 index: 2,
+                icon: Icons.description_outlined,
+                label: 'Contratos',
+              ),
+              _buildNavItem(
+                context: context,
+                index: 3,
                 icon: Icons.favorite_border,
                 label: 'Favoritos',
               ),
               _buildNavItem(
                 context: context,
-                index: 3,
+                index: 4,
                 icon: Icons.person_outline,
                 label: 'Perfil',
               ),

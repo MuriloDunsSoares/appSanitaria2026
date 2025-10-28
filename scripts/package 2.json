@@ -1,0 +1,36 @@
+{
+  "name": "app-sanitaria-migration-scripts",
+  "version": "1.0.0",
+  "description": "Scripts de migração do Firebase para App Sanitária",
+  "main": "firebase_migration_utils.js",
+  "scripts": {
+    "migrate:all": "node 01_remove_password_field.js && node 02_add_soft_delete_fields.js && node 03_add_verified_field.js",
+    "migrate:password": "node 01_remove_password_field.js",
+    "migrate:soft-delete": "node 02_add_soft_delete_fields.js",
+    "migrate:verified": "node 03_add_verified_field.js",
+    "test": "echo \"Run firebase emulators:start --only firestore first\" && exit 1"
+  },
+  "keywords": [
+    "firebase",
+    "migration",
+    "firestore"
+  ],
+  "author": "App Sanitária Team",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
+
+
+
+
+
+
+
+
+
